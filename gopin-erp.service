@@ -1,0 +1,18 @@
+# systemd service — only for running WITHOUT Docker (Node.js + PostgreSQL installed directly).
+# Copy to /etc/systemd/system/gopin-erp.service, then:
+#   sudo systemctl daemon-reload && sudo systemctl enable --now gopin-erp
+[Unit]
+Description=Gopin Semicon ERP
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/opt/gopin-erp
+ExecStart=/usr/bin/node server.js
+Restart=always
+RestartSec=5
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target
