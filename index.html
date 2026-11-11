@@ -165,6 +165,7 @@ body{margin:0;font-size:14px}[hidden]{display:none!important}img{max-width:100%}
 .lcard .brand{color:var(--ink);padding:0 0 18px}.lcard .brand small{color:var(--muted)}
 .lcard form{display:flex;flex-direction:column;gap:12px}.lcard .btn.pri{padding:9px 12px;font-weight:600}
 .lerr{color:var(--bad);font-size:13px;min-height:18px}
+a.brand{text-decoration:none}a.brand:hover .mark{filter:brightness(1.15)}a.co{color:var(--ink);text-decoration:none}a.co:hover{color:var(--accent)}
 </style>
 
 </head>
@@ -186,7 +187,7 @@ body{margin:0;font-size:14px}[hidden]{display:none!important}img{max-width:100%}
   <main class="main">
     <header class="top">
       <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰ Menu</button>
-      <span class="co" id="coName">Gopin Semicon Private Limited</span>
+      <a class="co" id="coName" href="#dash" title="Go to home screen">Gopin Semicon Private Limited</a>
       <span class="sp"></span>
       <button class="btn" id="installBtn" hidden>Install app</button>
       <span class="sync" id="sync"><span class="dot"></span>Connecting…</span>
@@ -223,59 +224,68 @@ const FG=['Finished Good','Semi-Finished'];
 const GP_TYPES=['Inward','Outward - Returnable (RGP)','Outward - Non-Returnable (NRGP)'];
 const ROLES={
  'Admin':{m:'*',a:1,d:'Everything, including user roles and approvals above the PO limit'},
- 'Purchase Manager':{m:['purchase','masters'],a:1,d:'Purchase orders and item masters; approves POs up to the limit'},
- 'Purchase Executive':{m:['purchase'],d:'Creates purchase orders and suppliers'},
- 'Stores Manager':{m:['stores','gate','masters'],a:1,d:'GRN, dispatch, stock journals, gate passes; approves journals and gate passes'},
- 'Stores Executive':{m:['stores','gate'],d:'Enters GRN, dispatch, stock journals and gate passes'},
- 'Production Manager':{m:['production'],a:1,d:'BOMs, routings, work centers; releases production orders'},
- 'Production Supervisor':{m:['production'],d:'Creates production orders, issues material, marks operations done'},
- 'Sales Manager':{m:['sales'],a:1,d:'Customers and sales orders; confirms sales orders'},
- 'Sales Executive':{m:['sales'],d:'Creates customers and sales orders'},
- 'Accounts':{m:['accounts'],a:1,d:'Creates and posts sales and purchase invoices'},
+ 'Purchase Manager':{m:['purchase','masters','request'],a:1,d:'Requisitions, purchase orders and item masters; approves PRs and POs up to the limit'},
+ 'Purchase Executive':{m:['purchase','request'],d:'Creates purchase orders from approved requisitions; adds suppliers'},
+ 'Stores Manager':{m:['stores','gate','masters','request'],a:1,d:'GRN, material issue and returns, dispatch, stock journals, gate passes; approves material requests'},
+ 'Stores Executive':{m:['stores','gate','request'],d:'Enters GRN, material issues and returns, dispatch, stock journals and gate passes'},
+ 'Production Manager':{m:['production','masters','request'],a:1,d:'Product master, BOMs, routings, work centers; releases production orders; approves material requests'},
+ 'Production Supervisor':{m:['production','request'],d:'Creates production orders and material requests, marks operations done'},
+ 'Sales Manager':{m:['sales','request'],a:1,d:'Customers and sales orders; confirms sales orders'},
+ 'Sales Executive':{m:['sales','request'],d:'Creates customers and sales orders'},
+ 'Accounts':{m:['accounts','request'],a:1,d:'Creates and posts sales and purchase invoices'},
  'Security Guard':{m:['gate'],d:'Creates gate passes and marks gate in / gate out'},
  'Viewer':{m:[],d:'Can look at everything, change nothing'},
 };
 
 /* ---------- configuration ---------- */
 const ENT={
- items:{title:'Items',one:'Item',key:'code',imp:1,mod:'masters',fields:[
+ items:{title:'Items',one:'Item',key:'code',imp:1,mod:'masters',auto:'ITM',fields:[
   {k:'code',l:'Item Code',req:1},{k:'name',l:'Item Name',req:1,w:2},{k:'type',l:'Item Type',t:'sel',o:ITEM_TYPES,req:1},
   {k:'uom',l:'Unit',t:'ref',r:'uoms',req:1},{k:'group',l:'Item Group'},{k:'hsn',l:'HSN / SAC'},{k:'gst',l:'GST %',t:'num'},
   {k:'stdCost',l:'Standard Cost (₹)',t:'num'},{k:'salePrice',l:'Sale Price (₹)',t:'num'},{k:'reorder',l:'Reorder Level',t:'num'},
   {k:'leadDays',l:'Lead Time (days)',t:'num'},{k:'defWh',l:'Default Warehouse',t:'ref',r:'warehouses'},
   {k:'batchTracked',l:'Batch / Lot Tracked',t:'bool',def:false},{k:'shelfDays',l:'Shelf Life (days)',t:'num'},{k:'active',l:'Active',t:'bool',def:true}],
   cols:['code','name','type','uom','hsn','gst','stdCost','reorder','onhand','batchTracked','active']},
- suppliers:{title:'Suppliers',one:'Supplier',key:'code',imp:1,mod:'purchase',fields:[
+ suppliers:{title:'Suppliers',one:'Supplier',key:'code',imp:1,mod:'purchase',auto:'SUP',fields:[
   {k:'code',l:'Supplier Code',req:1},{k:'name',l:'Supplier Name',req:1,w:2},{k:'contact',l:'Contact Person'},{k:'phone',l:'Phone'},{k:'email',l:'Email'},
   {k:'gstin',l:'GSTIN'},{k:'pan',l:'PAN'},{k:'address',l:'Address',t:'area',w:2},{k:'city',l:'City'},{k:'state',l:'State',t:'sel',o:STATE_N,req:1},
   {k:'payDays',l:'Payment Terms (days)',t:'num'},{k:'active',l:'Active',t:'bool',def:true}],
   cols:['code','name','city','state','phone','gstin','payDays','active']},
- customers:{title:'Customers',one:'Customer',key:'code',imp:1,mod:'sales',fields:[
+ customers:{title:'Customers',one:'Customer',key:'code',imp:1,mod:'sales',auto:'CUS',fields:[
   {k:'code',l:'Customer Code',req:1},{k:'name',l:'Customer Name',req:1,w:2},{k:'contact',l:'Contact Person'},{k:'phone',l:'Phone'},{k:'email',l:'Email'},
   {k:'gstin',l:'GSTIN'},{k:'address',l:'Billing Address',t:'area',w:2},{k:'shipAddress',l:'Shipping Address',t:'area',w:2},{k:'city',l:'City'},{k:'state',l:'State',t:'sel',o:STATE_N,req:1},
   {k:'creditLimit',l:'Credit Limit (₹)',t:'num'},{k:'payDays',l:'Payment Terms (days)',t:'num'},{k:'active',l:'Active',t:'bool',def:true}],
   cols:['code','name','city','state','phone','gstin','creditLimit','active']},
- warehouses:{title:'Warehouses',one:'Warehouse',key:'code',imp:1,mod:'stores',fields:[
+ warehouses:{title:'Warehouses',one:'Warehouse',key:'code',imp:1,mod:'stores',auto:'WH',fields:[
   {k:'code',l:'Warehouse Code',req:1},{k:'name',l:'Warehouse Name',req:1,w:2},
   {k:'type',l:'Warehouse Type',t:'sel',o:['Raw Material','Work in Progress','Finished Goods','Rejected / Scrap','General'],req:1},{k:'location',l:'Location'}],
   cols:['code','name','type','location']},
- boms:{title:'Bill of Materials',one:'BOM',key:'code',imp:1,mod:'production',fields:[
+ boms:{title:'Bill of Materials',one:'BOM',key:'code',imp:1,mod:'production',auto:'BOM',fields:[
   {k:'code',l:'BOM Code',req:1},{k:'item',l:'Output Item',t:'ref',r:'items',req:1,flt:i=>FG.includes(i.type)},
   {k:'outQty',l:'Output Quantity',t:'num',req:1,def:1},{k:'version',l:'Version'},{k:'remarks',l:'Remarks',w:2},{k:'active',l:'Active',t:'bool',def:true}],
   lines:[{k:'item',l:'Component',t:'ref',r:'items',req:1},{k:'qty',l:'Qty per Output',t:'num',req:1},{k:'scrap',l:'Scrap %',t:'num'}],
   cols:['code','item','outQty','version','nlines','active']},
- routings:{title:'Routings',one:'Routing',key:'code',imp:1,mod:'production',fields:[
+ routings:{title:'Routings',one:'Routing',key:'code',imp:1,mod:'production',auto:'RTG',fields:[
   {k:'code',l:'Routing Code',req:1},{k:'item',l:'Item',t:'ref',r:'items',req:1,flt:i=>FG.includes(i.type)},{k:'version',l:'Version'},{k:'remarks',l:'Remarks',w:2},{k:'active',l:'Active',t:'bool',def:true}],
   lines:[{k:'seq',l:'Op No.',t:'num',req:1},{k:'op',l:'Operation',req:1},{k:'wc',l:'Work Center',t:'ref',r:'workcenters',req:1},{k:'setup',l:'Setup (min)',t:'num'},{k:'run',l:'Run (min / unit)',t:'num',req:1}],
   cols:['code','item','version','nlines','active']},
- workcenters:{title:'Work Centers',one:'Work Center',key:'code',imp:1,mod:'production',fields:[
+ workcenters:{title:'Work Centers',one:'Work Center',key:'code',imp:1,mod:'production',auto:'WC',fields:[
   {k:'code',l:'Work Center Code',req:1},{k:'name',l:'Name',req:1,w:2},{k:'type',l:'Type',t:'sel',o:['Machine','Assembly Line','Packing','Quality Check','Manual']},
   {k:'hoursDay',l:'Working Hours / Day',t:'num',def:8},{k:'capHr',l:'Capacity / Hour',t:'num'},{k:'costHr',l:'Cost / Hour (₹)',t:'num'}],
   cols:['code','name','type','hoursDay','capHr','costHr']},
  uoms:{title:'Units of Measure',one:'Unit',key:'code',imp:1,mod:'masters',fields:[{k:'code',l:'Unit Code',req:1},{k:'name',l:'Description',req:1},{k:'decimals',l:'Decimal Places',t:'num'}],cols:['code','name','decimals']},
+ departments:{title:'Departments',one:'Department',key:'code',imp:1,mod:'masters',auto:'DEP',fields:[
+  {k:'code',l:'Department Code',req:1},{k:'name',l:'Department Name',req:1,w:2},{k:'head',l:'Department Head'},{k:'costCenter',l:'Cost Center'},{k:'active',l:'Active',t:'bool',def:true}],
+  cols:['code','name','head','costCenter','active']},
+ prs:{title:'Purchase Requisitions',one:'Purchase Requisition',key:'no',pre:'PR',txn:1,imp:1,mod:'request',edit:['Draft','Rejected'],fields:[
+  {k:'no',l:'PR Number',t:'ro'},{k:'date',l:'Request Date',t:'date',req:1,def:today},{k:'dept',l:'Department',t:'ref',r:'departments',req:1,flt:x=>x.active!==false},
+  {k:'requestedBy',l:'Requested By',req:1,def:()=>me.name},{k:'needBy',l:'Required By',t:'date'},{k:'priority',l:'Priority',t:'sel',o:['Normal','Urgent'],def:'Normal'},
+  {k:'mr',l:'From Material Request',t:'ref',r:'mrs',ro:1},{k:'status',l:'Status',t:'ro',def:'Draft'},{k:'purpose',l:'Purpose / Justification',w:2}],
+  lines:[{k:'item',l:'Item',t:'ref',r:'items',req:1},{k:'qty',l:'Qty',t:'num',req:1},{k:'rate',l:'Estimated Rate (₹)',t:'num'},{k:'supplier',l:'Suggested Supplier',t:'ref',r:'suppliers'},{k:'ordered',l:'Ordered',t:'ro'}],
+  total:1,cols:['no','date','dept','requestedBy','needBy','priority','status','total']},
  pos:{title:'Purchase Orders',one:'Purchase Order',key:'no',pre:'PO',txn:1,imp:1,mod:'purchase',edit:['Draft'],fields:[
   {k:'no',l:'PO Number',t:'ro'},{k:'date',l:'Order Date',t:'date',req:1,def:today},{k:'supplier',l:'Supplier',t:'ref',r:'suppliers',req:1,flt:s=>s.active!==false},
-  {k:'delivDate',l:'Expected Delivery',t:'date'},{k:'status',l:'Status',t:'ro',def:'Draft'},{k:'remarks',l:'Remarks',w:2}],
+  {k:'delivDate',l:'Expected Delivery',t:'date'},{k:'pr',l:'Purchase Requisition',t:'ref',r:'prs',ro:1},{k:'status',l:'Status',t:'ro',def:'Draft'},{k:'remarks',l:'Remarks',w:2}],
   lines:[{k:'item',l:'Item',t:'ref',r:'items',req:1},{k:'qty',l:'Qty',t:'num',req:1},{k:'rate',l:'Rate (₹)',t:'num'},{k:'recv',l:'Received',t:'ro'}],
   total:1,cols:['no','date','supplier','delivDate','status','total']},
  grns:{title:'Goods Receipt (GRN)',one:'Goods Receipt',key:'no',pre:'GRN',txn:1,mod:'stores',edit:['Draft'],noAdd:1,fields:[
@@ -320,6 +330,27 @@ const ENT={
   {k:'pos',l:'Supplier State',t:'sel',o:STATE_N,req:1},{k:'due',l:'Payment Due',t:'date'},{k:'status',l:'Status',t:'ro',def:'Draft'}],
   lines:[{k:'item',l:'Item',t:'ref',r:'items',ro:1},{k:'hsn',l:'HSN'},{k:'qty',l:'Qty',t:'num',req:1},{k:'rate',l:'Rate (₹)',t:'num',req:1},{k:'gst',l:'GST %',t:'num'}],
   cols:['no','date','supplier','supInv','grn','status','gtotal']},
+ mrs:{title:'Material Requests',one:'Material Request',key:'no',pre:'MR',txn:1,imp:1,mod:'request',edit:['Draft','Rejected'],fields:[
+  {k:'no',l:'MR Number',t:'ro'},{k:'date',l:'Request Date',t:'date',req:1,def:today},{k:'dept',l:'Department',t:'ref',r:'departments',req:1,flt:x=>x.active!==false},
+  {k:'requestedBy',l:'Requested By',req:1,def:()=>me.name},{k:'wh',l:'Issue From (Store)',t:'ref',r:'warehouses',req:1},
+  {k:'purpose',l:'Purpose',t:'sel',o:['Production','Maintenance','Consumable','Quality / Testing','Sample','Other'],req:1,def:'Production'},
+  {k:'mo',l:'Against Production Order',t:'ref',r:'prods',flt:m=>['Released','In Progress'].includes(m.status)},{k:'needBy',l:'Required By',t:'date'},
+  {k:'status',l:'Status',t:'ro',def:'Draft'},{k:'remarks',l:'Remarks',w:2}],
+  lines:[{k:'item',l:'Item',t:'ref',r:'items',req:1},{k:'qty',l:'Requested Qty',t:'num',req:1},{k:'issued',l:'Issued',t:'ro'}],
+  cols:['no','date','dept','requestedBy','wh','purpose','mo','status']},
+ mins:{title:'Material Issues',one:'Material Issue Note',key:'no',pre:'MIN',txn:1,mod:'stores',edit:['Draft'],noAdd:1,fields:[
+  {k:'no',l:'Issue Number',t:'ro'},{k:'date',l:'Issue Date',t:'date',req:1,def:today},
+  {k:'mr',l:'Material Request',t:'ref',r:'mrs',req:1,flt:x=>['Approved','Partially Issued'].includes(x.status)},
+  {k:'dept',l:'Department',t:'ref',r:'departments',ro:1},{k:'wh',l:'Issue From (Store)',t:'ref',r:'warehouses',req:1},
+  {k:'issuedTo',l:'Handed Over To',req:1},{k:'status',l:'Status',t:'ro',def:'Draft'}],
+  lines:[{k:'item',l:'Item',t:'ref',r:'items',ro:1},{k:'qty',l:'Issue Qty',t:'num',req:1},{k:'batch',l:'Batch (blank = FIFO)'}],
+  cols:['no','date','mr','dept','wh','issuedTo','status']},
+ mrets:{title:'Material Returns',one:'Material Return Note',key:'no',pre:'MRN',txn:1,mod:'stores',edit:['Draft'],fields:[
+  {k:'no',l:'Return Number',t:'ro'},{k:'date',l:'Return Date',t:'date',req:1,def:today},{k:'dept',l:'Returned By Department',t:'ref',r:'departments',req:1},
+  {k:'wh',l:'Return Into (Store)',t:'ref',r:'warehouses',req:1},{k:'min',l:'Against Issue Note',t:'ref',r:'mins',flt:x=>x.status==='Posted'},
+  {k:'reason',l:'Reason',t:'sel',o:['Excess Issued','Unused','Defective','Other'],req:1},{k:'status',l:'Status',t:'ro',def:'Draft'},{k:'remarks',l:'Remarks',w:2}],
+  lines:[{k:'item',l:'Item',t:'ref',r:'items',req:1},{k:'qty',l:'Return Qty',t:'num',req:1},{k:'batch',l:'Batch / Lot No.'}],
+  cols:['no','date','dept','wh','min','reason','status']},
  journals:{title:'Stock Journal',one:'Stock Journal',key:'no',pre:'SJ',txn:1,imp:1,mod:'stores',edit:['Draft'],fields:[
   {k:'no',l:'Journal Number',t:'ro'},{k:'date',l:'Date',t:'date',req:1,def:today},{k:'wh',l:'Warehouse',t:'ref',r:'warehouses',req:1},
   {k:'reason',l:'Reason',t:'sel',o:['Opening Stock','Stock Adjustment','Physical Count','Scrap Write-off'],req:1},{k:'status',l:'Status',t:'ro',def:'Draft'},{k:'remarks',l:'Remarks',w:2}],
@@ -336,15 +367,15 @@ const ENT={
 const XCOL={total:'Total (₹)',gtotal:'Invoice Total (₹)',nlines:'Lines',onhand:'On Hand',schedEnd:'Scheduled Finish',billed:'Billed',invoiced:'Invoiced'};
 const NAV=[
  ['Home',[['dash','Dashboard']]],
- ['Masters',[['items','Items'],['suppliers','Suppliers'],['customers','Customers'],['warehouses','Warehouses'],['boms','Bill of Materials'],['routings','Routings'],['workcenters','Work Centers'],['uoms','Units of Measure'],['company','Company Setup'],['users','Users & Roles']]],
- ['Procurement',[['pos','Purchase Orders'],['grns','Goods Receipt (GRN)'],['pinv','Purchase Invoices']]],
+ ['Masters',[['items','Items'],['products','Product Master'],['boms','Bill of Materials'],['routings','Routings'],['suppliers','Suppliers'],['customers','Customers'],['departments','Departments'],['warehouses','Warehouses'],['workcenters','Work Centers'],['uoms','Units of Measure'],['company','Company Setup'],['users','Users & Roles']]],
+ ['Procurement',[['prs','Purchase Requisitions'],['pos','Purchase Orders'],['grns','Goods Receipt (GRN)'],['pinv','Purchase Invoices']]],
+ ['Stores',[['mrs','Material Requests'],['mins','Material Issues'],['mrets','Material Returns'],['gatepasses','Gate Passes']]],
  ['Production',[['prods','Production Orders'],['sched','Machine Schedule'],['plan','Material Planning']]],
  ['Sales',[['sos','Sales Orders'],['dispatches','Dispatch Notes'],['sinv','Sales Invoices']]],
  ['Inventory',[['stock','Stock on Hand'],['batches','Batch Stock & Aging'],['ledger','Stock Ledger'],['journals','Stock Journal']]],
- ['Gate',[['gatepasses','Gate Passes']]],
 ];
-const PAGES=['dash','company','users','stock','batches','ledger','plan','sched'];
-const PILL={Draft:'',Created:'',Approved:'p-info',Released:'p-info',Confirmed:'p-info','In Progress':'p-warn','Partially Received':'p-warn','Partially Dispatched':'p-warn','Partially Returned':'p-warn',Out:'p-warn',
+const PAGES=['products','dash','company','users','stock','batches','ledger','plan','sched'];
+const PILL={Draft:'',Created:'',Approved:'p-info',Released:'p-info',Confirmed:'p-info','In Progress':'p-warn','Partially Received':'p-warn','Partially Dispatched':'p-warn','Partially Returned':'p-warn',Out:'p-warn','Pending Approval':'p-warn',Rejected:'p-bad',Ordered:'p-good','Partially Ordered':'p-warn',Issued:'p-good','Partially Issued':'p-warn',
  Received:'p-good',Posted:'p-good',Finished:'p-good',Dispatched:'p-good',Returned:'p-good',Closed:'p-acc',Done:'p-good',Pending:''};
 const pill=s=>`<span class="pill ${PILL[s]??''}">${esc(s)}</span>`;
 
@@ -362,9 +393,9 @@ const API={async j(m,u,b){let r;
   catch(e){throw {code:'unavailable',message:'Server not reachable. Check your internet connection.'}}
   let t={};try{t=await r.json()}catch(e){}
   if(r.status===401&&!u.endsWith('/login')){showLogin('Your session ended. Please sign in again.');throw {code:'unauth',message:t.error||'Please sign in.'}}
-  if(!r.ok)throw {code:r.status===403?'forbidden':'error',message:t.error||('Server error '+r.status)};
+  if(!r.ok)throw {code:r.status===403?'forbidden':r.status===409?'exists':'error',message:t.error||('Server error '+r.status)};
   return t}};
-async function put(c,id,data){S[c][id]=data;try{await API.j('PUT',`/api/docs/${enc(c)}/${enc(id)}`,data)}catch(e){wErr(e);reloadCol(c);throw e}}
+async function put(c,id,data,create){const old=S[c][id];S[c][id]=data;try{await API.j('PUT',`/api/docs/${enc(c)}/${enc(id)}`+(create?'?create=1':''),data)}catch(e){if(old)S[c][id]=old;else delete S[c][id];if(e?.code!=='exists')wErr(e);reloadCol(c);throw e}}
 async function del(c,id){const old=S[c][id];delete S[c][id];try{await API.j('DELETE',`/api/docs/${enc(c)}/${enc(id)}`)}catch(e){if(old)S[c][id]=old;wErr(e);throw e}}
 async function reloadCol(c){try{const r=await API.j('GET','/api/docs/'+enc(c));const o={};for(const x of r.docs)o[x.id]=x.data;S[c]=o;schedule()}catch(e){}}
 function wErr(e){if(e?.code==='unauth')return;toast(e?.code==='forbidden'?(e.message||'Your role can’t make this change.'):'Could not save: '+(e?.message||e),1)}
@@ -432,7 +463,7 @@ const allOps=()=>list('prods').filter(m=>['Released','In Progress','Finished'].i
 /* ---------- state & routing ---------- */
 const st={view:'dash',draft:null,isNew:false,q:'',pop:false,filt:'',skip:false};
 let coDirty=false;
-function route(){const h=(location.hash||'').slice(1);if(st.skip&&h===st.view){st.skip=false;render();return}st.skip=false;coDirty=false;
+function route(){const h=(location.hash||'').slice(1);if(st.skip&&h===st.view){st.skip--;render();return}st.skip=0;coDirty=false;
  st.view=(ENT[h]||PAGES.includes(h))?h:'dash';st.draft=null;st.q='';st.pop=false;st.filt='';$('#rail').classList.remove('open');render();scrollTo(0,0)}
 window.addEventListener('hashchange',route);
 let raf=0;function schedule(){if(raf)return;raf=requestAnimationFrame(()=>{raf=0;computeRole();renderChrome();if(!st.draft&&!(st.view==='company'&&coDirty)&&!(st.view==='users'&&document.activeElement?.closest?.('#uform')))render()})}
@@ -440,7 +471,7 @@ let raf=0;function schedule(){if(raf)return;raf=requestAnimationFrame(()=>{raf=0
 /* ---------- rendering ---------- */
 function renderWho(){const w=$('#who');if(!w)return;w.innerHTML=me.id?`<b>${esc(me.name)}</b>${esc(me.role)}<div style="margin-top:6px;display:flex;gap:4px;flex-wrap:wrap"><button class="btn sm" data-act="chpw">Change password</button><button class="btn sm" data-act="logout">Sign out</button></div>`:'<b>Connecting…</b>'}
 function renderChrome(){
- $('#rail').innerHTML=`<div class="brand"><div class="mark">GS</div><div><b>${esc(company.name||'Gopin Semicon Private Limited')}</b><small>Manufacturing ERP</small></div></div><div class="who" id="who"></div>`+
+ $('#rail').innerHTML=`<a class="brand" href="#dash" title="Go to home screen"><div class="mark">GS</div><div><b>${esc(company.name||'Gopin Semicon Private Limited')}</b><small>Manufacturing ERP</small></div></a><div class="who" id="who"></div>`+
   NAV.map(([g,it])=>`<div class="grp"><h3>${g}</h3>${it.map(([k,l])=>`<a href="#${k}" class="${st.view===k?'on':''}">${esc(l)}</a>`).join('')}</div>`).join('');
  renderWho();
  $('#coName').textContent=company.name||'Gopin Semicon Private Limited';
@@ -450,7 +481,7 @@ function render(){
  renderChrome();const v=st.view;let h='';
  if(mode==='live'&&ready&&me.role==='Viewer')h+=`<div class="note">You can view everything but can’t make changes yet. Ask the ERP admin to give you a role under Users &amp; Roles.</div>`;
  if(ENT[v])h+=st.draft?formHTML(v):listHTML(v);
- else h+=({dash:dashHTML,company:companyHTML,users:usersHTML,stock:stockHTML,batches:batchHTML,ledger:ledgerHTML,plan:planHTML,sched:schedHTML}[v])();
+ else h+=({products:productsHTML,dash:dashHTML,company:companyHTML,users:usersHTML,stock:stockHTML,batches:batchHTML,ledger:ledgerHTML,plan:planHTML,sched:schedHTML}[v])();
  $('#view').innerHTML=h;
  if(ENT[v]&&!st.draft)fillRows();
  if(['stock','ledger','batches'].includes(v))fillReport();
@@ -530,6 +561,8 @@ function formHTML(v){const c=ENT[v],d=st.draft,ed=editable(c,v,d),title=st.isNew
    ${c.total||c.gst?`<td class="num" data-amt="${i}">${fmt(n(l.qty)*n(l.rate))}</td>`:''}<td class="x">${!lro&&!c.noAdd?`<button class="xbtn" data-act="delline" data-i="${i}" aria-label="Remove line">✕</button>`:''}</td></tr>`).join('')||`<tr><td colspan="${c.lines.length+3}" class="empty">${{grns:'Select a purchase order to load its pending lines.',dispatches:'Select a sales order to load its pending lines.',sinv:'Select a posted dispatch note to load its lines.',pinv:'Select a posted GRN to load its accepted lines.'}[v]||'No lines yet.'}</td></tr>`}
   </tbody></table></div><div id="totals">${totalsHTML(c,d)}</div></section>`}
  if(v==='prods')h+=prodExtra(d);
+ if(v==='boms')h+=bomExtra(d);
+ if(v==='mrs'||v==='mins')h+=stockCheck(v,d);
  if(c.txn&&!st.isNew)h+=historyHTML(d);
  return h}
 function totalsHTML(c,d){
@@ -560,9 +593,9 @@ function dashHTML(){
  const rgp=list('gatepasses').filter(g=>g.type===GP_TYPES[1]&&['Out','Partially Returned'].includes(g.status)),rgpOd=rgp.filter(g=>g.expReturn&&g.expReturn<today());
  const low=items.filter(i=>i.active!==false&&n(i.reorder)>0&&onHand(i.code)<n(i.reorder));
  const lateOps=allOps().filter(o=>o.status!=='Done'&&o.mst!=='Finished'&&n(o.end)<Date.now());
- const appr=[['pos','Draft','Purchase order'],['prods','Created','Production order'],['sos','Draft','Sales order'],['journals','Draft','Stock journal'],['gatepasses','Draft','Gate pass'],['sinv','Draft','Sales invoice'],['pinv','Draft','Purchase invoice']]
+ const appr=[['prs','Pending Approval','Purchase requisition'],['mrs','Pending Approval','Material request'],['pos','Draft','Purchase order'],['prods','Created','Production order'],['sos','Draft','Sales order'],['journals','Draft','Stock journal'],['gatepasses','Draft','Gate pass'],['sinv','Draft','Sales invoice'],['pinv','Draft','Purchase invoice']]
   .filter(([v])=>canAppr(v)).flatMap(([v,s,l])=>list(v).filter(d=>d.status===s).map(d=>({v,l,d})));
- const flow=[['pos','Purchase',`${list('pos').filter(p=>p.status==='Draft').length} draft · ${openPO.length} open`],['grns','Goods receipt',`${list('grns').filter(g=>g.status==='Draft').length} to post`],
+ const flow=[['prs','Requisition',`${list('prs').filter(p=>p.status==='Pending Approval').length} to approve · ${list('prs').filter(p=>['Approved','Partially Ordered'].includes(p.status)).length} to order`],['pos','Purchase',`${list('pos').filter(p=>p.status==='Draft').length} draft · ${openPO.length} open`],['grns','Goods receipt',`${list('grns').filter(g=>g.status==='Draft').length} to post`],['mrs','Material request',`${list('mrs').filter(p=>p.status==='Pending Approval').length} to approve · ${list('mrs').filter(p=>['Approved','Partially Issued'].includes(p.status)).length} to issue`],
   ['prods','Production',`${mos.filter(m=>m.status==='Created').length} planned · ${wip.length} on floor`],['sos','Sales order',`${openSO.length} open`],['dispatches','Dispatch',`${list('dispatches').filter(g=>g.status==='Draft').length} to post`],['sinv','Invoice',`${list('dispatches').filter(g=>g.status==='Posted'&&!g.invoiced).length} to bill`]];
  return `<div class="head"><div><div class="crumb">${esc(new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'}))}</div><h1>Plant overview</h1></div></div>
  <div class="flow">${flow.map(([k,nm,ct],i)=>`<a href="#${k}"><div class="st">STEP ${i+1}</div><div class="nm">${nm}</div><div class="ct">${ct}</div></a>`).join('')}</div>
@@ -585,7 +618,7 @@ function dashHTML(){
   </section>
  </div>
  ${!items.length&&ready?`<section class="tab"><h2>Getting started</h2><div class="body"><ol style="margin:0;padding-left:18px;line-height:1.9">
-  <li>Fill in <a href="#company">Company Setup</a> — name, GSTIN, state, shift timing and PO approval limit.</li><li>Add your team in <a href="#users">Users &amp; Roles</a>.</li>
+  <li>Fill in <a href="#company">Company Setup</a> — name, GSTIN, state, shift timing and PO approval limit.</li><li>Add your team in <a href="#users">Users &amp; Roles</a>, and your <a href="#departments">Departments</a> (Production, Stores, Maintenance, Quality…).</li><li>Add what you manufacture in <a href="#products">Product Master</a> and map each product to its BOM.</li>
   <li>Add <a href="#items">Items</a>, <a href="#suppliers">Suppliers</a>, <a href="#customers">Customers</a> — or import them from Excel.</li>
   <li>Set up <a href="#workcenters">Work Centers</a>, a <a href="#boms">BOM</a> and a <a href="#routings">Routing</a> for each finished good.</li>
   <li>Load opening stock with a <a href="#journals">Stock Journal</a>, then run PO → GRN → Production → SO → Dispatch → Invoice.</li></ol></div></section>`:''}`}
@@ -661,7 +694,7 @@ function planRows(){const need={};
   .filter(r=>r.req>0||r.short>0).sort((a,b)=>b.short-a.short||a.item.localeCompare(b.item))}
 function planHTML(){const r=planRows(),sh=r.filter(x=>x.short>0);
  return `<div class="head"><div><div class="crumb">Production</div><h1>Material Planning</h1></div></div>
- <div class="pane">${canMod('purchase')?`<button class="btn pri" data-act="mkpo" ${sh.length?'':'disabled'}>Create draft PO for shortages (${sh.length})</button><span class="sep"></span>`:''}<button class="btn" data-act="rep-xlsx">Export Excel</button><button class="btn" data-act="rep-csv">Export CSV</button></div>
+ <div class="pane">${canMod('request')?`<button class="btn pri" data-act="mkprplan" ${sh.length?'':'disabled'}>Raise purchase requisition (${sh.length})</button>`:''}${canMod('purchase')?`<button class="btn" data-act="mkpo" ${sh.length?'':'disabled'}>Create draft PO directly</button>`:''}<span class="sep"></span><button class="btn" data-act="rep-xlsx">Export Excel</button><button class="btn" data-act="rep-csv">Export CSV</button></div>
  <div class="tablewrap"><table><thead><tr><th>Item</th><th>Name</th><th class="num">Needed for open MOs</th><th class="num">Reorder level</th><th class="num">On hand</th><th class="num">On open POs</th><th class="num">To purchase</th><th>Unit</th></tr></thead><tbody>
  ${r.length?r.map(x=>`<tr><td class="code">${esc(x.item)}</td><td>${esc(x.name)}</td><td class="num">${q3(x.req)}</td><td class="num">${q3(x.ro)}</td><td class="num">${q3(x.oh)}</td><td class="num">${q3(x.po)}</td><td class="num">${x.short>0?`<span class="pill p-bad">${q3(x.short)}</span>`:'<span class="pill p-good">0</span>'}</td><td>${esc(x.uom)}</td></tr>`).join(''):`<tr><td colspan="8" class="empty">Nothing to plan. Requirements appear here when production orders are created or released, and for items with a reorder level.</td></tr>`}
  </tbody></table></div><p class="hint">To purchase = needed for created/released production orders + reorder level − on hand − quantity still due on approved POs.</p>`}
@@ -689,9 +722,14 @@ function schedHTML(){const t0=new Date();t0.setHours(0,0,0,0);const S0=t0.getTim
 
 /* ---------- workflow actions ---------- */
 const WF={
+ prs:d=>{const open=['Approved','Partially Ordered'].includes(d.status);return [['Draft','Rejected'].includes(d.status)&&['submit','Submit for approval','e'],d.status==='Pending Approval'&&['approve','Approve','a'],d.status==='Pending Approval'&&['reject','Reject','a'],open&&['mkpo','Create purchase order','m:purchase'],open&&['close','Close PR','a']]},
+ mrs:d=>{const open=['Approved','Partially Issued'].includes(d.status);return [['Draft','Rejected'].includes(d.status)&&['submit','Submit for approval','e'],d.status==='Pending Approval'&&['approve','Approve','a'],d.status==='Pending Approval'&&['reject','Reject','a'],open&&['mkmin','Issue material','m:stores'],open&&mrShort(d).length&&['mkpr','Raise PR for shortage','m:request'],open&&['close','Close MR','a']]},
+ mins:d=>[d.status==='Draft'&&['post','Post issue','e']],
+ mrets:d=>[d.status==='Draft'&&['post','Post return','e']],
+ items:d=>[!st.isNew&&FG.includes(d.type)&&['mkbom',bomOf(d.code)?'Open BOM':'Create BOM','m:production']],
  pos:d=>[d.status==='Draft'&&['approve','Approve','a'],['Approved','Partially Received'].includes(d.status)&&['mkgrn','Create GRN','m:stores'],['Approved','Partially Received'].includes(d.status)&&['close','Close PO','a']],
  grns:d=>[d.status==='Draft'&&['post','Post GRN','e'],d.status==='Posted'&&!d.billed&&['mkpinv','Book purchase invoice','m:accounts']],
- prods:d=>[d.status==='Created'&&['release','Release to floor','a'],d.status==='Released'&&['issue','Issue materials','e'],['Released','In Progress'].includes(d.status)&&d.routing&&['resched','Reschedule','e'],d.status==='In Progress'&&['finish','Report as finished','e']],
+ prods:d=>[d.status==='Created'&&['release','Release to floor','a'],d.status==='Released'&&!mrFor(d.no).length&&['mkmr','Create material request','m:request'],d.status==='Released'&&!mrFor(d.no).length&&['issue','Issue materials directly','e'],['Released','In Progress'].includes(d.status)&&d.routing&&['resched','Reschedule','e'],d.status==='In Progress'&&['finish','Report as finished','e']],
  sos:d=>[d.status==='Draft'&&['confirm','Confirm','a'],['Confirmed','Partially Dispatched'].includes(d.status)&&['mkdn','Create dispatch','m:stores'],['Confirmed','Partially Dispatched'].includes(d.status)&&['mkmo','Create production order','m:production'],['Confirmed','Partially Dispatched'].includes(d.status)&&['close','Close SO','a']],
  dispatches:d=>[d.status==='Draft'&&['post','Post dispatch','e'],d.status==='Posted'&&['mkgp','Create gate pass','m:gate'],d.status==='Posted'&&!d.invoiced&&['mkinv','Create invoice','m:accounts']],
  journals:d=>[d.status==='Draft'&&['post','Post journal','a']],
@@ -701,7 +739,39 @@ const WF={
 };
 const fail=m=>{throw new Error(m)};
 const ACT={
- pos:{approve:d=>{if(!d.lines?.length)fail('Add at least one line before approving.');const lim=n(company.poLimit);if(lim>0&&docTotal(d)>lim&&!isAdmin())fail(`This PO is above the approval limit of ${inr(lim)}. An Admin must approve it.`);d.status='Approved';d.approvedBy=me.id},
+ prs:{submit:d=>{if(!d.lines?.length)fail('Add at least one item.');d.status='Pending Approval'},
+  approve:d=>{d.status='Approved';d.approvedBy=me.id},reject:d=>{d.status='Rejected'},close:d=>{d.status='Closed'},
+  mkpo:d=>{const p=d.lines.filter(l=>n(l.qty)-n(l.ordered)>1e-9);if(!p.length)fail('Every line is already ordered.');const sups=[...new Set(p.map(l=>l.supplier).filter(Boolean))];
+   openNew('pos',{pr:d.no,supplier:sups.length===1?sups[0]:'',remarks:`Against ${d.no}`,lines:p.map(l=>({item:l.item,qty:+(n(l.qty)-n(l.ordered)).toFixed(3),rate:l.rate}))});
+   if(sups.length>1)toast('Lines have different suggested suppliers. Choose one supplier, or make one PO per supplier.');return 'nav'}},
+ mrs:{submit:d=>{if(!d.lines?.length)fail('Add at least one item.');d.status='Pending Approval'},
+  approve:d=>{d.status='Approved';d.approvedBy=me.id},reject:d=>{d.status='Rejected'},close:d=>{d.status='Closed'},
+  mkmin:d=>{openNew('mins',{mr:d.no,issuedTo:d.requestedBy||''});return 'nav'},
+  mkpr:d=>{const s=mrShort(d);if(!s.length)fail('No shortage: the store has enough stock for every pending line.');
+   openNew('prs',{dept:d.dept,mr:d.no,priority:'Urgent',purpose:`Shortage for material request ${d.no}`,lines:s.map(x=>({item:x.item,qty:x.short,rate:n(get('items',x.item)?.stdCost)}))});return 'nav'}},
+ mins:{post:async d=>{const mr=get('mrs',d.mr);if(!mr)fail('Material request not found.');if(!['Approved','Partially Issued'].includes(mr.status))fail(`${mr.no} is ${mr.status}; only approved requests can be issued.`);
+   const m=clone(mr),need={};
+   for(const l of d.lines)if(n(l.qty)>0){const k=l.item+'|'+String(l.batch||'').trim();need[k]=(need[k]||0)+n(l.qty)}
+   if(!Object.keys(need).length)fail('Enter an issue quantity on at least one line.');
+   for(const [k,q] of Object.entries(need)){const [it,b]=k.split('|');const have=b?(batchBal(it,d.wh).find(x=>x.batch===b)?.qty||0):onHand(it,d.wh);if(have<q-1e-6)fail(`${it}${b?' batch '+b:''}: only ${q3(have)} in ${d.wh}, this issue needs ${q3(q)}.`)}
+   for(const l of d.lines)if(n(l.qty)>0&&allocTo(m.lines,l.item,n(l.qty),'issued')>1e-6)fail(`${l.item}: issuing more than requested on ${mr.no}.`);
+   let k=0,val=0;const done=[];
+   for(const l of d.lines.filter(l=>n(l.qty)>0)){const rate=+avgCost(l.item).toFixed(4),al=alloc(l.item,d.wh,n(l.qty),String(l.batch||'').trim());
+    await addLedger(al.map(a=>({id:'MIN-'+d.no+'-'+(k++),date:d.date,type:'Material Issue',ref:d.no,item:l.item,wh:d.wh,qty:-a.qty,rate,party:deptName(d.dept),batch:a.batch,exp:a.exp})));
+    val+=n(l.qty)*rate;done.push({item:l.item,qty:n(l.qty)});const bs=al.filter(a=>a.batch);if(bs.length)l.batch=bs.map(a=>bs.length>1?`${a.batch}×${q3(a.qty)}`:a.batch).join(', ')}
+   m.status=m.lines.every(x=>n(x.issued)>=n(x.qty)-1e-6)?'Issued':'Partially Issued';m.log=[...(m.log||[]),{at:Date.now(),by:me.id||'',act:`Issued on ${d.no}`}];await put('mrs',sid(m.no),m);
+   if(m.mo){const mo=get('prods',m.mo);if(mo&&['Released','In Progress'].includes(mo.status)){const o=clone(mo);o.issuedValue=+(n(o.issuedValue)+val).toFixed(2);const iss=o.issued||[];
+    for(const x of done){const e=iss.find(y=>y.item===x.item);if(e)e.qty=+(n(e.qty)+x.qty).toFixed(3);else iss.push({item:x.item,qty:x.qty})}o.issued=iss;if(o.status==='Released')o.status='In Progress';
+    o.log=[...(o.log||[]),{at:Date.now(),by:me.id||'',act:`Material issued on ${d.no}`}];await put('prods',sid(o.no),o)}}
+   d.value=+val.toFixed(2);d.status='Posted'}},
+ mrets:{post:async d=>{if(!d.lines.some(l=>n(l.qty)>0))fail('Enter a return quantity on at least one line.');
+   if(d.min){const mi=get('mins',d.min);if(mi){const got={};for(const l of mi.lines||[])got[l.item]=(got[l.item]||0)+n(l.qty);const back={};for(const l of d.lines)back[l.item]=(back[l.item]||0)+n(l.qty);
+    for(const [it,q] of Object.entries(back))if(q>(got[it]||0)+1e-6)fail(`${it}: returning ${q3(q)} but only ${q3(got[it]||0)} was issued on ${mi.no}.`)}}
+   let k=0;for(const [i,l] of d.lines.entries()){const q=n(l.qty);if(q<=0)continue;if(isTracked(l.item)&&!String(l.batch||'').trim())l.batch=`${d.no}-${i+1}`;
+    await addLedger([{id:'MRN-'+d.no+'-'+(k++),date:d.date,type:'Material Return',ref:d.no,item:l.item,wh:d.wh,qty:q,rate:+avgCost(l.item).toFixed(4),party:deptName(d.dept),batch:String(l.batch||'').trim(),exp:''}])}
+   d.status='Posted'}},
+ items:{mkbom:d=>{const b=bomOf(d.code);if(b)openRec('boms',sid(b.code));else openNew('boms',{item:d.code});return 'nav'}},
+ pos:{approve:async d=>{if(!d.lines?.length)fail('Add at least one line before approving.');const lim=n(company.poLimit);if(lim>0&&docTotal(d)>lim&&!isAdmin())fail(`This PO is above the approval limit of ${inr(lim)}. An Admin must approve it.`);await prOrdered(d);d.status='Approved';d.approvedBy=me.id},
   close:d=>{d.status='Closed'},mkgrn:d=>{openNew('grns',{po:d.no});return 'nav'}},
  grns:{post:async d=>{const po=get('pos',d.po);if(!po)fail('Purchase order not found.');if(!['Approved','Partially Received'].includes(po.status))fail(`${po.no} is ${po.status}; only approved POs can be received.`);
   const p=clone(po);
@@ -716,7 +786,9 @@ const ACT={
   if(rejWh)await addLedger(d.lines.filter(l=>n(l.rejected)>0).map((l,i)=>({id:'GRNR-'+d.no+'-'+i,date:d.date,type:'GRN Rejected',ref:d.no,item:l.item,wh:rejWh,qty:n(l.rejected),rate:n(l.rate),party:d.supplier,batch:l.batch||''})));
   p.status=p.lines.every(x=>n(x.recv)>=n(x.qty)-1e-6)?'Received':'Partially Received';await put('pos',sid(p.no),p);d.status='Posted'},
   mkpinv:d=>{openNew('pinv',{grn:d.no});return 'nav'}},
- prods:{release:d=>{const b=get('boms',d.bom);if(!b)fail('Select a BOM.');if(b.item!==d.item)fail(`BOM ${b.code} is for ${b.item}, not ${d.item}.`);if(n(d.qty)<=0)fail('Planned qty must be more than zero.');if(!b.lines?.length)fail(`BOM ${b.code} has no components.`);
+ prods:{mkmr:d=>{const req=bomReq(d);if(!req.length)fail('This order has no BOM components.');const dep=list('departments').find(x=>/prod/i.test(x.name||''));
+   openNew('mrs',{mo:d.no,wh:d.rmWh,purpose:'Production',dept:dep?.code||'',lines:req.map(r=>({item:r.item,qty:r.qty}))});return 'nav'},
+  release:d=>{const b=get('boms',d.bom);if(!b)fail('Select a BOM.');if(b.item!==d.item)fail(`BOM ${b.code} is for ${b.item}, not ${d.item}.`);if(n(d.qty)<=0)fail('Planned qty must be more than zero.');if(!b.lines?.length)fail(`BOM ${b.code} has no components.`);
    if(d.routing){const r=get('routings',d.routing);if(!r)fail('Routing not found.');if(r.item!==d.item)fail(`Routing ${r.code} is for ${r.item}, not ${d.item}.`)}
    d.ops=d.routing?scheduleOps(d,Math.max(Date.now(),Date.parse(d.date+'T00:00'))):[];d.status='Released';d.approvedBy=me.id},
   resched:d=>{d.ops=scheduleOps(d,Date.now())},
@@ -767,6 +839,10 @@ const ACT={
 /* autofill on change */
 function onField(v,k,d){
  const wh=t=>list('warehouses').find(w=>w.type===t)?.code;
+ if(v==='mins'&&k==='mr'){const m=get('mrs',d.mr);d.dept=m?.dept||'';d.wh=m?.wh||d.wh||'';if(m&&!d.issuedTo)d.issuedTo=m.requestedBy||'';d.lines=m?mrPending(m).map(x=>({item:x.item,qty:x.pend,batch:''})):[];return 1}
+ if(v==='mrets'&&k==='min'){const m=get('mins',d.min);if(m){d.dept=m.dept;d.wh=d.wh||m.wh;d.lines=(m.lines||[]).filter(l=>n(l.qty)>0).map(l=>({item:l.item,qty:l.qty,batch:/[×,]/.test(String(l.batch||''))?'':(l.batch||'')}))}return 1}
+ if(v==='mrs'&&k==='mo'){const m=get('prods',d.mo);if(m){d.wh=m.rmWh||d.wh;if(!(d.lines||[]).some(l=>l.item))d.lines=bomReq(m).map(r=>({item:r.item,qty:r.qty}))}return 1}
+ if((v==='mrs'||v==='mins')&&k==='wh')return 1;
  if(v==='grns'&&k==='po'){const p=get('pos',d.po);d.supplier=p?.supplier||'';d.lines=(p?.lines||[]).filter(l=>n(l.qty)-n(l.recv)>0).map(l=>{const q=+(n(l.qty)-n(l.recv)).toFixed(3);return {item:l.item,qty:q,accepted:q,rejected:0,rate:l.rate,batch:'',exp:''}});if(!d.wh)d.wh=wh('Raw Material')||'';return 1}
  if(v==='dispatches'&&k==='so'){const s=get('sos',d.so);d.customer=s?.customer||'';d.lines=(s?.lines||[]).filter(l=>n(l.qty)-n(l.disp)>0).map(l=>({item:l.item,qty:+(n(l.qty)-n(l.disp)).toFixed(3),rate:l.rate,batch:''}));if(!d.wh)d.wh=wh('Finished Goods')||'';return 1}
  if(v==='prods'&&k==='item'){const it=get('items',d.item);d.bom=list('boms').find(b=>b.item===d.item&&b.active!==false)?.code||'';d.routing=list('routings').find(b=>b.item===d.item&&b.active!==false)?.code||'';
@@ -778,8 +854,45 @@ function onField(v,k,d){
   d.lines=(g?.lines||[]).filter(l=>n(l.accepted)>0).map(l=>{const it=get('items',l.item)||{};return {item:l.item,hsn:it.hsn||'',qty:l.accepted,rate:l.rate,gst:it.gst??''}});return 1}
  if(['sinv','pinv'].includes(v)&&k==='pos')return 1;
  return 0}
-function onLine(v,k,l){if(k==='item'){const it=get('items',l.item);if(v==='pos'&&!n(l.rate))l.rate=it?.stdCost??'';if(v==='sos'&&!n(l.rate))l.rate=it?.salePrice??'';if(v==='journals'&&!n(l.rate))l.rate=it?.stdCost??'';
+function onLine(v,k,l){if(k==='item'){const it=get('items',l.item);if(v==='prs'&&!n(l.rate))l.rate=it?.stdCost??'';if(v==='pos'&&!n(l.rate))l.rate=it?.stdCost??'';if(v==='sos'&&!n(l.rate))l.rate=it?.salePrice??'';if(v==='journals'&&!n(l.rate))l.rate=it?.stdCost??'';
  if(v==='gatepasses'&&it){if(!l.desc)l.desc=it.name;if(!l.uom)l.uom=it.uom}}}
+
+/* ---------- codes, products, requisitions & material requests ---------- */
+function nextCode(c,v){const p=c.auto+'-';let m=0;for(const x of list(v)){const s=String(x[c.key]||'');if(s.startsWith(p)){const k=parseInt(s.slice(p.length),10);if(k>m)m=k}}return p+String(m+1).padStart(4,'0')}
+const mrFor=mo=>list('mrs').filter(m=>m.mo===mo&&!['Rejected','Closed'].includes(m.status));
+const deptName=c=>get('departments',c)?.name||c||'';
+const mrPending=d=>(d.lines||[]).map(l=>({item:l.item,pend:+Math.max(0,n(l.qty)-n(l.issued)).toFixed(3)})).filter(x=>x.item&&x.pend>0);
+const mrShort=d=>mrPending(d).map(x=>({...x,short:+Math.max(0,x.pend-Math.max(0,onHand(x.item,d.wh))).toFixed(3)})).filter(x=>x.short>0);
+function allocTo(lines,item,qty,key){let left=qty;for(const l of lines.filter(x=>x.item===item)){const t=Math.min(left,n(l.qty)-n(l[key]));if(t>0){l[key]=+(n(l[key])+t).toFixed(3);left-=t}}return left}
+async function prOrdered(po){if(!po.pr)return;const pr=get('prs',po.pr);if(!pr)return;const p=clone(pr);for(const l of po.lines||[])allocTo(p.lines,l.item,n(l.qty),'ordered');
+ p.status=p.lines.every(x=>n(x.ordered)>=n(x.qty)-1e-6)?'Ordered':'Partially Ordered';p.log=[...(p.log||[]),{at:Date.now(),by:me.id||'',act:`Ordered on ${po.no}`}];await put('prs',sid(p.no),p)}
+const bomOf=item=>list('boms').find(b=>b.item===item&&b.active!==false)||list('boms').find(b=>b.item===item);
+function bomCost(b){if(!b)return 0;let s=0;for(const l of b.lines||[])s+=n(l.qty)*(1+n(l.scrap)/100)*avgCost(l.item);return s/(n(b.outQty)||1)}
+function bomExtra(d){const ls=(d.lines||[]).filter(l=>l.item);if(!ls.length)return '';let tot=0;
+ const rows=ls.map(l=>{const it=get('items',l.item)||{},q=n(l.qty)*(1+n(l.scrap)/100),c=avgCost(l.item),a=q*c;tot+=a;return `<tr><td class="code">${esc(l.item)}</td><td>${esc(it.name)}</td><td>${esc(it.type)}</td><td class="num">${q3(q)} ${esc(it.uom||'')}</td><td class="num">${fmt(c)}</td><td class="num">${fmt(a)}</td></tr>`}).join('');
+ const per=tot/(n(d.outQty)||1),fg=get('items',d.item);
+ return `<section class="tab"><h2>Material cost</h2><div class="tablewrap"><table><thead><tr><th>Component</th><th>Name</th><th>Type</th><th class="num">Qty incl. scrap</th><th class="num">Unit cost (₹)</th><th class="num">Cost (₹)</th></tr></thead><tbody>${rows}</tbody></table></div>
+ <div class="totals"><span class="muted">Cost for ${q3(n(d.outQty)||1)} ${esc(fg?.uom||'unit')} <b>${inr(tot)}</b></span><span class="muted">Cost per unit <b>${inr(per)}</b></span>${n(fg?.salePrice)?`<span class="muted">Margin at sale price <b>${fmt((n(fg.salePrice)-per)/n(fg.salePrice)*100,1)}%</b></span>`:''}</div>
+ <p class="hint" style="padding:0 14px 10px">Unit cost is the weighted average of receipts, or the item’s standard cost until it has been received.</p></section>`}
+function stockCheck(v,d){if(!d.wh||['Posted','Issued','Closed','Rejected'].includes(d.status))return '';
+ const rows=(d.lines||[]).filter(l=>l.item).map(l=>({item:l.item,need:v==='mrs'?Math.max(0,n(l.qty)-n(l.issued)):n(l.qty)}));if(!rows.length)return '';
+ return `<section class="tab"><h2>Stock in ${esc(d.wh)}</h2><div class="tablewrap"><table><thead><tr><th>Item</th><th>Name</th><th class="num">${v==='mrs'?'Still to issue':'To issue now'}</th><th class="num">In store</th><th>Availability</th></tr></thead><tbody>
+ ${rows.map(r=>{const it=get('items',r.item)||{},oh=onHand(r.item,d.wh);return `<tr><td class="code">${esc(r.item)}</td><td>${esc(it.name)}</td><td class="num">${q3(r.need)} ${esc(it.uom||'')}</td><td class="num">${q3(oh)}</td><td>${oh>=r.need-1e-9?'<span class="pill p-good">Available</span>':`<span class="pill p-bad">Short ${q3(r.need-oh)}</span>`}</td></tr>`}).join('')}
+ </tbody></table></div>${v==='mrs'&&mrShort(d).length?'<p class="hint" style="padding:0 14px 10px">Short items can be bought with “Raise PR for shortage” once this request is approved.</p>':''}</section>`}
+function productRows(){const q=st.q.toLowerCase().trim();return list('items').filter(i=>FG.includes(i.type)).filter(i=>!q||(i.code+' '+i.name).toLowerCase().includes(q))
+ .sort((a,b)=>String(a.code).localeCompare(String(b.code),undefined,{numeric:true}))
+ .map(i=>{const b=bomOf(i.code),r=list('routings').find(x=>x.item===i.code&&x.active!==false),c=b?bomCost(b):0;return {i,b,r,c,m:n(i.salePrice)&&b?(n(i.salePrice)-c)/n(i.salePrice)*100:null}})}
+function productsHTML(){const rows=productRows(),ce=canEnt('items'),cb=canEnt('boms');
+ return `<div class="head"><div><div class="crumb">Masters</div><h1>Product Master</h1></div></div>
+ <div class="pane">${ce?'<button class="btn pri" data-act="newprod">+ New product</button><span class="sep"></span>':''}<button class="btn" data-act="rep-xlsx">Export Excel</button><button class="btn" data-act="rep-csv">Export CSV</button><input class="search" id="pq" placeholder="Search products…" value="${esc(st.q)}" aria-label="Search products"></div>
+ <div class="tablewrap"><table><thead><tr><th>Product code</th><th>Name</th><th>Type</th><th>Unit</th><th>BOM</th><th class="num">Components</th><th>Routing</th><th class="num">Material cost / unit (₹)</th><th class="num">Sale price (₹)</th><th class="num">Margin</th><th></th></tr></thead><tbody>
+ ${rows.length?rows.map(({i,b,r,c,m})=>`<tr class="click" data-goto="items" data-id="${esc(sid(i.code))}"><td class="code">${esc(i.code)}</td><td>${esc(i.name)}</td><td>${esc(i.type)}</td><td>${esc(i.uom)}</td>
+  <td>${b?`<span class="pill p-good">${esc(b.code)}</span>`:'<span class="pill p-warn">Not mapped</span>'}</td><td class="num">${b?(b.lines||[]).length:''}</td><td>${r?`<span class="code">${esc(r.code)}</span>`:'<span class="muted">—</span>'}</td>
+  <td class="num">${b?fmt(c):''}</td><td class="num">${i.salePrice!=null&&i.salePrice!==''?fmt(i.salePrice):''}</td><td class="num">${m==null?'':`<span class="pill ${m<0?'p-bad':m<15?'p-warn':'p-good'}">${fmt(m,1)}%</span>`}</td>
+  <td>${cb?(b?`<button class="btn sm" data-goto="boms" data-id="${esc(sid(b.code))}">Edit BOM</button>`:`<button class="btn sm wf" data-act="newbom" data-item="${esc(i.code)}">Map BOM</button>`):''}</td></tr>`).join('')
+ :`<tr><td colspan="11" class="empty">${ready?'No products yet. Click “+ New product” to add what you manufacture, then map its BOM.':'Loading…'}</td></tr>`}
+ </tbody></table></div>
+ <p class="hint">Products are items of type Finished Good or Semi-Finished. Map each product to a BOM (its components) and a routing (its operations) before making production orders.</p>`}
 
 /* ---------- invoice document ---------- */
 function downloadInvoice(d){const c=get('customers',d.customer)||{},g=gstCalc(d),co=company,dn=get('dispatches',d.dn)||{};
@@ -804,19 +917,25 @@ function printDoc(html,name){const w=window.open('','_blank');if(!w){saveFile(na
 /* ---------- form ops ---------- */
 function logAct(d,act){d.log=[...(d.log||[]),{at:Date.now(),by:me.id||'',act}].slice(-40)}
 function openNew(v,preset){const c=ENT[v],d={};for(const f of c.fields)if(f.def!==undefined)d[f.k]=typeof f.def==='function'?f.def():f.def;if(c.lines)d.lines=[];
- st.draft=d;Object.assign(d,clone(preset||{}));if(c.lines&&!c.noAdd&&!d.lines.length)d.lines.push({});
+ st.draft=d;Object.assign(d,clone(preset||{}));st.autoCode='';if(c.auto&&!d[c.key]){d[c.key]=nextCode(c,v);st.autoCode=d[c.key]}if(c.lines&&!c.noAdd&&!d.lines.length)d.lines.push({});
  st.isNew=true;for(const k in preset||{})if(k!=='lines')onField(v,k,d);
- st.q='';st.pop=false;if(st.view!==v){st.view=v;st.skip=true;location.hash=v}render();scrollTo(0,0)}
-function openRec(v,id){const r=S[v][id];if(!r)return;if(st.view!==v){st.view=v;st.skip=true;location.hash=v}st.isNew=false;st.draft=clone(r);render();scrollTo(0,0)}
+ st.q='';st.pop=false;if(st.view!==v){st.view=v;st.skip=(st.skip||0)+1;location.hash=v}render();scrollTo(0,0)}
+function openRec(v,id){const r=S[v][id];if(!r)return;if(st.view!==v){st.view=v;st.skip=(st.skip||0)+1;location.hash=v}st.isNew=false;st.draft=clone(r);render();scrollTo(0,0)}
 async function saveDraft(quiet){const v=st.view,c=ENT[v],d=st.draft;if(!canEnt(v)){toast('Your role can’t change '+c.title.toLowerCase()+'.',1);return false}
+ if(st.isNew&&c.auto&&!String(d[c.key]??'').trim()){d[c.key]=nextCode(c,v);st.autoCode=d[c.key]}
  for(const f of c.fields){if(f.req&&f.t!=='bool'&&!String(d[f.k]??'').trim()){toast(`${f.l} is required.`,1);return false}}
  if(c.lines){d.lines=(d.lines||[]).filter(l=>l.item||l.desc);for(const [i,l] of d.lines.entries())for(const f of c.lines)if(f.req&&!String(l[f.k]??'').trim()){toast(`Line ${i+1}: ${f.l} is required.`,1);return false}
   if(c.txn&&!d.lines.length){toast('Add at least one line.',1);return false}
   if(v==='routings'){const s=d.lines.map(l=>n(l.seq));if(new Set(s).size!==s.length){toast('Each operation needs a different Op No.',1);return false}}}
- const wasNew=st.isNew;
- if(wasNew){if(c.txn){d.no=docNo(c,v,d);d.createdBy=me.id||'';d.createdAt=Date.now()}else{d[c.key]=String(d[c.key]).trim();if(S[v][sid(d[c.key])]){toast(`${c.one} ${d[c.key]} already exists.`,1);return false}}}
+ const wasNew=st.isNew;let autoKey=false;
+ if(wasNew){if(c.txn){d.no=docNo(c,v,d);d.createdBy=me.id||'';d.createdAt=Date.now()}else{d[c.key]=String(d[c.key]).trim();autoKey=!!c.auto&&d[c.key]===st.autoCode;
+  if(S[v][sid(d[c.key])]){if(!autoKey){toast(`${c.one} ${d[c.key]} already exists.`,1);return false}d[c.key]=nextCode(c,v)}}}
  if(c.txn&&!quiet)logAct(d,wasNew?'Created':'Edited');else if(c.txn&&wasNew)logAct(d,'Created');
- d.updatedAt=Date.now();try{await put(v,sid(d[c.key]),clone(d))}catch(e){if(wasNew&&c.txn)delete d.no;return false}st.isNew=false;return true}
+ d.updatedAt=Date.now();
+ for(let i=0;;i++){try{await put(v,sid(d[c.key]),clone(d),wasNew);break}
+  catch(e){if(e?.code==='exists'&&wasNew&&i<4&&(c.txn||autoKey)){await reloadCol(v);d[c.key]=c.txn?docNo(c,v,d):nextCode(c,v);continue}
+   if(e?.code==='exists')toast(`${c.one} ${d[c.key]} already exists. Use a different code.`,1);if(wasNew&&c.txn)delete d.no;return false}}
+ st.isNew=false;st.autoCode='';return true}
 async function runWF(a){const v=st.view,label=(WF[v](st.draft).find(x=>x&&x[0]===a)||[])[1]||a;
  const needSave=st.isNew||editable(ENT[v],v,st.draft)||ENT[v].fields.some(f=>f.stage&&stageOk(f,st.draft))||(ENT[v].lines||[]).some(f=>f.stage&&stageOk(f,st.draft));
  if(needSave&&!(await saveDraft(true)))return;const d=st.draft;const before=clone(d);
@@ -851,13 +970,14 @@ function exportList(fmtx){const v=st.view,c=ENT[v];let h=flatHeaders(c),rs=rowsF
 const skipImp=f=>(f.t==='ro'&&f.k!=='no')||f.ro||f.stage;
 function exportTemplate(){const v=st.view,c=ENT[v],h=[...c.fields.filter(f=>!skipImp(f)).map(f=>f.l),...(c.lines||[]).filter(f=>!skipImp(f)).map(f=>'Line - '+f.l)];
  exportAoa(v+'_template',h,[],'xlsx',wb=>{const notes=[['Column','Required','Allowed values / notes']];
-  for(const f of c.fields.filter(f=>!skipImp(f)))notes.push([f.l,f.req?'Yes':'',f.t==='sel'?f.o.join(', '):f.t==='ref'?`Code from ${ENT[f.r].title}`:f.t==='bool'?'Yes / No':f.t==='date'?'Date (YYYY-MM-DD)':f.t==='num'?'Number':f.k==='no'?'Optional: leave blank to number automatically. Rows with the same number become one document.':''])
+  for(const f of c.fields.filter(f=>!skipImp(f)))notes.push([f.l,f.req&&!(f.k===c.key&&c.auto)?'Yes':'',f.t==='sel'?f.o.join(', '):f.t==='ref'?`Code from ${ENT[f.r].title}`:f.t==='bool'?'Yes / No':f.t==='date'?'Date (YYYY-MM-DD)':f.t==='num'?'Number':f.k===c.key&&c.auto?`Optional: leave blank to create the code automatically (${c.auto}-0001, ${c.auto}-0002…)`:f.k==='no'?'Optional: leave blank to number automatically. Rows with the same number become one document.':''])
   for(const f of (c.lines||[]).filter(f=>!skipImp(f)))notes.push(['Line - '+f.l,f.req?'Yes':'',f.t==='ref'?`Code from ${ENT[f.r].title}. One row per line.`:f.t==='num'?'Number':f.t==='date'?'Date (YYYY-MM-DD)':'']);
   XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(notes),'Instructions')})}
 function exportReport(fmtx){const v=st.view;
  if(v==='stock'){let r=stockRows();if(st.filt)r=r.filter(x=>x.wh===st.filt);exportAoa('stock_on_hand',['Item Code','Item Name','Type','Warehouse','Qty','Unit','Avg Cost','Value'],r.map(x=>[x.item,x.name,x.type,x.wh,+x.qty.toFixed(3),x.uom,+x.rate.toFixed(2),+x.value.toFixed(2)]),fmtx)}
  if(v==='batches'){let r=batchRows();if(st.filt)r=r.filter(x=>x.wh===st.filt);exportAoa('batch_aging',['Item Code','Item Name','Batch','Warehouse','Qty','Unit','Received','Age (days)','Bucket','Expiry','Value'],r.map(x=>[x.item,x.name,x.batch,x.wh,+x.qty.toFixed(3),x.uom,x.first,x.age,x.bucket,x.exp,+x.value.toFixed(2)]),fmtx)}
  if(v==='ledger'){let r=ledgerRows();if(st.filt)r=r.filter(x=>x.wh===st.filt);exportAoa('stock_ledger',['Date','Type','Document','Item','Batch','Warehouse','Party','Qty','Rate','Value'],r.map(x=>[x.date,x.type,x.ref,x.item,x.batch||'',x.wh,x.party,n(x.qty),n(x.rate),n(x.value)]),fmtx)}
+ if(v==='products')exportAoa('product_master',['Product Code','Name','Type','Unit','BOM','Components','Routing','Material Cost / Unit','Sale Price','Margin %'],productRows().map(({i,b,r,c,m})=>[i.code,i.name,i.type,i.uom,b?.code||'',b?(b.lines||[]).length:'',r?.code||'',b?+c.toFixed(2):'',n(i.salePrice),m==null?'':+m.toFixed(1)]),fmtx);
  if(v==='plan')exportAoa('material_planning',['Item Code','Item Name','Needed for MOs','Reorder Level','On Hand','On Open POs','To Purchase','Unit'],planRows().map(x=>[x.item,x.name,x.req,x.ro,x.oh,x.po,x.short,x.uom]),fmtx)}
 function coerce(f,raw,errs,row){let v=raw;if(v instanceof Date){const d=new Date(v.getTime()-v.getTimezoneOffset()*60000);v=d.toISOString().slice(0,10)}
  v=typeof v==='string'?v.trim():v;if(v===''||v==null)return f.t==='bool'?(f.def!==false):'';
@@ -873,11 +993,12 @@ async function importFile(file){const v=st.view,c=ENT[v];if(!window.XLSX){toast(
  const map={};for(const h of Object.keys(rows[0])){const k=norm(h);let f=c.fields.find(f=>norm(f.l)===k||norm(f.k)===k);if(f){map[h]={f};continue}
   f=(c.lines||[]).find(f=>norm('Line - '+f.l)===k||norm('line'+f.k)===k||(!c.fields.some(x=>norm(x.l)===norm(f.l))&&norm(f.l)===k));if(f)map[h]={f,line:1}}
  const keyF=c.fields.find(f=>f.k===c.key),errs=[],docs={},order=[];
- if(!c.txn&&!Object.values(map).some(m=>m.f===keyF)){toast(`Column “${keyF.l}” is missing. Download the blank template to see the headings.`,1);return}
+ if(!c.txn&&!c.auto&&!Object.values(map).some(m=>m.f===keyF)){toast(`Column “${keyF.l}” is missing. Download the blank template to see the headings.`,1);return}
+ let autoN=null;
  rows.forEach((r,i)=>{const row=i+2,hd={},ln={};let any=false;
   for(const [h,m] of Object.entries(map)){if(skipImp(m.f))continue;const raw=r[h];if(raw!==''&&raw!=null)any=true;
    const val=m.f.k==='no'?String(raw??'').trim():coerce(m.f,raw,errs,row);(m.line?ln:hd)[m.f.k]=val}
-  if(!any)return;let key=hd[c.key];if(!c.txn&&!key){errs.push(`Row ${row}: ${keyF.l} is empty.`);return}
+  if(!any)return;let key=hd[c.key];if(!c.txn&&!key&&c.auto){if(autoN===null)autoN=+nextCode(c,v).split('-').pop();key=hd[c.key]=c.auto+'-'+String(autoN++).padStart(4,'0')}if(!c.txn&&!key){errs.push(`Row ${row}: ${keyF.l} is empty.`);return}
   if(c.txn&&!key)key='__new'+row;
   if(!docs[key]){docs[key]={...hd,lines:[],_row:row};order.push(key)}
   if(c.lines&&(ln.item||ln.desc))docs[key].lines.push(ln)});
@@ -924,6 +1045,9 @@ V.addEventListener('click',async e=>{const t=e.target.closest('[data-act],[data-
   case'opdone':{const d=st.draft,o=d.ops[+t.dataset.i];o.status='Done';o.doneAt=Date.now();o.doneBy=me.id||'';logAct(d,`Operation ${o.seq} ${o.op} done`);d.updatedAt=Date.now();
    try{await put('prods',sid(d.no),clone(d));toast(`Op ${o.seq} marked done`)}catch(e){o.status='Pending'}render();break}
   case'rep-xlsx':exportReport('xlsx');break;case'rep-csv':exportReport('csv');break;
+  case'newprod':openNew('items',{type:'Finished Good'});break;
+  case'newbom':openNew('boms',{item:t.dataset.item});break;
+  case'mkprplan':{const sh=planRows().filter(x=>x.short>0);openNew('prs',{purpose:'Shortage from material planning',lines:sh.map(x=>({item:x.item,qty:+x.short.toFixed(3),rate:x.rate}))});break}
   case'mkpo':{const sh=planRows().filter(x=>x.short>0);openNew('pos',{remarks:'Raised from material planning',lines:sh.map(x=>({item:x.item,qty:+x.short.toFixed(3),rate:x.rate}))});break}
   case'cosave':{if(!String(coDraft.name||'').trim()){toast('Company Name is required.',1);break}const prev=company;company=clone(coDraft);
    try{await API.j('PUT','/api/docs/settings/company',company);coDirty=false;toast('Company details saved');renderChrome()}catch(e){company=prev;wErr(e)}break}
@@ -932,7 +1056,7 @@ V.addEventListener('click',async e=>{const t=e.target.closest('[data-act],[data-
   case'ureset':{const u=USERS[t.dataset.uid];if(!u)break;modal(`<h2>Reset password for ${esc(u.name)}</h2><p class="muted">They’ll be signed out everywhere and must use the new password.</p><div class="fld"><label for="rpw">New password (8+ characters)</label><input id="rpw" minlength="8" autocomplete="off"></div><div class="acts"><button class="btn" data-act="mclose">Cancel</button><button class="btn pri" data-act="doreset" data-uid="${esc(u.id)}">Reset password</button></div>`);break}
  }});
 V.addEventListener('input',async e=>{const t=e.target,d=st.draft;
- if(t.id==='q'){st.q=t.value;fillRows();return}if(t.id==='rq'){st.q=t.value;fillReport();return}
+ if(t.id==='q'){st.q=t.value;fillRows();return}if(t.id==='pq'){st.q=t.value;render();const p=$('#pq');if(p){p.focus();p.setSelectionRange(p.value.length,p.value.length)}return}if(t.id==='rq'){st.q=t.value;fillReport();return}
  if(t.dataset.ck){coDraft[t.dataset.ck]=t.value;coDirty=true;return}
  if(!d)return;
  if(t.dataset.k&&t.tagName!=='SELECT'&&t.type!=='checkbox'){d[t.dataset.k]=t.value;if(st.view==='prods'&&['qty','date'].includes(t.dataset.k)){clearTimeout(st.tm);st.tm=setTimeout(()=>{const y=scrollY,k=t.dataset.k;render();scrollTo(0,y);document.getElementById('f_'+k)?.focus()},700)}return}
@@ -973,6 +1097,9 @@ function connectWS(){clearTimeout(wsTimer);const p=location.protocol==='https:'?
 $('#loginForm').addEventListener('submit',async e=>{e.preventDefault();const btn=$('#lbtn');btn.disabled=true;$('#lerr').textContent='';
  try{const r=await API.j('POST','/api/login',{email:$('#lemail').value.trim(),password:$('#lpass').value});$('#lpass').value='';setMe(r.user);await loadAll();wsTry=0;connectWS();route()}
  catch(x){$('#lerr').textContent=x.message||'Sign-in failed.'}finally{btn.disabled=false}});
+// Logo / company name always lead to the home screen, even when already on it.
+document.addEventListener('click',e=>{const a=e.target.closest('a[href="#dash"]');if(a&&location.hash==='#dash'){e.preventDefault();route()}});
+
 /* ---------- mobile app (PWA) ---------- */
 let installEvt=null;
 const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;

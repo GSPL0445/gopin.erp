@@ -3,15 +3,15 @@
 
 const ROLES = {
   'Admin': '*',
-  'Purchase Manager': ['purchase', 'masters'],
-  'Purchase Executive': ['purchase'],
-  'Stores Manager': ['stores', 'gate', 'masters'],
-  'Stores Executive': ['stores', 'gate'],
-  'Production Manager': ['production'],
-  'Production Supervisor': ['production'],
-  'Sales Manager': ['sales'],
-  'Sales Executive': ['sales'],
-  'Accounts': ['accounts'],
+  'Purchase Manager': ['purchase', 'masters', 'request'],
+  'Purchase Executive': ['purchase', 'request'],
+  'Stores Manager': ['stores', 'gate', 'masters', 'request'],
+  'Stores Executive': ['stores', 'gate', 'request'],
+  'Production Manager': ['production', 'masters', 'request'],
+  'Production Supervisor': ['production', 'request'],
+  'Sales Manager': ['sales', 'request'],
+  'Sales Executive': ['sales', 'request'],
+  'Accounts': ['accounts', 'request'],
   'Security Guard': ['gate'],
   'Viewer': [],
 };
@@ -21,12 +21,15 @@ const ROLES = {
 // updates its SO, an invoice marks its dispatch/GRN as billed), so those
 // modules are listed too.
 const COLLECTIONS = {
-  items: ['masters'], uoms: ['masters'],
+  items: ['masters'], uoms: ['masters'], departments: ['masters'],
   suppliers: ['purchase'], customers: ['sales'], warehouses: ['stores'],
   boms: ['production'], routings: ['production'], workcenters: ['production'],
+  prs: ['request', 'purchase'],          // PO approval marks PR lines as ordered
   pos: ['purchase', 'stores'],
   grns: ['stores', 'accounts'],
-  prods: ['production'],
+  mrs: ['request', 'stores'],            // material issue marks MR lines as issued
+  mins: ['stores'], mrets: ['stores'],
+  prods: ['production', 'stores'],       // material issue against an MO updates it
   sos: ['sales', 'stores'],
   dispatches: ['stores', 'accounts'],
   sinv: ['accounts'], pinv: ['accounts'],
