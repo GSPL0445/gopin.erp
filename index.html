@@ -1,0 +1,1121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Gopin Semicon Private Limited</title>
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#14232b">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Gopin ERP">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%226%22 fill=%22%230d7468%22/%3E%3Ctext x=%2216%22 y=%2221%22 font-family=%22monospace%22 font-size=%2214%22 font-weight=%22700%22 fill=%22white%22 text-anchor=%22middle%22%3EGS%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<script src="/vendor/xlsx.full.min.js"></script>
+<style>
+/* Layout: Dynamics-style shell — dark module rail left, action pane + FastTab forms right */
+:root{
+  --bg:#eef2f3; --surface:#ffffff; --surface-2:#f6f8f9; --ink:#15212a; --muted:#5a6b76; --line:#d5dee2;
+  --accent:#0d7468; --accent-soft:#dcefeb; --accent-ink:#ffffff;
+  --rail:#14232b; --rail-ink:#c4d3da; --rail-hi:#ffffff; --rail-active:#1f3742;
+  --good:#2b7a4b; --good-soft:#e0f1e6; --warn:#a5650f; --warn-soft:#fbefd9; --bad:#b33a2e; --bad-soft:#f8e1de; --info:#2f5f9e; --info-soft:#e1eaf6;
+  --f-ui:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d1418; --surface:#141e24; --surface-2:#18242b; --ink:#e2eaee; --muted:#8fa2ad; --line:#26353d;
+  --accent:#38b3a2; --accent-soft:#163632; --accent-ink:#06211d;
+  --rail:#091014; --rail-ink:#9fb2bb; --rail-hi:#ffffff; --rail-active:#17262e;
+  --good:#5cc187; --good-soft:#15301f; --warn:#e2a54b; --warn-soft:#33270f; --bad:#ec7f72; --bad-soft:#3a1915; --info:#7fa8e0; --info-soft:#17253a;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0d1418; --surface:#141e24; --surface-2:#18242b; --ink:#e2eaee; --muted:#8fa2ad; --line:#26353d;
+  --accent:#38b3a2; --accent-soft:#163632; --accent-ink:#06211d;
+  --rail:#091014; --rail-ink:#9fb2bb; --rail-hi:#ffffff; --rail-active:#17262e;
+  --good:#5cc187; --good-soft:#15301f; --warn:#e2a54b; --warn-soft:#33270f; --bad:#ec7f72; --bad-soft:#3a1915; --info:#7fa8e0; --info-soft:#17253a;
+  color-scheme:dark}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:14px;line-height:1.45}
+*{box-sizing:border-box}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.app{display:grid;grid-template-columns:236px minmax(0,1fr);min-height:100%}
+.rail{background:var(--rail);color:var(--rail-ink);padding-block:14px 24px;padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:12px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brand{display:flex;align-items:center;gap:10px;padding:4px 8px 12px;color:var(--rail-hi)}
+.brand .mark{width:30px;height:30px;border-radius:6px;background:var(--accent);display:grid;place-items:center;font-family:var(--f-mono);font-weight:600;color:var(--accent-ink);font-size:13px;flex:none}
+.brand b{font-size:15px;letter-spacing:.01em}.brand small{display:block;font-size:11px;color:var(--rail-ink);font-weight:400}
+.who{margin:0 8px 6px;padding:8px 10px;border-radius:6px;background:var(--rail-active);font-size:12px;color:var(--rail-ink)}
+.who b{display:block;color:var(--rail-hi);font-size:13px;font-weight:500}
+.grp{margin-top:12px}
+.grp h3{margin:0 0 4px;padding:0 8px;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--rail-ink);opacity:.7;font-weight:600}
+.grp a{display:block;padding:5px 8px;border-radius:5px;color:var(--rail-ink);text-decoration:none;font-size:13.5px}
+.grp a:hover{background:var(--rail-active);color:var(--rail-hi)}
+.grp a.on{background:var(--rail-active);color:var(--rail-hi);box-shadow:inset 3px 0 0 var(--accent)}
+.main{min-width:0;padding-block:0 40px;padding-left:24px;padding-right:max(24px,env(safe-area-inset-right,0px))}
+.top{display:flex;align-items:center;gap:12px;padding:14px 0 10px;border-bottom:1px solid var(--line);margin-bottom:14px}
+.top .co{font-weight:600}.top .sp{flex:1}
+.menu-btn{display:none;border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:6px 10px;cursor:pointer}
+.sync{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}.dot.live{background:var(--good)}.dot.local{background:var(--warn)}
+.note{background:var(--warn-soft);color:var(--ink);border:1px solid var(--line);padding:8px 12px;border-radius:6px;font-size:13px;margin-bottom:12px}
+h1{font-size:22px;margin:0;font-weight:600;letter-spacing:-.01em;text-wrap:balance}
+.crumb{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}
+.pane{display:flex;flex-wrap:wrap;gap:4px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px;margin-bottom:14px;position:relative}
+.btn{border:1px solid transparent;background:transparent;padding:6px 11px;border-radius:5px;cursor:pointer;font-size:13.5px;white-space:nowrap;text-decoration:none;color:var(--ink)}
+.btn:hover{background:var(--surface-2);border-color:var(--line)}
+.btn.pri{background:var(--accent);color:var(--accent-ink)}.btn.pri:hover{filter:brightness(1.07)}
+.btn.wf{border-color:var(--accent);color:var(--accent);font-weight:600}
+.btn.sm{padding:3px 8px;font-size:12.5px}
+.btn.danger{color:var(--bad)}
+.btn[disabled]{opacity:.45;pointer-events:none}
+.sep{width:1px;align-self:stretch;background:var(--line);margin:2px 4px}
+.search{margin-left:auto;min-width:0;flex:0 1 240px;border:1px solid var(--line);background:var(--surface-2);border-radius:5px;padding:6px 10px}
+.pop{position:absolute;top:calc(100% + 4px);z-index:20;background:var(--surface);border:1px solid var(--line);border-radius:8px;box-shadow:0 8px 24px rgb(0 0 0 / .14);padding:4px;min-width:210px}
+.pop button{display:block;width:100%;text-align:left}
+.head{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;margin-bottom:12px}
+.tablewrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:8px}
+.tab .tablewrap{border:0;border-radius:0}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th{text-align:left;font-weight:600;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:7px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+tbody tr.click{cursor:pointer}tbody tr.click:hover td{background:var(--accent-soft)}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.code{font-family:var(--f-mono);font-size:12.5px}
+.muted{color:var(--muted)}
+.empty{padding:28px 16px;text-align:center;color:var(--muted);white-space:normal}
+.pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;font-weight:500;background:var(--surface-2);border:1px solid var(--line)}
+.p-good{background:var(--good-soft);color:var(--good);border-color:transparent}.p-warn{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.p-bad{background:var(--bad-soft);color:var(--bad);border-color:transparent}.p-info{background:var(--info-soft);color:var(--info);border-color:transparent}
+.p-acc{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.tab{background:var(--surface);border:1px solid var(--line);border-radius:8px;margin-bottom:12px}
+.tab>h2{margin:0;padding:10px 14px;font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tab>h2 .sp{flex:1}
+.tab .body{padding:14px}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px 16px}
+.fld{display:flex;flex-direction:column;gap:4px;min-width:0}.fld.w2{grid-column:span 2}
+.fld label{font-size:12px;color:var(--muted);font-weight:500}.fld label i{color:var(--bad);font-style:normal}
+.fld input,.fld select,.fld textarea,.lines input,.lines select{border:1px solid var(--line);background:var(--surface);border-radius:5px;padding:6px 8px;width:100%;min-width:0}
+.fld textarea{min-height:60px;resize:vertical}
+.fld input[readonly],.fld select[disabled],.lines input[readonly],.lines select[disabled]{background:var(--surface-2);color:var(--muted)}
+.chk{flex-direction:row;align-items:center;gap:8px;padding-top:20px}.chk input{width:auto}
+.lines td{padding:5px 6px}.lines input,.lines select{padding:5px 6px}
+.lines td.n{width:110px}.lines td.x{width:36px}
+.lines td.n input{min-width:80px}.lines td select{min-width:180px}
+.xbtn{border:0;background:transparent;color:var(--muted);cursor:pointer;padding:4px 8px;border-radius:4px}.xbtn:hover{color:var(--bad);background:var(--bad-soft)}
+.totals{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px 24px;padding:10px 14px;border-top:1px solid var(--line);font-variant-numeric:tabular-nums}
+.totals b{font-size:15px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:14px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.tile .k{font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.tile .v{font-size:22px;font-weight:600;font-variant-numeric:tabular-nums;margin-top:2px}
+.tile .s{font-size:12.5px;color:var(--muted)}
+.tile.alert{box-shadow:inset 3px 0 0 var(--bad)}
+.flow{display:flex;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:8px;margin-bottom:14px;overflow:hidden}
+.flow a{flex:1 1 130px;padding:12px 14px;text-decoration:none;color:var(--ink);border-right:1px solid var(--line)}
+.flow a:last-child{border-right:0}.flow a:hover{background:var(--accent-soft)}
+.flow .st{font-size:11px;font-family:var(--f-mono);color:var(--accent);letter-spacing:.04em}
+.flow .nm{font-weight:600}.flow .ct{font-size:12.5px;color:var(--muted)}
+.cols2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:12px}
+.cols2>*{min-width:0}
+.log{list-style:none;margin:0;padding:6px 14px 12px;font-size:13px}
+.log li{display:flex;gap:12px;padding:5px 0;border-bottom:1px dashed var(--line)}.log li:last-child{border:0}
+.log time{color:var(--muted);font-variant-numeric:tabular-nums;min-width:132px}
+/* gantt */
+.gantt{min-width:780px}
+.g-row{display:grid;grid-template-columns:150px 1fr;border-bottom:1px solid var(--line)}
+.g-row:last-child{border-bottom:0}
+.g-lab{padding:8px 10px;font-size:13px;border-right:1px solid var(--line)}.g-lab small{display:block;color:var(--muted);font-size:11.5px}
+.g-track{position:relative;min-height:44px;background-image:linear-gradient(to right,var(--line) 1px,transparent 1px);background-size:calc(100%/7) 100%}
+.g-head .g-track{min-height:30px}
+.g-day{position:absolute;top:0;padding:6px 6px;font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.g-bar{position:absolute;top:8px;height:28px;border-radius:4px;background:var(--info-soft);color:var(--info);border:1px solid var(--info);font-size:11.5px;padding:0 6px;overflow:hidden;white-space:nowrap;line-height:26px;cursor:pointer;font-family:var(--f-mono)}
+.g-bar.ip{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+.g-bar.done{background:var(--good-soft);color:var(--good);border-color:var(--good)}
+.g-bar.late{background:var(--bad-soft);color:var(--bad);border-color:var(--bad)}
+.g-now{position:absolute;top:0;bottom:0;width:2px;background:var(--bad);opacity:.6}
+.ures{display:flex;flex-direction:column;gap:2px;margin-top:6px}
+.ures button{text-align:left}
+#modal{position:fixed;inset:0;background:rgb(10 18 22 / .45);display:grid;place-items:center;z-index:50;padding:16px}
+.dlg{background:var(--surface);border:1px solid var(--line);border-radius:10px;max-width:560px;width:100%;max-height:85vh;overflow:auto;padding:18px}
+.dlg h2{margin:0 0 8px;font-size:17px}.dlg .acts{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.dlg ul{padding-left:18px;margin:8px 0;font-size:13px}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:none}
+.t{background:var(--ink);color:var(--surface);padding:8px 14px;border-radius:6px;font-size:13.5px;box-shadow:0 6px 20px rgb(0 0 0 / .2);max-width:90vw}
+.t.err{background:var(--bad);color:#fff}
+.hint{font-size:12.5px;color:var(--muted);margin:6px 0 0}
+@media (max-width:860px){
+  .top{gap:8px}.top .co{font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sync{font-size:11px}
+  .app{grid-template-columns:minmax(0,1fr)}
+  .rail{position:fixed;left:0;top:0;bottom:0;width:260px;z-index:40;transform:translateX(-100%);transition:transform .2s;padding-top:calc(14px + env(safe-area-inset-top,0px))}
+  .rail.open{transform:none;box-shadow:0 0 0 100vmax rgb(0 0 0 / .4)}
+  .menu-btn{display:inline-block}
+  .main{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .fld.w2{grid-column:auto}
+  .search{flex-basis:100%;margin-left:0}
+}
+@media (prefers-reduced-motion:reduce){.rail{transition:none}}
+body{margin:0;font-size:14px}[hidden]{display:none!important}img{max-width:100%}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.who .btn{color:var(--rail-ink);border-color:var(--rail);background:var(--rail)}.who .btn:hover{color:var(--rail-hi);border-color:var(--rail-ink)}
+#login{position:fixed;inset:0;z-index:70;background:var(--bg);display:grid;place-items:center;padding:16px}
+.lcard{width:100%;max-width:380px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:28px 24px}
+.lcard .brand{color:var(--ink);padding:0 0 18px}.lcard .brand small{color:var(--muted)}
+.lcard form{display:flex;flex-direction:column;gap:12px}.lcard .btn.pri{padding:9px 12px;font-weight:600}
+.lerr{color:var(--bad);font-size:13px;min-height:18px}
+a.brand{text-decoration:none}a.brand:hover .mark{filter:brightness(1.15)}a.co{color:var(--ink);text-decoration:none}a.co:hover{color:var(--accent)}
+</style>
+
+</head>
+<body>
+<div id="login" hidden>
+  <div class="lcard">
+    <div class="brand"><div class="mark">GS</div><div><b>Gopin Semicon Private Limited</b><small>Manufacturing ERP · sign in</small></div></div>
+    <form id="loginForm" autocomplete="on">
+      <div class="fld"><label for="lemail">Email</label><input id="lemail" type="email" autocomplete="username" required></div>
+      <div class="fld"><label for="lpass">Password</label><input id="lpass" type="password" autocomplete="current-password" required></div>
+      <div class="lerr" id="lerr" role="alert"></div>
+      <button class="btn pri" type="submit" id="lbtn">Sign in</button>
+    </form>
+    <p class="hint">Forgot your password? Ask your ERP admin to reset it.</p>
+  </div>
+</div>
+<div class="app">
+  <aside class="rail" id="rail"></aside>
+  <main class="main">
+    <header class="top">
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰ Menu</button>
+      <a class="co" id="coName" href="#dash" title="Go to home screen">Gopin Semicon Private Limited</a>
+      <span class="sp"></span>
+      <button class="btn" id="installBtn" hidden>Install app</button>
+      <span class="sync" id="sync"><span class="dot"></span>Connecting…</span>
+    </header>
+    <div id="view"></div>
+  </main>
+</div>
+<div id="modal" hidden></div>
+<div id="toast" aria-live="polite"></div>
+<input type="file" id="fileIn" accept=".xlsx,.xls,.csv" hidden>
+
+<script>
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s);
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const sid=v=>{let s=String(v??'').trim().replace(/[^A-Za-z0-9_\-.~:@+]/g,'_');if(!s||s==='.'||s==='..')s='_'+s;return s.slice(0,180)};
+const today=()=>{const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,10)};
+const addDays=(ds,k)=>{const d=new Date(ds+'T00:00');d.setDate(d.getDate()+k);d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,10)};
+const DAYMS=864e5;
+const n=v=>{const x=parseFloat(String(v??'').replace(/,/g,''));return isFinite(x)?x:0};
+const fmt=(v,d=2)=>Number(v||0).toLocaleString('en-IN',{minimumFractionDigits:d,maximumFractionDigits:d});
+const q3=v=>fmt(v,Number.isInteger(+v)?0:3);
+const inr=v=>'₹'+fmt(v);
+const clone=o=>JSON.parse(JSON.stringify(o??{}));
+const fmtDT=ms=>ms?new Date(ms).toLocaleString('en-IN',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',hour12:false}):'';
+const fmtD=s=>s?new Date(s+'T00:00').toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}):'';
+function toast(msg,err){const t=document.createElement('div');t.className='t'+(err?' err':'');t.textContent=msg;$('#toast').appendChild(t);setTimeout(()=>t.remove(),err?5200:2600)}
+
+/* ---------- reference data ---------- */
+const STATES=[['01','Jammu and Kashmir'],['02','Himachal Pradesh'],['03','Punjab'],['04','Chandigarh'],['05','Uttarakhand'],['06','Haryana'],['07','Delhi'],['08','Rajasthan'],['09','Uttar Pradesh'],['10','Bihar'],['11','Sikkim'],['12','Arunachal Pradesh'],['13','Nagaland'],['14','Manipur'],['15','Mizoram'],['16','Tripura'],['17','Meghalaya'],['18','Assam'],['19','West Bengal'],['20','Jharkhand'],['21','Odisha'],['22','Chhattisgarh'],['23','Madhya Pradesh'],['24','Gujarat'],['26','Dadra and Nagar Haveli and Daman and Diu'],['27','Maharashtra'],['29','Karnataka'],['30','Goa'],['31','Lakshadweep'],['32','Kerala'],['33','Tamil Nadu'],['34','Puducherry'],['35','Andaman and Nicobar Islands'],['36','Telangana'],['37','Andhra Pradesh'],['38','Ladakh'],['97','Other Territory'],['96','Outside India (Export)']];
+const STATE_N=STATES.map(s=>s[1]);const stCode=s=>STATES.find(x=>x[1]===s)?.[0]||'';
+const ITEM_TYPES=['Raw Material','Semi-Finished','Finished Good','Consumable','Packing Material','Spare Part'];
+const FG=['Finished Good','Semi-Finished'];
+const GP_TYPES=['Inward','Outward - Returnable (RGP)','Outward - Non-Returnable (NRGP)'];
+const ROLES={
+ 'Admin':{m:'*',a:1,d:'Everything, including user roles and approvals above the PO limit'},
+ 'Purchase Manager':{m:['purchase','masters','request'],a:1,d:'Requisitions, purchase orders and item masters; approves PRs and POs up to the limit'},
+ 'Purchase Executive':{m:['purchase','request'],d:'Creates purchase orders from approved requisitions; adds suppliers'},
+ 'Stores Manager':{m:['stores','gate','masters','request'],a:1,d:'GRN, material issue and returns, dispatch, stock journals, gate passes; approves material requests'},
+ 'Stores Executive':{m:['stores','gate','request'],d:'Enters GRN, material issues and returns, dispatch, stock journals and gate passes'},
+ 'Production Manager':{m:['production','masters','request'],a:1,d:'Product master, BOMs, routings, work centers; releases production orders; approves material requests'},
+ 'Production Supervisor':{m:['production','request'],d:'Creates production orders and material requests, marks operations done'},
+ 'Sales Manager':{m:['sales','request'],a:1,d:'Customers and sales orders; confirms sales orders'},
+ 'Sales Executive':{m:['sales','request'],d:'Creates customers and sales orders'},
+ 'Accounts':{m:['accounts','request'],a:1,d:'Creates and posts sales and purchase invoices'},
+ 'Security Guard':{m:['gate'],d:'Creates gate passes and marks gate in / gate out'},
+ 'Viewer':{m:[],d:'Can look at everything, change nothing'},
+};
+
+/* ---------- configuration ---------- */
+const ENT={
+ items:{title:'Items',one:'Item',key:'code',imp:1,mod:'masters',auto:'ITM',fields:[
+  {k:'code',l:'Item Code',req:1},{k:'name',l:'Item Name',req:1,w:2},{k:'type',l:'Item Type',t:'sel',o:ITEM_TYPES,req:1},
+  {k:'uom',l:'Unit',t:'ref',r:'uoms',req:1},{k:'group',l:'Item Group'},{k:'hsn',l:'HSN / SAC'},{k:'gst',l:'GST %',t:'num'},
+  {k:'stdCost',l:'Standard Cost (₹)',t:'num'},{k:'salePrice',l:'Sale Price (₹)',t:'num'},{k:'reorder',l:'Reorder Level',t:'num'},
+  {k:'leadDays',l:'Lead Time (days)',t:'num'},{k:'defWh',l:'Default Warehouse',t:'ref',r:'warehouses'},
+  {k:'batchTracked',l:'Batch / Lot Tracked',t:'bool',def:false},{k:'shelfDays',l:'Shelf Life (days)',t:'num'},{k:'active',l:'Active',t:'bool',def:true}],
+  cols:['code','name','type','uom','hsn','gst','stdCost','reorder','onhand','batchTracked','active']},
+ suppliers:{title:'Suppliers',one:'Supplier',key:'code',imp:1,mod:'purchase',auto:'SUP',fields:[
+  {k:'code',l:'Supplier Code',req:1},{k:'name',l:'Supplier Name',req:1,w:2},{k:'contact',l:'Contact Person'},{k:'phone',l:'Phone'},{k:'email',l:'Email'},
+  {k:'gstin',l:'GSTIN'},{k:'pan',l:'PAN'},{k:'address',l:'Address',t:'area',w:2},{k:'city',l:'City'},{k:'state',l:'State',t:'sel',o:STATE_N,req:1},
+  {k:'payDays',l:'Payment Terms (days)',t:'num'},{k:'active',l:'Active',t:'bool',def:true}],
+  cols:['code','name','city','state','phone','gstin','payDays','active']},
+ customers:{title:'Customers',one:'Customer',key:'code',imp:1,mod:'sales',auto:'CUS',fields:[
+  {k:'code',l:'Customer Code',req:1},{k:'name',l:'Customer Name',req:1,w:2},{k:'contact',l:'Contact Person'},{k:'phone',l:'Phone'},{k:'email',l:'Email'},
+  {k:'gstin',l:'GSTIN'},{k:'address',l:'Billing Address',t:'area',w:2},{k:'shipAddress',l:'Shipping Address',t:'area',w:2},{k:'city',l:'City'},{k:'state',l:'State',t:'sel',o:STATE_N,req:1},
+  {k:'creditLimit',l:'Credit Limit (₹)',t:'num'},{k:'payDays',l:'Payment Terms (days)',t:'num'},{k:'active',l:'Active',t:'bool',def:true}],
+  cols:['code','name','city','state','phone','gstin','creditLimit','active']},
+ warehouses:{title:'Warehouses',one:'Warehouse',key:'code',imp:1,mod:'stores',auto:'WH',fields:[
+  {k:'code',l:'Warehouse Code',req:1},{k:'name',l:'Warehouse Name',req:1,w:2},
+  {k:'type',l:'Warehouse Type',t:'sel',o:['Raw Material','Work in Progress','Finished Goods','Rejected / Scrap','General'],req:1},{k:'location',l:'Location'}],
+  cols:['code','name','type','location']},
+ boms:{title:'Bill of Materials',one:'BOM',key:'code',imp:1,mod:'production',auto:'BOM',fields:[
+  {k:'code',l:'BOM Code',req:1},{k:'item',l:'Output Item',t:'ref',r:'items',req:1,flt:i=>FG.includes(i.type)},
+  {k:'outQty',l:'Output Quantity',t:'num',req:1,def:1},{k:'version',l:'Version'},{k:'remarks',l:'Remarks',w:2},{k:'active',l:'Active',t:'bool',def:true}],
+  lines:[{k:'item',l:'Component',t:'ref',r:'items',req:1},{k:'qty',l:'Qty per Output',t:'num',req:1},{k:'scrap',l:'Scrap %',t:'num'}],
+  cols:['code','item','outQty','version','nlines','active']},
+ routings:{title:'Routings',one:'Routing',key:'code',imp:1,mod:'production',auto:'RTG',fields:[
+  {k:'code',l:'Routing Code',req:1},{k:'item',l:'Item',t:'ref',r:'items',req:1,flt:i=>FG.includes(i.type)},{k:'version',l:'Version'},{k:'remarks',l:'Remarks',w:2},{k:'active',l:'Active',t:'bool',def:true}],
+  lines:[{k:'seq',l:'Op No.',t:'num',req:1},{k:'op',l:'Operation',req:1},{k:'wc',l:'Work Center',t:'ref',r:'workcenters',req:1},{k:'setup',l:'Setup (min)',t:'num'},{k:'run',l:'Run (min / unit)',t:'num',req:1}],
+  cols:['code','item','version','nlines','active']},
+ workcenters:{title:'Work Centers',one:'Work Center',key:'code',imp:1,mod:'production',auto:'WC',fields:[
+  {k:'code',l:'Work Center Code',req:1},{k:'name',l:'Name',req:1,w:2},{k:'type',l:'Type',t:'sel',o:['Machine','Assembly Line','Packing','Quality Check','Manual']},
+  {k:'hoursDay',l:'Working Hours / Day',t:'num',def:8},{k:'capHr',l:'Capacity / Hour',t:'num'},{k:'costHr',l:'Cost / Hour (₹)',t:'num'}],
+  cols:['code','name','type','hoursDay','capHr','costHr']},
+ uoms:{title:'Units of Measure',one:'Unit',key:'code',imp:1,mod:'masters',fields:[{k:'code',l:'Unit Code',req:1},{k:'name',l:'Description',req:1},{k:'decimals',l:'Decimal Places',t:'num'}],cols:['code','name','decimals']},
+ departments:{title:'Departments',one:'Department',key:'code',imp:1,mod:'masters',auto:'DEP',fields:[
+  {k:'code',l:'Department Code',req:1},{k:'name',l:'Department Name',req:1,w:2},{k:'head',l:'Department Head'},{k:'costCenter',l:'Cost Center'},{k:'active',l:'Active',t:'bool',def:true}],
+  cols:['code','name','head','costCenter','active']},
+ prs:{title:'Purchase Requisitions',one:'Purchase Requisition',key:'no',pre:'PR',txn:1,imp:1,mod:'request',edit:['Draft','Rejected'],fields:[
+  {k:'no',l:'PR Number',t:'ro'},{k:'date',l:'Request Date',t:'date',req:1,def:today},{k:'dept',l:'Department',t:'ref',r:'departments',req:1,flt:x=>x.active!==false},
+  {k:'requestedBy',l:'Requested By',req:1,def:()=>me.name},{k:'needBy',l:'Required By',t:'date'},{k:'priority',l:'Priority',t:'sel',o:['Normal','Urgent'],def:'Normal'},
+  {k:'mr',l:'From Material Request',t:'ref',r:'mrs',ro:1},{k:'status',l:'Status',t:'ro',def:'Draft'},{k:'purpose',l:'Purpose / Justification',w:2}],
+  lines:[{k:'item',l:'Item',t:'ref',r:'items',req:1},{k:'qty',l:'Qty',t:'num',req:1},{k:'rate',l:'Estimated Rate (₹)',t:'num'},{k:'supplier',l:'Suggested Supplier',t:'ref',r:'suppliers'},{k:'ordered',l:'Ordered',t:'ro'}],
+  total:1,cols:['no','date','dept','requestedBy','needBy','priority','status','total']},
+ pos:{title:'Purchase Orders',one:'Purchase Order',key:'no',pre:'PO',txn:1,imp:1,mod:'purchase',edit:['Draft'],fields:[
+  {k:'no',l:'PO Number',t:'ro'},{k:'date',l:'Order Date',t:'date',req:1,def:today},{k:'supplier',l:'Supplier',t:'ref',r:'suppliers',req:1,flt:s=>s.active!==false},
+  {k:'delivDate',l:'Expected Delivery',t:'date'},{k:'pr',l:'Purchase Requisition',t:'ref',r:'prs',ro:1},{k:'status',l:'Status',t:'ro',def:'Draft'},{k:'remarks',l:'Remarks',w:2}],
+  lines:[{k:'item',l:'Item',t:'ref',r:'items',req:1},{k:'qty',l:'Qty',t:'num',req:1},{k:'rate',l:'Rate (₹)',t:'num'},{k:'recv',l:'Received',t:'ro'}],
+  total:1,cols:['no','date','supplier','delivDate','status','total']},
+ grns:{title:'Goods Receipt (GRN)',one:'Goods Receipt',key:'no',pre:'GRN',txn:1,mod:'stores',edit:['Draft'],noAdd:1,fields:[
+  {k:'no',l:'GRN Number',t:'ro'},{k:'date',l:'Receipt Date',t:'date',req:1,def:today},
+  {k:'po',l:'Purchase Order',t:'ref',r:'pos',req:1,flt:p=>['Approved','Partially Received'].includes(p.status)},
+  {k:'supplier',l:'Supplier',t:'ref',r:'suppliers',ro:1},{k:'wh',l:'Receiving Warehouse',t:'ref',r:'warehouses',req:1},
+  {k:'invNo',l:'Supplier Invoice / Challan No.'},{k:'gp',l:'Inward Gate Pass No.'},{k:'status',l:'Status',t:'ro',def:'Draft'}],
+  lines:[{k:'item',l:'Item',t:'ref',r:'items',ro:1},{k:'qty',l:'Received Qty',t:'num',req:1},{k:'accepted',l:'Accepted (QC)',t:'num'},{k:'rejected',l:'Rejected (QC)',t:'num'},{k:'rate',l:'Rate (₹)',t:'num'},{k:'batch',l:'Batch / Lot No.'},{k:'exp',l:'Expiry',t:'date'}],
+  total:1,cols:['no','date','po','supplier','wh','status','billed','total']},
+ prods:{title:'Production Orders',one:'Production Order',key:'no',pre:'MO',txn:1,mod:'production',edit:['Created'],fields:[
+  {k:'no',l:'Order Number',t:'ro'},{k:'date',l:'Start Date',t:'date',req:1,def:today},
+  {k:'item',l:'Item to Produce',t:'ref',r:'items',req:1,flt:i=>FG.includes(i.type)},{k:'bom',l:'BOM',t:'ref',r:'boms',req:1,flt:(x,d)=>!d.item||x.item===d.item},
+  {k:'routing',l:'Routing',t:'ref',r:'routings',flt:(x,d)=>!d.item||x.item===d.item},
+  {k:'qty',l:'Planned Qty',t:'num',req:1},
+  {k:'rmWh',l:'Issue From (RM Warehouse)',t:'ref',r:'warehouses',req:1},{k:'fgWh',l:'Receive Into (FG Warehouse)',t:'ref',r:'warehouses',req:1},
+  {k:'so',l:'Against Sales Order',t:'ref',r:'sos',flt:s=>['Confirmed','Partially Dispatched'].includes(s.status)},
+  {k:'status',l:'Status',t:'ro',def:'Created'},{k:'goodQty',l:'Good Qty Produced',t:'num',stage:'In Progress'},{k:'scrapQty',l:'Scrap / Rejected Qty',t:'num',stage:'In Progress'},{k:'remarks',l:'Remarks',w:2}],
+  cols:['no','date','item','qty','goodQty','schedEnd','status']},
+ sos:{title:'Sales Orders',one:'Sales Order',key:'no',pre:'SO',txn:1,imp:1,mod:'sales',edit:['Draft'],fields:[
+  {k:'no',l:'SO Number',t:'ro'},{k:'date',l:'Order Date',t:'date',req:1,def:today},{k:'customer',l:'Customer',t:'ref',r:'customers',req:1,flt:s=>s.active!==false},
+  {k:'delivDate',l:'Delivery Date',t:'date'},{k:'custPo',l:'Customer PO Ref.'},{k:'status',l:'Status',t:'ro',def:'Draft'},{k:'remarks',l:'Remarks',w:2}],
+  lines:[{k:'item',l:'Item',t:'ref',r:'items',req:1},{k:'qty',l:'Qty',t:'num',req:1},{k:'rate',l:'Rate (₹)',t:'num'},{k:'disp',l:'Dispatched',t:'ro'}],
+  total:1,cols:['no','date','customer','delivDate','status','total']},
+ dispatches:{title:'Dispatch Notes',one:'Dispatch Note',key:'no',pre:'DN',txn:1,mod:'stores',edit:['Draft'],noAdd:1,fields:[
+  {k:'no',l:'Dispatch Number',t:'ro'},{k:'date',l:'Dispatch Date',t:'date',req:1,def:today},
+  {k:'so',l:'Sales Order',t:'ref',r:'sos',req:1,flt:s=>['Confirmed','Partially Dispatched'].includes(s.status)},
+  {k:'customer',l:'Customer',t:'ref',r:'customers',ro:1},{k:'wh',l:'Dispatch From Warehouse',t:'ref',r:'warehouses',req:1},
+  {k:'vehicle',l:'Vehicle No.'},{k:'transporter',l:'Transporter'},{k:'lrNo',l:'LR / E-way Bill No.'},{k:'status',l:'Status',t:'ro',def:'Draft'}],
+  lines:[{k:'item',l:'Item',t:'ref',r:'items',ro:1},{k:'qty',l:'Dispatch Qty',t:'num',req:1},{k:'rate',l:'Rate (₹)',t:'num'},{k:'batch',l:'Batch (blank = FIFO)'}],
+  total:1,cols:['no','date','so','customer','wh','vehicle','status','invoiced','total']},
+ sinv:{title:'Sales Invoices',one:'Tax Invoice',key:'no',preFn:d=>'INV/'+fyCode(d.date),txn:1,mod:'accounts',edit:['Draft'],noAdd:1,gst:1,fields:[
+  {k:'no',l:'Invoice Number',t:'ro'},{k:'date',l:'Invoice Date',t:'date',req:1,def:today},
+  {k:'dn',l:'Dispatch Note',t:'ref',r:'dispatches',req:1,flt:x=>x.status==='Posted'&&!x.invoiced},
+  {k:'customer',l:'Customer',t:'ref',r:'customers',ro:1},{k:'gstin',l:'Customer GSTIN'},{k:'pos',l:'Place of Supply',t:'sel',o:STATE_N,req:1},
+  {k:'due',l:'Payment Due',t:'date'},{k:'status',l:'Status',t:'ro',def:'Draft'},{k:'remarks',l:'Remarks',w:2}],
+  lines:[{k:'item',l:'Item',t:'ref',r:'items',ro:1},{k:'hsn',l:'HSN'},{k:'qty',l:'Qty',t:'num',req:1},{k:'rate',l:'Rate (₹)',t:'num',req:1},{k:'gst',l:'GST %',t:'num'}],
+  cols:['no','date','customer','dn','pos','status','gtotal']},
+ pinv:{title:'Purchase Invoices',one:'Purchase Invoice',key:'no',pre:'PINV',txn:1,mod:'accounts',edit:['Draft'],noAdd:1,gst:1,fields:[
+  {k:'no',l:'Voucher Number',t:'ro'},{k:'date',l:'Booking Date',t:'date',req:1,def:today},
+  {k:'grn',l:'Goods Receipt (GRN)',t:'ref',r:'grns',req:1,flt:x=>x.status==='Posted'&&!x.billed},
+  {k:'supplier',l:'Supplier',t:'ref',r:'suppliers',ro:1},{k:'supInv',l:'Supplier Invoice No.',req:1},{k:'supInvDate',l:'Supplier Invoice Date',t:'date'},
+  {k:'pos',l:'Supplier State',t:'sel',o:STATE_N,req:1},{k:'due',l:'Payment Due',t:'date'},{k:'status',l:'Status',t:'ro',def:'Draft'}],
+  lines:[{k:'item',l:'Item',t:'ref',r:'items',ro:1},{k:'hsn',l:'HSN'},{k:'qty',l:'Qty',t:'num',req:1},{k:'rate',l:'Rate (₹)',t:'num',req:1},{k:'gst',l:'GST %',t:'num'}],
+  cols:['no','date','supplier','supInv','grn','status','gtotal']},
+ mrs:{title:'Material Requests',one:'Material Request',key:'no',pre:'MR',txn:1,imp:1,mod:'request',edit:['Draft','Rejected'],fields:[
+  {k:'no',l:'MR Number',t:'ro'},{k:'date',l:'Request Date',t:'date',req:1,def:today},{k:'dept',l:'Department',t:'ref',r:'departments',req:1,flt:x=>x.active!==false},
+  {k:'requestedBy',l:'Requested By',req:1,def:()=>me.name},{k:'wh',l:'Issue From (Store)',t:'ref',r:'warehouses',req:1},
+  {k:'purpose',l:'Purpose',t:'sel',o:['Production','Maintenance','Consumable','Quality / Testing','Sample','Other'],req:1,def:'Production'},
+  {k:'mo',l:'Against Production Order',t:'ref',r:'prods',flt:m=>['Released','In Progress'].includes(m.status)},{k:'needBy',l:'Required By',t:'date'},
+  {k:'status',l:'Status',t:'ro',def:'Draft'},{k:'remarks',l:'Remarks',w:2}],
+  lines:[{k:'item',l:'Item',t:'ref',r:'items',req:1},{k:'qty',l:'Requested Qty',t:'num',req:1},{k:'issued',l:'Issued',t:'ro'}],
+  cols:['no','date','dept','requestedBy','wh','purpose','mo','status']},
+ mins:{title:'Material Issues',one:'Material Issue Note',key:'no',pre:'MIN',txn:1,mod:'stores',edit:['Draft'],noAdd:1,fields:[
+  {k:'no',l:'Issue Number',t:'ro'},{k:'date',l:'Issue Date',t:'date',req:1,def:today},
+  {k:'mr',l:'Material Request',t:'ref',r:'mrs',req:1,flt:x=>['Approved','Partially Issued'].includes(x.status)},
+  {k:'dept',l:'Department',t:'ref',r:'departments',ro:1},{k:'wh',l:'Issue From (Store)',t:'ref',r:'warehouses',req:1},
+  {k:'issuedTo',l:'Handed Over To',req:1},{k:'status',l:'Status',t:'ro',def:'Draft'}],
+  lines:[{k:'item',l:'Item',t:'ref',r:'items',ro:1},{k:'qty',l:'Issue Qty',t:'num',req:1},{k:'batch',l:'Batch (blank = FIFO)'}],
+  cols:['no','date','mr','dept','wh','issuedTo','status']},
+ mrets:{title:'Material Returns',one:'Material Return Note',key:'no',pre:'MRN',txn:1,mod:'stores',edit:['Draft'],fields:[
+  {k:'no',l:'Return Number',t:'ro'},{k:'date',l:'Return Date',t:'date',req:1,def:today},{k:'dept',l:'Returned By Department',t:'ref',r:'departments',req:1},
+  {k:'wh',l:'Return Into (Store)',t:'ref',r:'warehouses',req:1},{k:'min',l:'Against Issue Note',t:'ref',r:'mins',flt:x=>x.status==='Posted'},
+  {k:'reason',l:'Reason',t:'sel',o:['Excess Issued','Unused','Defective','Other'],req:1},{k:'status',l:'Status',t:'ro',def:'Draft'},{k:'remarks',l:'Remarks',w:2}],
+  lines:[{k:'item',l:'Item',t:'ref',r:'items',req:1},{k:'qty',l:'Return Qty',t:'num',req:1},{k:'batch',l:'Batch / Lot No.'}],
+  cols:['no','date','dept','wh','min','reason','status']},
+ journals:{title:'Stock Journal',one:'Stock Journal',key:'no',pre:'SJ',txn:1,imp:1,mod:'stores',edit:['Draft'],fields:[
+  {k:'no',l:'Journal Number',t:'ro'},{k:'date',l:'Date',t:'date',req:1,def:today},{k:'wh',l:'Warehouse',t:'ref',r:'warehouses',req:1},
+  {k:'reason',l:'Reason',t:'sel',o:['Opening Stock','Stock Adjustment','Physical Count','Scrap Write-off'],req:1},{k:'status',l:'Status',t:'ro',def:'Draft'},{k:'remarks',l:'Remarks',w:2}],
+  lines:[{k:'item',l:'Item',t:'ref',r:'items',req:1},{k:'qty',l:'Qty (+ in / − out)',t:'num',req:1},{k:'rate',l:'Rate (₹)',t:'num'},{k:'batch',l:'Batch / Lot No.'},{k:'exp',l:'Expiry',t:'date'}],
+  cols:['no','date','wh','reason','status']},
+ gatepasses:{title:'Gate Passes',one:'Gate Pass',key:'no',pre:'GP',txn:1,imp:1,mod:'gate',edit:['Draft'],fields:[
+  {k:'no',l:'Gate Pass No.',t:'ro'},{k:'date',l:'Date',t:'date',req:1,def:today},{k:'type',l:'Type',t:'sel',o:GP_TYPES,req:1},
+  {k:'partyType',l:'Party Type',t:'sel',o:['Supplier','Customer','Job Worker','Other']},{k:'party',l:'Party Name',req:1,w:2},
+  {k:'refDoc',l:'Reference Doc (PO / DN / Challan)'},{k:'vehicle',l:'Vehicle No.'},{k:'driver',l:'Driver / Carrier'},
+  {k:'expReturn',l:'Expected Return Date',t:'date'},{k:'purpose',l:'Purpose',w:2},{k:'status',l:'Status',t:'ro',def:'Draft'}],
+  lines:[{k:'item',l:'Item (optional)',t:'ref',r:'items'},{k:'desc',l:'Description',req:1},{k:'qty',l:'Qty',t:'num',req:1},{k:'uom',l:'Unit'},{k:'returned',l:'Returned Qty',t:'num',stage:['Out','Partially Returned']}],
+  cols:['no','date','type','party','refDoc','expReturn','status']},
+};
+const XCOL={total:'Total (₹)',gtotal:'Invoice Total (₹)',nlines:'Lines',onhand:'On Hand',schedEnd:'Scheduled Finish',billed:'Billed',invoiced:'Invoiced'};
+const NAV=[
+ ['Home',[['dash','Dashboard']]],
+ ['Masters',[['items','Items'],['products','Product Master'],['boms','Bill of Materials'],['routings','Routings'],['suppliers','Suppliers'],['customers','Customers'],['departments','Departments'],['warehouses','Warehouses'],['workcenters','Work Centers'],['uoms','Units of Measure'],['company','Company Setup'],['users','Users & Roles']]],
+ ['Procurement',[['prs','Purchase Requisitions'],['pos','Purchase Orders'],['grns','Goods Receipt (GRN)'],['pinv','Purchase Invoices']]],
+ ['Stores',[['mrs','Material Requests'],['mins','Material Issues'],['mrets','Material Returns'],['gatepasses','Gate Passes']]],
+ ['Production',[['prods','Production Orders'],['sched','Machine Schedule'],['plan','Material Planning']]],
+ ['Sales',[['sos','Sales Orders'],['dispatches','Dispatch Notes'],['sinv','Sales Invoices']]],
+ ['Inventory',[['stock','Stock on Hand'],['batches','Batch Stock & Aging'],['ledger','Stock Ledger'],['journals','Stock Journal']]],
+];
+const PAGES=['products','dash','company','users','stock','batches','ledger','plan','sched'];
+const PILL={Draft:'',Created:'',Approved:'p-info',Released:'p-info',Confirmed:'p-info','In Progress':'p-warn','Partially Received':'p-warn','Partially Dispatched':'p-warn','Partially Returned':'p-warn',Out:'p-warn','Pending Approval':'p-warn',Rejected:'p-bad',Ordered:'p-good','Partially Ordered':'p-warn',Issued:'p-good','Partially Issued':'p-warn',
+ Received:'p-good',Posted:'p-good',Finished:'p-good',Dispatched:'p-good',Returned:'p-good',Closed:'p-acc',Done:'p-good',Pending:''};
+const pill=s=>`<span class="pill ${PILL[s]??''}">${esc(s)}</span>`;
+
+/* ---------- store ---------- */
+const COLS=[...Object.keys(ENT),'ledger','appusers'];
+const S={};COLS.forEach(c=>S[c]={});
+let company={},mode='connecting',stale=false,ready=false,readOnly=false;
+let USERS={};
+const me={id:null,role:'Viewer',owner:false,name:'',email:''};
+const get=(c,v)=>v==null||v===''?null:S[c][sid(v)]||null;
+const list=c=>Object.values(S[c]);
+const enc=encodeURIComponent;
+const API={async j(m,u,b){let r;
+  try{r=await fetch(u,{method:m,credentials:'same-origin',headers:m==='GET'?{}:{'Content-Type':'application/json','X-ERP':'1'},body:b!==undefined?JSON.stringify(b):undefined})}
+  catch(e){throw {code:'unavailable',message:'Server not reachable. Check your internet connection.'}}
+  let t={};try{t=await r.json()}catch(e){}
+  if(r.status===401&&!u.endsWith('/login')){showLogin('Your session ended. Please sign in again.');throw {code:'unauth',message:t.error||'Please sign in.'}}
+  if(!r.ok)throw {code:r.status===403?'forbidden':r.status===409?'exists':'error',message:t.error||('Server error '+r.status)};
+  return t}};
+async function put(c,id,data,create){const old=S[c][id];S[c][id]=data;try{await API.j('PUT',`/api/docs/${enc(c)}/${enc(id)}`+(create?'?create=1':''),data)}catch(e){if(old)S[c][id]=old;else delete S[c][id];if(e?.code!=='exists')wErr(e);reloadCol(c);throw e}}
+async function del(c,id){const old=S[c][id];delete S[c][id];try{await API.j('DELETE',`/api/docs/${enc(c)}/${enc(id)}`)}catch(e){if(old)S[c][id]=old;wErr(e);throw e}}
+async function reloadCol(c){try{const r=await API.j('GET','/api/docs/'+enc(c));const o={};for(const x of r.docs)o[x.id]=x.data;S[c]=o;schedule()}catch(e){}}
+function wErr(e){if(e?.code==='unauth')return;toast(e?.code==='forbidden'?(e.message||'Your role can’t make this change.'):'Could not save: '+(e?.message||e),1)}
+
+/* ---------- roles ---------- */
+function computeRole(){const u=USERS[me.id];if(u){me.role=u.active===false?'Viewer':u.role;me.name=u.name}me.owner=me.role==='Admin'}
+const canMod=m=>!readOnly&&(me.role==='Admin'||(ROLES[me.role]?.m||[]).includes(m));
+const canEnt=v=>canMod(ENT[v].mod);
+const canAppr=v=>canEnt(v)&&!!ROLES[me.role]?.a;
+const isAdmin=()=>me.role==='Admin';
+function nameOf(id){if(!id)return '—';return USERS[id]?.name||'Former user'}
+const uname=id=>`<span>${esc(nameOf(id))}</span>`;
+
+/* ---------- numbering ---------- */
+function fyCode(ds){const d=new Date((ds||today())+'T00:00'),y=d.getFullYear(),m=d.getMonth()+1;if(company.fy==='January')return String(y);const s=m>=4?y:y-1;return String(s).slice(2)+String(s+1).slice(2)}
+function docNo(c,v,d){if(c.preFn){const p=c.preFn(d);let m=0;for(const x of list(v)){const s=String(x.no||'');if(s.startsWith(p+'/')){const k=+s.slice(p.length+1);if(k>m)m=k}}return p+'/'+String(m+1).padStart(4,'0')}
+ let m=0;for(const x of list(v)){const r=String(x.no||'').match(/(\d+)$/);if(r)m=Math.max(m,+r[1])}return c.pre+'-'+String(m+1).padStart(4,'0')}
+
+/* ---------- stock math ---------- */
+function onHand(item,wh){let q=0;for(const l of list('ledger'))if(l.item===item&&(!wh||l.wh===wh))q+=n(l.qty);return q}
+function avgCost(item){let q=0,v=0;for(const l of list('ledger'))if(l.item===item&&n(l.qty)>0){q+=n(l.qty);v+=n(l.qty)*n(l.rate)}return q?v/q:n(get('items',item)?.stdCost)}
+function openPoQty(item){let q=0;for(const p of list('pos'))if(['Approved','Partially Received'].includes(p.status))for(const l of p.lines||[])if(l.item===item)q+=Math.max(0,n(l.qty)-n(l.recv));return q}
+function docTotal(d){return (d.lines||[]).reduce((s,l)=>s+n(l.qty)*n(l.rate),0)}
+function bomReq(d){const b=get('boms',d.bom);if(!b)return[];const f=n(d.qty)/(n(b.outQty)||1);
+ return (b.lines||[]).filter(l=>l.item).map(l=>({item:l.item,qty:+(n(l.qty)*f*(1+n(l.scrap)/100)).toFixed(3)}))}
+function batchBal(item,wh){const m={};for(const l of list('ledger'))if(l.item===item&&l.wh===wh){const b=l.batch||'';const r=(m[b]??={batch:b,qty:0,first:'9999',exp:''});r.qty+=n(l.qty);if(n(l.qty)>0){if(String(l.date)<r.first)r.first=l.date;if(l.exp)r.exp=l.exp}}
+ return Object.values(m).filter(r=>r.qty>1e-9).sort((a,b)=>(a.exp||'9999').localeCompare(b.exp||'9999')||a.first.localeCompare(b.first))}
+function alloc(item,wh,qty,pref){const bal=batchBal(item,wh);
+ if(pref){const b=bal.find(x=>x.batch===pref);if(!b||b.qty<qty-1e-6)fail(`${item}: batch ${pref} has only ${q3(b?.qty||0)} in ${wh}.`);return [{batch:pref,qty,exp:b.exp}]}
+ const tot=bal.reduce((s,b)=>s+b.qty,0);if(tot<qty-1e-6)fail(`${item}: only ${q3(tot)} in ${wh}, need ${q3(qty)}.`);
+ const out=[];let left=qty;for(const b of bal){if(left<=1e-9)break;const t=Math.min(left,b.qty);out.push({batch:b.batch,qty:+t.toFixed(3),exp:b.exp});left-=t}return out}
+const isTracked=item=>!!get('items',item)?.batchTracked;
+const expFor=(item,date)=>{const s=n(get('items',item)?.shelfDays);return s>0?addDays(date,s):''};
+async function addLedger(rows){for(const r of rows){const id=sid(r.id);delete r.id;await put('ledger',id,{batch:'',exp:'',...r,value:+(n(r.qty)*n(r.rate)).toFixed(2),ts:Date.now(),by:me.id||''})}}
+
+/* ---------- GST ---------- */
+const sameState=(a,b)=>a&&b&&String(a).toLowerCase()===String(b).toLowerCase();
+function gstCalc(d){const intra=sameState(company.state,d.pos);let tx=0,tax=0;const rates={};
+ for(const l of d.lines||[]){const t=n(l.qty)*n(l.rate),g=t*n(l.gst)/100;tx+=t;tax+=g;const k=n(l.gst);(rates[k]??={taxable:0,tax:0});rates[k].taxable+=t;rates[k].tax+=g}
+ const gross=tx+tax,total=Math.round(gross);return {intra,taxable:tx,tax,cgst:intra?tax/2:0,sgst:intra?tax/2:0,igst:intra?0:tax,round:total-gross,total,rates}}
+function words(num){const a=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'],b=['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
+ const two=x=>x<20?a[x]:b[Math.floor(x/10)]+(x%10?' '+a[x%10]:''),three=x=>(x>=100?a[Math.floor(x/100)]+' Hundred'+(x%100?' ':''):'')+(x%100?two(x%100):'');
+ let x=Math.floor(num),r='';const cr=Math.floor(x/1e7);x%=1e7;const lk=Math.floor(x/1e5);x%=1e5;const th=Math.floor(x/1e3);x%=1e3;
+ if(cr)r+=three(cr)+' Crore ';if(lk)r+=two(lk)+' Lakh ';if(th)r+=two(th)+' Thousand ';if(x)r+=three(x);return 'Rupees '+(r.trim()||'Zero')+' Only'}
+
+/* ---------- scheduling ---------- */
+function shiftMin(){const [h,m]=String(company.shiftStart||'09:00').split(':').map(Number);return (h||0)*60+(m||0)}
+const isOff=t=>(company.weeklyOff||'Sunday')==='Sunday'&&t.getDay()===0;
+const dayAt=(t,plus,min)=>new Date(t.getFullYear(),t.getMonth(),t.getDate()+plus,0,min);
+function addWork(start,mins,hpd){let t=new Date(start),left=mins;const s0=shiftMin(),len=Math.max(1,Math.min(24,hpd||8))*60;
+ for(let g=0;g<5000;g++){if(isOff(t)){t=dayAt(t,1,s0);continue}const m=t.getHours()*60+t.getMinutes();
+  if(m<s0){t=dayAt(t,0,s0);continue}if(m>=s0+len){t=dayAt(t,1,s0);continue}
+  const av=s0+len-m;if(left<=av)return t.getTime()+left*6e4;left-=av;t=dayAt(t,1,s0)}return t.getTime()}
+function scheduleOps(d,from){const rt=get('routings',d.routing);if(!rt)return [];
+ const busy={};for(const m of list('prods'))if(m.no!==d.no&&['Released','In Progress'].includes(m.status))for(const o of m.ops||[])if(o.status!=='Done')busy[o.wc]=Math.max(busy[o.wc]||0,n(o.end));
+ const done=(d.ops||[]).filter(o=>o.status==='Done');let prev=Math.max(from,...done.map(o=>n(o.end)),0);
+ const ops=[...done];
+ for(const l of [...(rt.lines||[])].sort((a,b)=>n(a.seq)-n(b.seq))){if(done.some(o=>o.seq===n(l.seq)))continue;
+  const wc=get('workcenters',l.wc),hpd=n(wc?.hoursDay)||8,mins=Math.max(1,Math.round(n(l.setup)+n(l.run)*n(d.qty)));
+  const st=addWork(Math.max(prev,busy[l.wc]||0),0,hpd),en=addWork(st,mins,hpd);busy[l.wc]=en;prev=en;
+  ops.push({seq:n(l.seq),op:l.op,wc:l.wc,mins,start:st,end:en,status:'Pending'})}
+ return ops.sort((a,b)=>a.seq-b.seq)}
+const allOps=()=>list('prods').filter(m=>['Released','In Progress','Finished'].includes(m.status)).flatMap(m=>(m.ops||[]).map(o=>({...o,mo:m.no,item:m.item,qty:m.qty,mst:m.status})));
+
+/* ---------- state & routing ---------- */
+const st={view:'dash',draft:null,isNew:false,q:'',pop:false,filt:'',skip:false};
+let coDirty=false;
+function route(){const h=(location.hash||'').slice(1);if(st.skip&&h===st.view){st.skip--;render();return}st.skip=0;coDirty=false;
+ st.view=(ENT[h]||PAGES.includes(h))?h:'dash';st.draft=null;st.q='';st.pop=false;st.filt='';$('#rail').classList.remove('open');render();scrollTo(0,0)}
+window.addEventListener('hashchange',route);
+let raf=0;function schedule(){if(raf)return;raf=requestAnimationFrame(()=>{raf=0;computeRole();renderChrome();if(!st.draft&&!(st.view==='company'&&coDirty)&&!(st.view==='users'&&document.activeElement?.closest?.('#uform')))render()})}
+
+/* ---------- rendering ---------- */
+function renderWho(){const w=$('#who');if(!w)return;w.innerHTML=me.id?`<b>${esc(me.name)}</b>${esc(me.role)}<div style="margin-top:6px;display:flex;gap:4px;flex-wrap:wrap"><button class="btn sm" data-act="chpw">Change password</button><button class="btn sm" data-act="logout">Sign out</button></div>`:'<b>Connecting…</b>'}
+function renderChrome(){
+ $('#rail').innerHTML=`<a class="brand" href="#dash" title="Go to home screen"><div class="mark">GS</div><div><b>${esc(company.name||'Gopin Semicon Private Limited')}</b><small>Manufacturing ERP</small></div></a><div class="who" id="who"></div>`+
+  NAV.map(([g,it])=>`<div class="grp"><h3>${g}</h3>${it.map(([k,l])=>`<a href="#${k}" class="${st.view===k?'on':''}">${esc(l)}</a>`).join('')}</div>`).join('');
+ renderWho();
+ $('#coName').textContent=company.name||'Gopin Semicon Private Limited';
+ $('#sync').innerHTML=mode==='live'?(stale?'<span class="dot local"></span>Reconnecting… data may be out of date':'<span class="dot live"></span>Live'):'<span class="dot"></span>Connecting…';
+}
+function render(){
+ renderChrome();const v=st.view;let h='';
+ if(mode==='live'&&ready&&me.role==='Viewer')h+=`<div class="note">You can view everything but can’t make changes yet. Ask the ERP admin to give you a role under Users &amp; Roles.</div>`;
+ if(ENT[v])h+=st.draft?formHTML(v):listHTML(v);
+ else h+=({products:productsHTML,dash:dashHTML,company:companyHTML,users:usersHTML,stock:stockHTML,batches:batchHTML,ledger:ledgerHTML,plan:planHTML,sched:schedHTML}[v])();
+ $('#view').innerHTML=h;
+ if(ENT[v]&&!st.draft)fillRows();
+ if(['stock','ledger','batches'].includes(v))fillReport();
+}
+
+/* ---- list ---- */
+function colLabel(c,k){return XCOL[k]||c.fields.find(f=>f.k===k)?.l||k}
+const NUMCOL=['total','gtotal','nlines','onhand'];
+function cell(c,r,k){
+ if(k==='total')return `<td class="num">${fmt(docTotal(r))}</td>`;
+ if(k==='gtotal')return `<td class="num">${fmt(gstCalc(r).total)}</td>`;
+ if(k==='nlines')return `<td class="num">${(r.lines||[]).length}</td>`;
+ if(k==='onhand')return `<td class="num">${q3(onHand(r.code))}</td>`;
+ if(k==='schedEnd'){const e=Math.max(0,...(r.ops||[]).map(o=>n(o.end)));return `<td>${e?esc(fmtDT(e)):'<span class="muted">—</span>'}</td>`}
+ if(k==='billed'||k==='invoiced')return `<td class="code">${r[k]?esc(r[k]):r.status==='Posted'?'<span class="pill p-warn">Pending</span>':''}</td>`;
+ const f=c.fields.find(x=>x.k===k)||{},v=r[k];
+ if(k==='status'){const od=r.type===GP_TYPES[1]&&['Out','Partially Returned'].includes(v)&&r.expReturn&&r.expReturn<today();return `<td>${pill(v||'')}${od?' <span class="pill p-bad">Overdue</span>':''}</td>`}
+ if(f.t==='bool')return `<td>${v===false||(v==null&&f.def===false)?'<span class="pill">No</span>':'<span class="pill p-good">Yes</span>'}</td>`;
+ if(f.t==='num')return `<td class="num">${v===''||v==null?'':q3(v)}</td>`;
+ if(f.t==='date')return `<td>${esc(fmtD(v))}</td>`;
+ if(k===c.key||f.t==='ref')return `<td class="code">${esc(v)}</td>`;
+ return `<td>${esc(v)}</td>`;
+}
+function rowsFor(v){const c=ENT[v],q=st.q.toLowerCase().trim();
+ let r=list(v);if(q)r=r.filter(x=>JSON.stringify(x).toLowerCase().includes(q));
+ return r.sort((a,b)=>c.txn?(String(b.date||'').localeCompare(String(a.date||''))||String(b[c.key]).localeCompare(String(a[c.key]),undefined,{numeric:true})):String(a[c.key]).localeCompare(String(b[c.key]),undefined,{numeric:true}))}
+function listHTML(v){const c=ENT[v],ce=canEnt(v);
+ return `<div class="head"><div><div class="crumb">${grpOf(v)}</div><h1>${esc(c.title)}</h1></div></div>
+ <div class="pane">
+  ${ce?'<button class="btn pri" data-act="new">+ New</button><span class="sep"></span>':''}
+  ${c.imp&&ce?'<button class="btn" data-act="import">Import</button>':''}
+  <button class="btn" data-act="pop">Export ▾</button>
+  ${st.pop?`<div class="pop" style="left:${c.imp&&ce?'150px':ce?'80px':'6px'}"><button class="btn" data-act="exp-xlsx">Excel workbook (.xlsx)</button><button class="btn" data-act="exp-csv">CSV file (.csv)</button>${c.imp?'<button class="btn" data-act="template">Blank import template</button>':''}</div>`:''}
+  <input class="search" id="q" placeholder="Search ${esc(c.title.toLowerCase())}…" value="${esc(st.q)}" aria-label="Search">
+ </div>
+ <div class="tablewrap"><table><thead><tr>${c.cols.map(k=>`<th class="${NUMCOL.includes(k)||c.fields.find(f=>f.k===k)?.t==='num'?'num':''}">${esc(colLabel(c,k))}</th>`).join('')}</tr></thead><tbody id="rows"></tbody></table></div>
+ ${c.imp&&ce?`<p class="hint">Import accepts .xlsx or .csv. Use “Blank import template” for the exact column headings. ${c.txn?'Imported documents come in as Draft.':`Rows with an existing ${esc(colLabel(c,c.key))} are updated; new ones are added.`}</p>`:''}`}
+function fillRows(){const v=st.view,c=ENT[v],el=$('#rows');if(!el)return;const r=rowsFor(v);
+ el.innerHTML=r.length?r.map(x=>`<tr class="click" data-open="${esc(sid(x[c.key]))}" tabindex="0">${c.cols.map(k=>cell(c,x,k)).join('')}</tr>`).join('')
+ :`<tr><td colspan="${c.cols.length}" class="empty">${!ready&&mode!=='local'?'Loading…':st.q?'No records match your search.':`No ${esc(c.title.toLowerCase())} yet.${canEnt(v)?` Click “+ New”${c.imp?' or import from Excel':''} to add the first one.`:''}`}</td></tr>`}
+function grpOf(v){return NAV.find(([,it])=>it.some(([k])=>k===v))?.[0]||''}
+
+/* ---- form ---- */
+const stageOk=(f,d)=>[].concat(f.stage).includes(d.status);
+function editable(c,v,d){return canEnt(v)&&(!c.txn||st.isNew||(c.edit||[]).includes(d.status))}
+function fieldRO(c,v,f,d){if(!canEnt(v))return true;if(f.stage)return !stageOk(f,d);if(f.t==='ro'||f.ro)return true;if(f.k===c.key&&!st.isNew)return true;return !editable(c,v,d)}
+function refOpts(f,cur,d){const rc=ENT[f.r];let rs=list(f.r);if(f.flt)rs=rs.filter(x=>f.flt(x,d)||x[rc.key]===cur);
+ rs.sort((a,b)=>String(a[rc.key]).localeCompare(String(b[rc.key]),undefined,{numeric:true}));
+ return `<option value="">— Select —</option>`+rs.map(x=>`<option value="${esc(x[rc.key])}" ${x[rc.key]===cur?'selected':''}>${esc(refText(f.r,x))}</option>`).join('')}
+function refText(r,x){if(!x)return'';const k=ENT[r].key;const nm=x.name||(x.supplier?get('suppliers',x.supplier)?.name:x.customer?get('customers',x.customer)?.name:x.item?get('items',x.item)?.name:'');return x[k]+(nm?' · '+nm:'')}
+function inputHTML(f,v,ro,attr){
+ if(f.t==='sel')return `<select ${attr} ${ro?'disabled':''}><option value="">— Select —</option>${f.o.map(o=>`<option ${o===v?'selected':''}>${esc(o)}</option>`).join('')}</select>`;
+ if(f.t==='ref')return ro?`<input ${attr} readonly value="${esc(v?refText(f.r,get(f.r,v))||v:'')}">`:`<select ${attr}>${refOpts(f,v,st.draft||{})}</select>`;
+ if(f.t==='area')return `<textarea ${attr} ${ro?'readonly':''}>${esc(v)}</textarea>`;
+ if(f.t==='num')return `<input ${attr} type="number" step="any" inputmode="decimal" ${ro?'readonly':''} value="${esc(v)}">`;
+ if(f.t==='date'||f.t==='time')return `<input ${attr} type="${f.t}" ${ro?'readonly':''} value="${esc(v)}">`;
+ return `<input ${attr} ${ro?'readonly':''} value="${esc(v)}">`}
+function fieldHTML(c,v,f,d){const ro=fieldRO(c,v,f,d),id='f_'+f.k;
+ if(f.t==='bool')return `<div class="fld chk"><input type="checkbox" id="${id}" data-k="${f.k}" ${d[f.k]===true||(d[f.k]==null&&f.def!==false)?'checked':''} ${ro?'disabled':''}><label for="${id}">${esc(f.l)}</label></div>`;
+ return `<div class="fld ${f.w?'w2':''}"><label for="${id}">${esc(f.l)}${f.req&&!ro?' <i>*</i>':''}</label>${inputHTML(f,d[f.k]??'',ro,`id="${id}" data-k="${f.k}"`)}</div>`}
+function wfList(v,d){return (WF[v]?.(d)||[]).filter(Boolean).filter(([,,p])=>p==='a'?canAppr(v):p&&p.startsWith('m:')?canMod(p.slice(2)):canEnt(v))}
+function formHTML(v){const c=ENT[v],d=st.draft,ed=editable(c,v,d),title=st.isNew?'New '+c.one:(d[c.key]||c.one);
+ const wfs=wfList(v,d);
+ const stageEd=canEnt(v)&&(c.fields.some(f=>f.stage&&stageOk(f,d))||(c.lines||[]).some(f=>f.stage&&stageOk(f,d)));
+ let h=`<div class="head"><div><div class="crumb">${esc(c.title)}</div><h1>${esc(title)} ${c.txn&&!st.isNew?pill(d.status):''}</h1></div></div>
+ <div class="pane">
+  ${ed||stageEd?'<button class="btn pri" data-act="save">Save</button>':''}
+  ${wfs.map(([a,l])=>`<button class="btn wf" data-act="wf" data-wf="${a}">${esc(l)}</button>`).join('')}
+  ${!st.isNew&&canEnt(v)&&(!c.txn||(c.edit||[]).includes(d.status))?'<button class="btn danger" data-act="delete">Delete</button>':''}
+  <span class="sep"></span><button class="btn" data-act="close">← Back to list</button>
+ </div>
+ <section class="tab"><h2>General</h2><div class="body"><div class="fgrid">${c.fields.map(f=>fieldHTML(c,v,f,d)).join('')}</div></div></section>`;
+ if(c.lines){const lro=!ed;
+  h+=`<section class="tab"><h2>Lines<span class="sp"></span>${!lro&&!c.noAdd?'<button class="btn" data-act="addline">+ Add line</button>':''}</h2>
+  <div class="tablewrap"><table class="lines"><thead><tr><th>#</th>${c.lines.map(f=>`<th class="${f.t==='num'||f.t==='ro'?'num':''}">${esc(f.l)}</th>`).join('')}${c.total||c.gst?`<th class="num">${c.gst?'Taxable (₹)':'Amount (₹)'}</th>`:''}<th></th></tr></thead><tbody>
+  ${(d.lines||[]).map((l,i)=>`<tr><td class="muted">${i+1}</td>${c.lines.map(f=>{const fro=f.stage?!(canEnt(v)&&stageOk(f,d)):(lro||f.ro);return `<td class="${f.t==='num'?'n':''}">${f.t==='ro'?`<span class="num" style="display:block">${q3(l[f.k]||0)}</span>`:inputHTML(f,l[f.k]??'',fro,`data-li="${i}" data-lk="${f.k}" aria-label="${esc(f.l)} line ${i+1}"`)}</td>`}).join('')}
+   ${c.total||c.gst?`<td class="num" data-amt="${i}">${fmt(n(l.qty)*n(l.rate))}</td>`:''}<td class="x">${!lro&&!c.noAdd?`<button class="xbtn" data-act="delline" data-i="${i}" aria-label="Remove line">✕</button>`:''}</td></tr>`).join('')||`<tr><td colspan="${c.lines.length+3}" class="empty">${{grns:'Select a purchase order to load its pending lines.',dispatches:'Select a sales order to load its pending lines.',sinv:'Select a posted dispatch note to load its lines.',pinv:'Select a posted GRN to load its accepted lines.'}[v]||'No lines yet.'}</td></tr>`}
+  </tbody></table></div><div id="totals">${totalsHTML(c,d)}</div></section>`}
+ if(v==='prods')h+=prodExtra(d);
+ if(v==='boms')h+=bomExtra(d);
+ if(v==='mrs'||v==='mins')h+=stockCheck(v,d);
+ if(c.txn&&!st.isNew)h+=historyHTML(d);
+ return h}
+function totalsHTML(c,d){
+ if(c.gst){const g=gstCalc(d);return `<div class="totals"><span class="muted">Taxable <b>${inr(g.taxable)}</b></span>${g.intra?`<span class="muted">CGST <b>${inr(g.cgst)}</b></span><span class="muted">SGST <b>${inr(g.sgst)}</b></span>`:`<span class="muted">IGST <b>${inr(g.igst)}</b></span>`}<span class="muted">Round off <b>${fmt(g.round)}</b></span><span class="muted">Invoice total <b>${inr(g.total)}</b></span></div>
+  <p class="hint" style="padding:0 14px 10px">${company.state?(g.intra?`Same state as your company (${esc(company.state)}): CGST + SGST.`:`Different state from your company (${esc(company.state)}): IGST.`):'Set your company’s state in Company Setup so CGST/SGST vs IGST is decided correctly.'}</p>`}
+ if(c.total)return `<div class="totals"><span class="muted">Total quantity <b>${q3((d.lines||[]).reduce((s,l)=>s+n(l.qty),0))}</b></span><span class="muted">Total value <b>${inr(docTotal(d))}</b></span></div>`;return ''}
+function historyHTML(d){const lg=d.log||[];if(!lg.length)return '';
+ return `<section class="tab"><h2>History</h2><ul class="log">${[...lg].reverse().map(x=>`<li><time>${esc(fmtDT(x.at))}</time><span>${esc(x.act)}</span><span class="muted">by ${uname(x.by)}</span></li>`).join('')}</ul></section>`}
+function prodExtra(d){let h='';const req=d.issued||bomReq(d);
+ if(!req.length)h+=`<section class="tab"><h2>Material requirement</h2><div class="body muted">Select an item, BOM and planned quantity to see the components needed.</div></section>`;
+ else h+=`<section class="tab"><h2>Material requirement ${d.issued?pill('Issued'):''}</h2><div class="tablewrap"><table><thead><tr><th>Component</th><th>Description</th><th class="num">Required</th><th class="num">Stock in ${esc(d.rmWh||'RM warehouse')}</th><th>Availability</th></tr></thead><tbody>
+ ${req.map(r=>{const it=get('items',r.item),oh=onHand(r.item,d.rmWh);return `<tr><td class="code">${esc(r.item)}</td><td>${esc(it?.name)}</td><td class="num">${q3(r.qty)} ${esc(it?.uom||'')}</td><td class="num">${q3(oh)}</td><td>${d.issued?pill('Issued'):oh>=r.qty?'<span class="pill p-good">Available</span>':`<span class="pill p-bad">Short ${q3(r.qty-oh)}</span>`}</td></tr>`}).join('')}
+ </tbody></table></div>${d.issuedValue?`<div class="totals"><span class="muted">Material cost issued <b>${inr(d.issuedValue)}</b></span>${d.unitCost?`<span class="muted">Cost per unit <b>${inr(d.unitCost)}</b></span>`:''}</div>`:''}</section>`;
+ const ops=d.ops&&d.ops.length?d.ops:(d.routing&&d.status==='Created'?scheduleOps(d,Math.max(Date.now(),Date.parse((d.date||today())+'T00:00'))):[]);
+ const canOp=canEnt('prods')&&d.status==='In Progress';
+ h+=`<section class="tab"><h2>Operations &amp; schedule ${d.status==='Created'&&ops.length?'<span class="pill">Preview — fixed on release</span>':''}</h2>${ops.length?`<div class="tablewrap"><table><thead><tr><th>Op</th><th>Operation</th><th>Work center</th><th class="num">Minutes</th><th>Start</th><th>Finish</th><th>Status</th><th></th></tr></thead><tbody>
+ ${ops.map((o,i)=>`<tr><td class="code">${o.seq}</td><td>${esc(o.op)}</td><td class="code">${esc(o.wc)}</td><td class="num">${fmt(o.mins,0)}</td><td>${esc(fmtDT(o.start))}</td><td>${esc(fmtDT(o.end))}</td><td>${pill(o.status)}${o.status!=='Done'&&n(o.end)<Date.now()&&d.status!=='Created'?' <span class="pill p-bad">Late</span>':''}</td><td>${canOp&&o.status!=='Done'?`<button class="btn sm" data-act="opdone" data-i="${i}">Mark done</button>`:o.doneAt?`<span class="muted">${esc(fmtDT(o.doneAt))}</span>`:''}</td></tr>`).join('')}
+ </tbody></table></div>`:`<div class="body muted">${d.routing?'Routing has no operations.':'No routing selected. Add a routing to schedule this order on your machines.'}</div>`}</section>`;
+ return h}
+
+/* ---- dashboard ---- */
+function dashHTML(){
+ const items=list('items');let sv=0;for(const it of items)sv+=Math.max(0,onHand(it.code))*avgCost(it.code);
+ const openPO=list('pos').filter(p=>['Approved','Partially Received'].includes(p.status));
+ const mos=list('prods'),wip=mos.filter(m=>['Released','In Progress'].includes(m.status));
+ const openSO=list('sos').filter(s=>['Confirmed','Partially Dispatched'].includes(s.status));
+ const mon=today().slice(0,7),inv=list('sinv').filter(i=>i.status==='Posted'&&String(i.date).startsWith(mon));
+ const rgp=list('gatepasses').filter(g=>g.type===GP_TYPES[1]&&['Out','Partially Returned'].includes(g.status)),rgpOd=rgp.filter(g=>g.expReturn&&g.expReturn<today());
+ const low=items.filter(i=>i.active!==false&&n(i.reorder)>0&&onHand(i.code)<n(i.reorder));
+ const lateOps=allOps().filter(o=>o.status!=='Done'&&o.mst!=='Finished'&&n(o.end)<Date.now());
+ const appr=[['prs','Pending Approval','Purchase requisition'],['mrs','Pending Approval','Material request'],['pos','Draft','Purchase order'],['prods','Created','Production order'],['sos','Draft','Sales order'],['journals','Draft','Stock journal'],['gatepasses','Draft','Gate pass'],['sinv','Draft','Sales invoice'],['pinv','Draft','Purchase invoice']]
+  .filter(([v])=>canAppr(v)).flatMap(([v,s,l])=>list(v).filter(d=>d.status===s).map(d=>({v,l,d})));
+ const flow=[['prs','Requisition',`${list('prs').filter(p=>p.status==='Pending Approval').length} to approve · ${list('prs').filter(p=>['Approved','Partially Ordered'].includes(p.status)).length} to order`],['pos','Purchase',`${list('pos').filter(p=>p.status==='Draft').length} draft · ${openPO.length} open`],['grns','Goods receipt',`${list('grns').filter(g=>g.status==='Draft').length} to post`],['mrs','Material request',`${list('mrs').filter(p=>p.status==='Pending Approval').length} to approve · ${list('mrs').filter(p=>['Approved','Partially Issued'].includes(p.status)).length} to issue`],
+  ['prods','Production',`${mos.filter(m=>m.status==='Created').length} planned · ${wip.length} on floor`],['sos','Sales order',`${openSO.length} open`],['dispatches','Dispatch',`${list('dispatches').filter(g=>g.status==='Draft').length} to post`],['sinv','Invoice',`${list('dispatches').filter(g=>g.status==='Posted'&&!g.invoiced).length} to bill`]];
+ return `<div class="head"><div><div class="crumb">${esc(new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'}))}</div><h1>Plant overview</h1></div></div>
+ <div class="flow">${flow.map(([k,nm,ct],i)=>`<a href="#${k}"><div class="st">STEP ${i+1}</div><div class="nm">${nm}</div><div class="ct">${ct}</div></a>`).join('')}</div>
+ <div class="tiles">
+  <div class="tile"><div class="k">Inventory value</div><div class="v">${inr(sv)}</div><div class="s">${items.length} items · ${list('warehouses').length} warehouses</div></div>
+  <div class="tile"><div class="k">Sales invoiced this month</div><div class="v">${inr(inv.reduce((s,i)=>s+gstCalc(i).total,0))}</div><div class="s">${inv.length} invoices incl. GST</div></div>
+  <div class="tile"><div class="k">Open purchase orders</div><div class="v">${openPO.length}</div><div class="s">${inr(openPO.reduce((s,p)=>s+docTotal(p),0))} awaiting receipt</div></div>
+  <div class="tile ${lateOps.length?'alert':''}"><div class="k">Production on floor</div><div class="v">${wip.length}</div><div class="s">${lateOps.length?`${lateOps.length} operations running late`:'No operations late'}</div></div>
+  <div class="tile"><div class="k">Open sales orders</div><div class="v">${openSO.length}</div><div class="s">${inr(openSO.reduce((s,p)=>s+docTotal(p),0))} to dispatch</div></div>
+  <div class="tile ${rgpOd.length?'alert':''}"><div class="k">Returnable gate passes out</div><div class="v">${rgp.length}</div><div class="s">${rgpOd.length?`${rgpOd.length} past return date`:'None overdue'}</div></div>
+ </div>
+ ${appr.length?`<section class="tab"><h2>Waiting for your approval (${appr.length})</h2><div class="tablewrap"><table><thead><tr><th>Document</th><th>Type</th><th>Date</th><th>Party / item</th><th class="num">Value (₹)</th><th>Created by</th></tr></thead><tbody>
+  ${appr.slice(0,12).map(({v,l,d})=>`<tr class="click" data-goto="${v}" data-id="${esc(sid(d.no))}"><td class="code">${esc(d.no)}</td><td>${l}</td><td>${esc(fmtD(d.date))}</td><td>${esc(d.supplier||d.customer||d.party||d.item||d.wh||'')}</td><td class="num">${ENT[v].gst?fmt(gstCalc(d).total):d.lines?fmt(docTotal(d)):''}</td><td>${uname(d.createdBy)}</td></tr>`).join('')}</tbody></table></div></section>`:''}
+ <div class="cols2">
+  <section class="tab"><h2>Below reorder level<span class="sp"></span><a class="btn" href="#plan">Material planning →</a></h2>
+   ${low.length?`<div class="tablewrap"><table><thead><tr><th>Item</th><th>Name</th><th class="num">On hand</th><th class="num">Reorder</th></tr></thead><tbody>${low.slice(0,10).map(i=>`<tr><td class="code">${esc(i.code)}</td><td>${esc(i.name)}</td><td class="num">${q3(onHand(i.code))}</td><td class="num">${q3(i.reorder)}</td></tr>`).join('')}</tbody></table></div>`:'<div class="body muted">Every item with a reorder level is above it.</div>'}
+  </section>
+  <section class="tab"><h2>Recent stock movements<span class="sp"></span><a class="btn" href="#ledger">Stock ledger →</a></h2>
+   ${list('ledger').length?`<div class="tablewrap"><table><thead><tr><th>Date</th><th>Document</th><th>Item</th><th class="num">Qty</th></tr></thead><tbody>${list('ledger').sort((a,b)=>n(b.ts)-n(a.ts)).slice(0,8).map(l=>`<tr><td>${esc(fmtD(l.date))}</td><td class="code">${esc(l.ref)}</td><td class="code">${esc(l.item)}</td><td class="num" style="color:var(${n(l.qty)<0?'--bad':'--good'})">${n(l.qty)>0?'+':''}${q3(l.qty)}</td></tr>`).join('')}</tbody></table></div>`:'<div class="body muted">No movements yet. Post a GRN or an opening-stock journal to start.</div>'}
+  </section>
+ </div>
+ ${!items.length&&ready?`<section class="tab"><h2>Getting started</h2><div class="body"><ol style="margin:0;padding-left:18px;line-height:1.9">
+  <li>Fill in <a href="#company">Company Setup</a> — name, GSTIN, state, shift timing and PO approval limit.</li><li>Add your team in <a href="#users">Users &amp; Roles</a>, and your <a href="#departments">Departments</a> (Production, Stores, Maintenance, Quality…).</li><li>Add what you manufacture in <a href="#products">Product Master</a> and map each product to its BOM.</li>
+  <li>Add <a href="#items">Items</a>, <a href="#suppliers">Suppliers</a>, <a href="#customers">Customers</a> — or import them from Excel.</li>
+  <li>Set up <a href="#workcenters">Work Centers</a>, a <a href="#boms">BOM</a> and a <a href="#routings">Routing</a> for each finished good.</li>
+  <li>Load opening stock with a <a href="#journals">Stock Journal</a>, then run PO → GRN → Production → SO → Dispatch → Invoice.</li></ol></div></section>`:''}`}
+
+/* ---- company ---- */
+const CO_F=[{k:'name',l:'Company Name',req:1,w:2},{k:'legal',l:'Legal Name',w:2},{k:'gstin',l:'GSTIN'},{k:'pan',l:'PAN'},{k:'state',l:'State (for GST)',t:'sel',o:STATE_N},{k:'phone',l:'Phone'},{k:'email',l:'Email'},
+ {k:'address',l:'Registered Address',t:'area',w:2},{k:'plant',l:'Plant Address',t:'area',w:2},{k:'fy',l:'Financial Year Starts',t:'sel',o:['April','January']},
+ {k:'shiftStart',l:'Shift Starts At',t:'time'},{k:'weeklyOff',l:'Weekly Off',t:'sel',o:['Sunday','None']},{k:'poLimit',l:'PO Approval Limit (₹) — above this only Admin approves',t:'num',w:2},
+ {k:'bankName',l:'Bank Name'},{k:'bankAcc',l:'Bank Account No.'},{k:'ifsc',l:'IFSC'},{k:'invTerms',l:'Invoice Terms & Conditions',t:'area',w:2}];
+let coDraft=null;
+function companyHTML(){if(!coDirty){coDraft=clone(company);if(!coDraft.fy)coDraft.fy='April';if(!coDraft.shiftStart)coDraft.shiftStart='09:00';if(!coDraft.weeklyOff)coDraft.weeklyOff='Sunday'}
+ const ro=!isAdmin();
+ return `<div class="head"><div><div class="crumb">Masters</div><h1>Company Setup</h1></div></div>
+ ${ro?'':'<div class="pane"><button class="btn pri" data-act="cosave">Save</button><span class="sep"></span><button class="btn" data-act="backup">Download full backup (JSON)</button></div>'}
+ <section class="tab"><h2>Company details</h2><div class="body"><div class="fgrid">${CO_F.map(f=>`<div class="fld ${f.w?'w2':''}"><label for="c_${f.k}">${esc(f.l)}</label>${inputHTML(f,coDraft[f.k]??'',ro,`id="c_${f.k}" data-ck="${f.k}"`)}</div>`).join('')}</div></div></section>`}
+
+/* ---- users ---- */
+function usersHTML(){const us=Object.values(USERS).sort((a,b)=>a.name.localeCompare(b.name)),adm=isAdmin();
+ return `<div class="head"><div><div class="crumb">Masters</div><h1>Users &amp; Roles</h1></div></div>
+ <section class="tab"><h2>Your access</h2><div class="body">${esc(me.name)} <span class="muted">(${esc(me.email)})</span> — <b>${esc(me.role)}</b></div></section>
+ ${adm?`<section class="tab"><h2>Add a user</h2><div class="body"><form id="uform" class="fgrid" autocomplete="off">
+  <div class="fld"><label for="un">Full name</label><input id="un" required></div>
+  <div class="fld"><label for="ue">Email (used to sign in)</label><input id="ue" type="email" required></div>
+  <div class="fld"><label for="up">Temporary password</label><input id="up" minlength="8" required></div>
+  <div class="fld"><label for="ur">Role</label><select id="ur">${Object.keys(ROLES).map(r=>`<option ${r==='Viewer'?'selected':''}>${r}</option>`).join('')}</select></div>
+  <div class="fld" style="justify-content:flex-end"><button class="btn pri" type="submit">Create user</button></div></form>
+  <p class="hint">Give the person their email and temporary password. They can change it with “Change password” after signing in.</p></div></section>`:''}
+ <section class="tab"><h2>Team (${us.length})</h2><div class="tablewrap"><table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th></th></tr></thead><tbody>
+ ${us.map(u=>{const mine=u.id===me.id;return `<tr><td>${esc(u.name)}${mine?' <span class="pill p-acc">You</span>':''}</td><td>${esc(u.email)}</td>
+  <td>${adm&&!mine?`<select data-urole="${esc(u.id)}" aria-label="Role for ${esc(u.name)}">${Object.keys(ROLES).map(r=>`<option ${r===u.role?'selected':''}>${r}</option>`).join('')}</select>`:esc(u.role)}</td>
+  <td>${u.active===false?'<span class="pill">Inactive</span>':'<span class="pill p-good">Active</span>'}</td>
+  <td>${adm&&!mine?`<button class="btn sm" data-act="utoggle" data-uid="${esc(u.id)}">${u.active===false?'Activate':'Deactivate'}</button><button class="btn sm" data-act="ureset" data-uid="${esc(u.id)}">Reset password</button>`:''}</td></tr>`}).join('')}
+ </tbody></table></div></section>`+rolesTable()}
+function rolesTable(){return `<section class="tab"><h2>What each role can do</h2><div class="tablewrap"><table><thead><tr><th>Role</th><th>Approves</th><th>Access</th></tr></thead><tbody>${Object.entries(ROLES).map(([r,x])=>`<tr><td><b>${r}</b></td><td>${x.a?'<span class="pill p-good">Yes</span>':'<span class="pill">No</span>'}</td><td style="white-space:normal">${esc(x.d)}</td></tr>`).join('')}</tbody></table></div></section>`}
+
+/* ---- reports ---- */
+function stockRows(){const m={};for(const l of list('ledger')){const k=l.item+'|'+l.wh;(m[k]??={item:l.item,wh:l.wh,qty:0}).qty+=n(l.qty)}
+ return Object.values(m).filter(r=>Math.abs(r.qty)>1e-9).map(r=>{const it=get('items',r.item)||{},rate=avgCost(r.item);return {...r,name:it.name||'',type:it.type||'',uom:it.uom||'',rate,value:r.qty*rate,low:n(it.reorder)>0&&onHand(r.item)<n(it.reorder)}})
+ .sort((a,b)=>a.item.localeCompare(b.item,undefined,{numeric:true})||a.wh.localeCompare(b.wh))}
+const whSel=()=>`<select class="search" id="whf" style="flex-basis:200px;margin-left:auto" aria-label="Warehouse filter"><option value="">All warehouses</option>${list('warehouses').map(w=>`<option ${st.filt===w.code?'selected':''} value="${esc(w.code)}">${esc(w.code)} · ${esc(w.name)}</option>`).join('')}</select>`;
+const repPane=ph=>`<div class="pane"><button class="btn" data-act="rep-xlsx">Export Excel</button><button class="btn" data-act="rep-csv">Export CSV</button>${whSel()}<input class="search" id="rq" placeholder="${ph}" value="${esc(st.q)}" style="margin-left:0" aria-label="Search"></div>`;
+function stockHTML(){return `<div class="head"><div><div class="crumb">Inventory</div><h1>Stock on Hand</h1></div></div>${repPane('Search item…')}
+ <div class="tablewrap"><table><thead><tr><th>Item</th><th>Name</th><th>Type</th><th>Warehouse</th><th class="num">Qty</th><th>Unit</th><th class="num">Avg cost (₹)</th><th class="num">Value (₹)</th><th></th></tr></thead><tbody id="rrows"></tbody><tfoot id="rfoot"></tfoot></table></div>
+ <p class="hint">Average cost is the weighted cost of all receipts (GRN, production, opening stock) for the item.</p>`}
+const BUCKETS=[[30,'0–30 days'],[60,'31–60 days'],[90,'61–90 days'],[180,'91–180 days'],[1e9,'Over 180 days']];
+function batchRows(){const m={},t=Date.parse(today()+'T00:00');for(const l of list('ledger')){const k=l.item+'|'+l.wh+'|'+(l.batch||'');const r=(m[k]??={item:l.item,wh:l.wh,batch:l.batch||'',qty:0,first:'',exp:''});r.qty+=n(l.qty);
+  if(n(l.qty)>0){if(!r.first||l.date<r.first)r.first=l.date;if(l.exp&&(!r.exp||l.exp<r.exp))r.exp=l.exp}}
+ return Object.values(m).filter(r=>r.qty>1e-9).map(r=>{const it=get('items',r.item)||{},age=r.first?Math.max(0,Math.round((t-Date.parse(r.first+'T00:00'))/DAYMS)):0,ed=r.exp?Math.round((Date.parse(r.exp+'T00:00')-t)/DAYMS):null;
+  return {...r,name:it.name||'',uom:it.uom||'',age,bucket:BUCKETS.find(b=>age<=b[0])[1],ed,value:r.qty*avgCost(r.item)}}).sort((a,b)=>b.age-a.age)}
+function batchHTML(){let r=batchRows();if(st.filt)r=r.filter(x=>x.wh===st.filt);
+ const tot=r.reduce((s,x)=>s+x.value,0)||1;
+ return `<div class="head"><div><div class="crumb">Inventory</div><h1>Batch Stock &amp; Aging</h1></div></div>
+ <div class="tiles">${BUCKETS.map(([,b])=>{const v=r.filter(x=>x.bucket===b).reduce((s,x)=>s+x.value,0);return `<div class="tile ${b==='Over 180 days'&&v>0?'alert':''}"><div class="k">${b}</div><div class="v">${inr(v)}</div><div class="s">${fmt(v/tot*100,0)}% of stock value</div></div>`}).join('')}</div>
+ ${repPane('Search item or batch…')}
+ <div class="tablewrap"><table><thead><tr><th>Item</th><th>Name</th><th>Batch / Lot</th><th>Warehouse</th><th class="num">Qty</th><th>Received</th><th class="num">Age (days)</th><th>Bucket</th><th>Expiry</th></tr></thead><tbody id="rrows"></tbody></table></div>
+ <p class="hint">Issues and dispatches use the batch expiring first, then the oldest (FEFO / FIFO), unless a batch is entered on the dispatch line. Search a batch number in the Stock Ledger to trace where it went.</p>`}
+function ledgerRows(){return list('ledger').sort((a,b)=>String(b.date).localeCompare(String(a.date))||n(b.ts)-n(a.ts))}
+function ledgerHTML(){return `<div class="head"><div><div class="crumb">Inventory</div><h1>Stock Ledger</h1></div></div>${repPane('Search item, batch, document…')}
+ <div class="tablewrap"><table><thead><tr><th>Date</th><th>Type</th><th>Document</th><th>Item</th><th>Batch</th><th>Warehouse</th><th>Party</th><th class="num">In</th><th class="num">Out</th><th class="num">Rate (₹)</th><th class="num">Value (₹)</th></tr></thead><tbody id="rrows"></tbody></table></div>`}
+function fillReport(){const q=st.q.toLowerCase().trim(),el=$('#rrows');if(!el)return;const wait=ready||mode==='local';
+ if(st.view==='stock'){let r=stockRows();if(st.filt)r=r.filter(x=>x.wh===st.filt);if(q)r=r.filter(x=>(x.item+' '+x.name+' '+x.type).toLowerCase().includes(q));
+  el.innerHTML=r.length?r.map(x=>`<tr><td class="code">${esc(x.item)}</td><td>${esc(x.name)}</td><td>${esc(x.type)}</td><td class="code">${esc(x.wh)}</td><td class="num">${q3(x.qty)}</td><td>${esc(x.uom)}</td><td class="num">${fmt(x.rate)}</td><td class="num">${fmt(x.value)}</td><td>${x.low?'<span class="pill p-warn">Below reorder</span>':''}</td></tr>`).join(''):`<tr><td colspan="9" class="empty">${wait?'No stock yet.':'Loading…'}</td></tr>`;
+  $('#rfoot').innerHTML=r.length?`<tr><td colspan="7"><b>Total</b></td><td class="num"><b>${fmt(r.reduce((s,x)=>s+x.value,0))}</b></td><td></td></tr>`:''}
+ else if(st.view==='batches'){let r=batchRows();if(st.filt)r=r.filter(x=>x.wh===st.filt);if(q)r=r.filter(x=>(x.item+' '+x.name+' '+x.batch).toLowerCase().includes(q));
+  el.innerHTML=r.length?r.map(x=>`<tr><td class="code">${esc(x.item)}</td><td>${esc(x.name)}</td><td class="code">${esc(x.batch||'—')}</td><td class="code">${esc(x.wh)}</td><td class="num">${q3(x.qty)} ${esc(x.uom)}</td><td>${esc(fmtD(x.first))}</td><td class="num">${x.age}</td><td>${esc(x.bucket)}</td><td>${x.exp?esc(fmtD(x.exp))+' '+(x.ed<0?'<span class="pill p-bad">Expired</span>':x.ed<=30?`<span class="pill p-warn">${x.ed} days left</span>`:''):'<span class="muted">—</span>'}</td></tr>`).join(''):`<tr><td colspan="9" class="empty">${wait?'No stock yet.':'Loading…'}</td></tr>`}
+ else{let r=ledgerRows();if(st.filt)r=r.filter(x=>x.wh===st.filt);if(q)r=r.filter(x=>[x.item,x.ref,x.wh,x.type,x.party,x.batch].join(' ').toLowerCase().includes(q));
+  el.innerHTML=r.length?r.slice(0,500).map(x=>`<tr><td>${esc(fmtD(x.date))}</td><td>${esc(x.type)}</td><td class="code">${esc(x.ref)}</td><td class="code">${esc(x.item)}</td><td class="code">${esc(x.batch||'')}</td><td class="code">${esc(x.wh)}</td><td>${esc(x.party)}</td><td class="num">${n(x.qty)>0?q3(x.qty):''}</td><td class="num">${n(x.qty)<0?q3(-x.qty):''}</td><td class="num">${fmt(x.rate)}</td><td class="num">${fmt(x.value)}</td></tr>`).join(''):`<tr><td colspan="11" class="empty">${wait?'No movements yet.':'Loading…'}</td></tr>`}}
+function planRows(){const need={};
+ for(const m of list('prods'))if(['Created','Released'].includes(m.status))for(const r of bomReq(m))need[r.item]=(need[r.item]||0)+r.qty;
+ for(const it of list('items'))if(it.active!==false&&n(it.reorder)>0&&!FG.includes(it.type))need[it.code]=need[it.code]||0;
+ return Object.entries(need).map(([item,req])=>{const it=get('items',item)||{},oh=onHand(item),po=openPoQty(item),ro=n(it.reorder);
+  const short=Math.max(0,req+ro-oh-po);return {item,name:it.name||'',uom:it.uom||'',req,oh,po,ro,short,rate:n(it.stdCost)}})
+  .filter(r=>r.req>0||r.short>0).sort((a,b)=>b.short-a.short||a.item.localeCompare(b.item))}
+function planHTML(){const r=planRows(),sh=r.filter(x=>x.short>0);
+ return `<div class="head"><div><div class="crumb">Production</div><h1>Material Planning</h1></div></div>
+ <div class="pane">${canMod('request')?`<button class="btn pri" data-act="mkprplan" ${sh.length?'':'disabled'}>Raise purchase requisition (${sh.length})</button>`:''}${canMod('purchase')?`<button class="btn" data-act="mkpo" ${sh.length?'':'disabled'}>Create draft PO directly</button>`:''}<span class="sep"></span><button class="btn" data-act="rep-xlsx">Export Excel</button><button class="btn" data-act="rep-csv">Export CSV</button></div>
+ <div class="tablewrap"><table><thead><tr><th>Item</th><th>Name</th><th class="num">Needed for open MOs</th><th class="num">Reorder level</th><th class="num">On hand</th><th class="num">On open POs</th><th class="num">To purchase</th><th>Unit</th></tr></thead><tbody>
+ ${r.length?r.map(x=>`<tr><td class="code">${esc(x.item)}</td><td>${esc(x.name)}</td><td class="num">${q3(x.req)}</td><td class="num">${q3(x.ro)}</td><td class="num">${q3(x.oh)}</td><td class="num">${q3(x.po)}</td><td class="num">${x.short>0?`<span class="pill p-bad">${q3(x.short)}</span>`:'<span class="pill p-good">0</span>'}</td><td>${esc(x.uom)}</td></tr>`).join(''):`<tr><td colspan="8" class="empty">Nothing to plan. Requirements appear here when production orders are created or released, and for items with a reorder level.</td></tr>`}
+ </tbody></table></div><p class="hint">To purchase = needed for created/released production orders + reorder level − on hand − quantity still due on approved POs.</p>`}
+function schedHTML(){const t0=new Date();t0.setHours(0,0,0,0);const S0=t0.getTime(),SPAN=7*DAYMS,now=Date.now();
+ const ops=allOps().filter(o=>n(o.end)>S0-DAYMS||o.status!=='Done');
+ const wcs=list('workcenters').filter(w=>!st.filt||w.code===st.filt).sort((a,b)=>a.code.localeCompare(b.code));
+ const days=[...Array(7)].map((_,i)=>new Date(S0+i*DAYMS));
+ const pend=ops.filter(o=>o.status!=='Done'&&o.mst!=='Finished'&&(!st.filt||o.wc===st.filt)).sort((a,b)=>n(a.start)-n(b.start));
+ const gantt=wcs.length?`<div class="tablewrap" style="margin-bottom:14px"><div class="gantt">
+  <div class="g-row g-head"><div class="g-lab muted">Work center</div><div class="g-track">${days.map((d,i)=>`<span class="g-day" style="left:${i/7*100}%">${esc(d.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'}))}</span>`).join('')}</div></div>
+  ${wcs.map(w=>{const mine=ops.filter(o=>o.wc===w.code),load=mine.filter(o=>o.status!=='Done'&&o.mst!=='Finished').reduce((s,o)=>s+n(o.mins),0)/60;
+   return `<div class="g-row"><div class="g-lab"><b class="code">${esc(w.code)}</b><small>${esc(w.name)} · ${fmt(load,1)} h queued</small></div><div class="g-track">
+   ${mine.filter(o=>n(o.end)>S0&&n(o.start)<S0+SPAN).map(o=>{const l=Math.max(0,(n(o.start)-S0)/SPAN*100),r=Math.min(100,(n(o.end)-S0)/SPAN*100);const cls=o.status==='Done'?'done':n(o.end)<now?'late':o.mst==='In Progress'?'ip':'';
+    return `<span class="g-bar ${cls}" style="left:${l}%;width:${Math.max(.8,r-l)}%" data-goto="prods" data-id="${esc(sid(o.mo))}" title="${esc(`${o.mo} · Op ${o.seq} ${o.op} · ${fmtDT(o.start)} → ${fmtDT(o.end)}`)}">${esc(o.mo)} · ${esc(o.op)}</span>`}).join('')}
+   <span class="g-now" style="left:${(now-S0)/SPAN*100}%"></span></div></div>`}).join('')}
+ </div></div>`:'<div class="note">Add work centers and routings to see the machine schedule.</div>';
+ return `<div class="head"><div><div class="crumb">Production</div><h1>Machine Schedule</h1></div></div>
+ <div class="pane"><span class="muted" style="padding:0 6px">Next 7 days · shift from ${esc(company.shiftStart||'09:00')}${(company.weeklyOff||'Sunday')==='Sunday'?' · Sunday off':''}</span>
+ <select class="search" id="wcf" style="flex-basis:220px" aria-label="Work center filter"><option value="">All work centers</option>${list('workcenters').map(w=>`<option ${st.filt===w.code?'selected':''} value="${esc(w.code)}">${esc(w.code)} · ${esc(w.name)}</option>`).join('')}</select></div>
+ ${gantt}
+ <section class="tab"><h2>Upcoming operations (${pend.length})</h2><div class="tablewrap"><table><thead><tr><th>Start</th><th>Finish</th><th>Work center</th><th>Order</th><th>Item</th><th class="num">Qty</th><th>Operation</th><th class="num">Hours</th><th>Status</th></tr></thead><tbody>
+ ${pend.length?pend.map(o=>`<tr class="click" data-goto="prods" data-id="${esc(sid(o.mo))}"><td>${esc(fmtDT(o.start))}</td><td>${esc(fmtDT(o.end))}</td><td class="code">${esc(o.wc)}</td><td class="code">${esc(o.mo)}</td><td class="code">${esc(o.item)}</td><td class="num">${q3(o.qty)}</td><td>${o.seq} · ${esc(o.op)}</td><td class="num">${fmt(o.mins/60,1)}</td><td>${n(o.end)<now?'<span class="pill p-bad">Late</span>':pill(o.mst)}</td></tr>`).join(''):'<tr><td colspan="9" class="empty">No operations scheduled. Release a production order that has a routing.</td></tr>'}
+ </tbody></table></div></section>
+ <p class="hint">Each operation starts after the previous one on the order finishes and after the work center is free, within its working hours per day. Mark operations done on the production order.</p>`}
+
+/* ---------- workflow actions ---------- */
+const WF={
+ prs:d=>{const open=['Approved','Partially Ordered'].includes(d.status);return [['Draft','Rejected'].includes(d.status)&&['submit','Submit for approval','e'],d.status==='Pending Approval'&&['approve','Approve','a'],d.status==='Pending Approval'&&['reject','Reject','a'],open&&['mkpo','Create purchase order','m:purchase'],open&&['close','Close PR','a']]},
+ mrs:d=>{const open=['Approved','Partially Issued'].includes(d.status);return [['Draft','Rejected'].includes(d.status)&&['submit','Submit for approval','e'],d.status==='Pending Approval'&&['approve','Approve','a'],d.status==='Pending Approval'&&['reject','Reject','a'],open&&['mkmin','Issue material','m:stores'],open&&mrShort(d).length&&['mkpr','Raise PR for shortage','m:request'],open&&['close','Close MR','a']]},
+ mins:d=>[d.status==='Draft'&&['post','Post issue','e']],
+ mrets:d=>[d.status==='Draft'&&['post','Post return','e']],
+ items:d=>[!st.isNew&&FG.includes(d.type)&&['mkbom',bomOf(d.code)?'Open BOM':'Create BOM','m:production']],
+ pos:d=>[d.status==='Draft'&&['approve','Approve','a'],['Approved','Partially Received'].includes(d.status)&&['mkgrn','Create GRN','m:stores'],['Approved','Partially Received'].includes(d.status)&&['close','Close PO','a']],
+ grns:d=>[d.status==='Draft'&&['post','Post GRN','e'],d.status==='Posted'&&!d.billed&&['mkpinv','Book purchase invoice','m:accounts']],
+ prods:d=>[d.status==='Created'&&['release','Release to floor','a'],d.status==='Released'&&!mrFor(d.no).length&&['mkmr','Create material request','m:request'],d.status==='Released'&&!mrFor(d.no).length&&['issue','Issue materials directly','e'],['Released','In Progress'].includes(d.status)&&d.routing&&['resched','Reschedule','e'],d.status==='In Progress'&&['finish','Report as finished','e']],
+ sos:d=>[d.status==='Draft'&&['confirm','Confirm','a'],['Confirmed','Partially Dispatched'].includes(d.status)&&['mkdn','Create dispatch','m:stores'],['Confirmed','Partially Dispatched'].includes(d.status)&&['mkmo','Create production order','m:production'],['Confirmed','Partially Dispatched'].includes(d.status)&&['close','Close SO','a']],
+ dispatches:d=>[d.status==='Draft'&&['post','Post dispatch','e'],d.status==='Posted'&&['mkgp','Create gate pass','m:gate'],d.status==='Posted'&&!d.invoiced&&['mkinv','Create invoice','m:accounts']],
+ journals:d=>[d.status==='Draft'&&['post','Post journal','a']],
+ sinv:d=>[d.status==='Draft'&&['post','Post invoice','a'],d.status==='Posted'&&['dlinv','Print / download invoice','e']],
+ pinv:d=>[d.status==='Draft'&&['post','Post invoice','a']],
+ gatepasses:d=>{const rgp=d.type===GP_TYPES[1];return [d.status==='Draft'&&['approve','Approve','a'],d.status==='Approved'&&(d.type==='Inward'?['gatein','Mark gate in','e']:['gateout','Mark gate out','e']),rgp&&['Out','Partially Returned'].includes(d.status)&&['ret','Record return','e'],rgp&&['Out','Partially Returned'].includes(d.status)&&['close','Close','a']]},
+};
+const fail=m=>{throw new Error(m)};
+const ACT={
+ prs:{submit:d=>{if(!d.lines?.length)fail('Add at least one item.');d.status='Pending Approval'},
+  approve:d=>{d.status='Approved';d.approvedBy=me.id},reject:d=>{d.status='Rejected'},close:d=>{d.status='Closed'},
+  mkpo:d=>{const p=d.lines.filter(l=>n(l.qty)-n(l.ordered)>1e-9);if(!p.length)fail('Every line is already ordered.');const sups=[...new Set(p.map(l=>l.supplier).filter(Boolean))];
+   openNew('pos',{pr:d.no,supplier:sups.length===1?sups[0]:'',remarks:`Against ${d.no}`,lines:p.map(l=>({item:l.item,qty:+(n(l.qty)-n(l.ordered)).toFixed(3),rate:l.rate}))});
+   if(sups.length>1)toast('Lines have different suggested suppliers. Choose one supplier, or make one PO per supplier.');return 'nav'}},
+ mrs:{submit:d=>{if(!d.lines?.length)fail('Add at least one item.');d.status='Pending Approval'},
+  approve:d=>{d.status='Approved';d.approvedBy=me.id},reject:d=>{d.status='Rejected'},close:d=>{d.status='Closed'},
+  mkmin:d=>{openNew('mins',{mr:d.no,issuedTo:d.requestedBy||''});return 'nav'},
+  mkpr:d=>{const s=mrShort(d);if(!s.length)fail('No shortage: the store has enough stock for every pending line.');
+   openNew('prs',{dept:d.dept,mr:d.no,priority:'Urgent',purpose:`Shortage for material request ${d.no}`,lines:s.map(x=>({item:x.item,qty:x.short,rate:n(get('items',x.item)?.stdCost)}))});return 'nav'}},
+ mins:{post:async d=>{const mr=get('mrs',d.mr);if(!mr)fail('Material request not found.');if(!['Approved','Partially Issued'].includes(mr.status))fail(`${mr.no} is ${mr.status}; only approved requests can be issued.`);
+   const m=clone(mr),need={};
+   for(const l of d.lines)if(n(l.qty)>0){const k=l.item+'|'+String(l.batch||'').trim();need[k]=(need[k]||0)+n(l.qty)}
+   if(!Object.keys(need).length)fail('Enter an issue quantity on at least one line.');
+   for(const [k,q] of Object.entries(need)){const [it,b]=k.split('|');const have=b?(batchBal(it,d.wh).find(x=>x.batch===b)?.qty||0):onHand(it,d.wh);if(have<q-1e-6)fail(`${it}${b?' batch '+b:''}: only ${q3(have)} in ${d.wh}, this issue needs ${q3(q)}.`)}
+   for(const l of d.lines)if(n(l.qty)>0&&allocTo(m.lines,l.item,n(l.qty),'issued')>1e-6)fail(`${l.item}: issuing more than requested on ${mr.no}.`);
+   let k=0,val=0;const done=[];
+   for(const l of d.lines.filter(l=>n(l.qty)>0)){const rate=+avgCost(l.item).toFixed(4),al=alloc(l.item,d.wh,n(l.qty),String(l.batch||'').trim());
+    await addLedger(al.map(a=>({id:'MIN-'+d.no+'-'+(k++),date:d.date,type:'Material Issue',ref:d.no,item:l.item,wh:d.wh,qty:-a.qty,rate,party:deptName(d.dept),batch:a.batch,exp:a.exp})));
+    val+=n(l.qty)*rate;done.push({item:l.item,qty:n(l.qty)});const bs=al.filter(a=>a.batch);if(bs.length)l.batch=bs.map(a=>bs.length>1?`${a.batch}×${q3(a.qty)}`:a.batch).join(', ')}
+   m.status=m.lines.every(x=>n(x.issued)>=n(x.qty)-1e-6)?'Issued':'Partially Issued';m.log=[...(m.log||[]),{at:Date.now(),by:me.id||'',act:`Issued on ${d.no}`}];await put('mrs',sid(m.no),m);
+   if(m.mo){const mo=get('prods',m.mo);if(mo&&['Released','In Progress'].includes(mo.status)){const o=clone(mo);o.issuedValue=+(n(o.issuedValue)+val).toFixed(2);const iss=o.issued||[];
+    for(const x of done){const e=iss.find(y=>y.item===x.item);if(e)e.qty=+(n(e.qty)+x.qty).toFixed(3);else iss.push({item:x.item,qty:x.qty})}o.issued=iss;if(o.status==='Released')o.status='In Progress';
+    o.log=[...(o.log||[]),{at:Date.now(),by:me.id||'',act:`Material issued on ${d.no}`}];await put('prods',sid(o.no),o)}}
+   d.value=+val.toFixed(2);d.status='Posted'}},
+ mrets:{post:async d=>{if(!d.lines.some(l=>n(l.qty)>0))fail('Enter a return quantity on at least one line.');
+   if(d.min){const mi=get('mins',d.min);if(mi){const got={};for(const l of mi.lines||[])got[l.item]=(got[l.item]||0)+n(l.qty);const back={};for(const l of d.lines)back[l.item]=(back[l.item]||0)+n(l.qty);
+    for(const [it,q] of Object.entries(back))if(q>(got[it]||0)+1e-6)fail(`${it}: returning ${q3(q)} but only ${q3(got[it]||0)} was issued on ${mi.no}.`)}}
+   let k=0;for(const [i,l] of d.lines.entries()){const q=n(l.qty);if(q<=0)continue;if(isTracked(l.item)&&!String(l.batch||'').trim())l.batch=`${d.no}-${i+1}`;
+    await addLedger([{id:'MRN-'+d.no+'-'+(k++),date:d.date,type:'Material Return',ref:d.no,item:l.item,wh:d.wh,qty:q,rate:+avgCost(l.item).toFixed(4),party:deptName(d.dept),batch:String(l.batch||'').trim(),exp:''}])}
+   d.status='Posted'}},
+ items:{mkbom:d=>{const b=bomOf(d.code);if(b)openRec('boms',sid(b.code));else openNew('boms',{item:d.code});return 'nav'}},
+ pos:{approve:async d=>{if(!d.lines?.length)fail('Add at least one line before approving.');const lim=n(company.poLimit);if(lim>0&&docTotal(d)>lim&&!isAdmin())fail(`This PO is above the approval limit of ${inr(lim)}. An Admin must approve it.`);await prOrdered(d);d.status='Approved';d.approvedBy=me.id},
+  close:d=>{d.status='Closed'},mkgrn:d=>{openNew('grns',{po:d.no});return 'nav'}},
+ grns:{post:async d=>{const po=get('pos',d.po);if(!po)fail('Purchase order not found.');if(!['Approved','Partially Received'].includes(po.status))fail(`${po.no} is ${po.status}; only approved POs can be received.`);
+  const p=clone(po);
+  for(const l of d.lines){const q=n(l.qty);if(q<=0)continue;let a=l.accepted===''||l.accepted==null?q-n(l.rejected):n(l.accepted);const r=l.rejected===''||l.rejected==null?q-a:n(l.rejected);
+   if(Math.abs(a+r-q)>1e-6)fail(`${l.item}: accepted + rejected must equal received qty.`);l.accepted=a;l.rejected=r;
+   let left=q;for(const pl of p.lines.filter(x=>x.item===l.item)){const t=Math.min(left,n(pl.qty)-n(pl.recv));if(t>0){pl.recv=+(n(pl.recv)+t).toFixed(3);left-=t}}
+   if(left>1e-6)fail(`${l.item}: receiving more than pending on ${po.no}.`)}
+  if(!d.lines.some(l=>n(l.qty)>0))fail('Enter a received quantity on at least one line.');
+  d.lines.forEach((l,i)=>{if(isTracked(l.item)&&!String(l.batch||'').trim())l.batch=`${d.no}-${i+1}`;if(!l.exp&&l.batch)l.exp=expFor(l.item,d.date)});
+  const rejWh=list('warehouses').find(w=>w.type==='Rejected / Scrap')?.code;
+  await addLedger(d.lines.filter(l=>n(l.accepted)>0).map((l,i)=>({id:'GRN-'+d.no+'-'+i,date:d.date,type:'GRN',ref:d.no,item:l.item,wh:d.wh,qty:n(l.accepted),rate:n(l.rate),party:d.supplier,batch:l.batch||'',exp:l.exp||''})));
+  if(rejWh)await addLedger(d.lines.filter(l=>n(l.rejected)>0).map((l,i)=>({id:'GRNR-'+d.no+'-'+i,date:d.date,type:'GRN Rejected',ref:d.no,item:l.item,wh:rejWh,qty:n(l.rejected),rate:n(l.rate),party:d.supplier,batch:l.batch||''})));
+  p.status=p.lines.every(x=>n(x.recv)>=n(x.qty)-1e-6)?'Received':'Partially Received';await put('pos',sid(p.no),p);d.status='Posted'},
+  mkpinv:d=>{openNew('pinv',{grn:d.no});return 'nav'}},
+ prods:{mkmr:d=>{const req=bomReq(d);if(!req.length)fail('This order has no BOM components.');const dep=list('departments').find(x=>/prod/i.test(x.name||''));
+   openNew('mrs',{mo:d.no,wh:d.rmWh,purpose:'Production',dept:dep?.code||'',lines:req.map(r=>({item:r.item,qty:r.qty}))});return 'nav'},
+  release:d=>{const b=get('boms',d.bom);if(!b)fail('Select a BOM.');if(b.item!==d.item)fail(`BOM ${b.code} is for ${b.item}, not ${d.item}.`);if(n(d.qty)<=0)fail('Planned qty must be more than zero.');if(!b.lines?.length)fail(`BOM ${b.code} has no components.`);
+   if(d.routing){const r=get('routings',d.routing);if(!r)fail('Routing not found.');if(r.item!==d.item)fail(`Routing ${r.code} is for ${r.item}, not ${d.item}.`)}
+   d.ops=d.routing?scheduleOps(d,Math.max(Date.now(),Date.parse(d.date+'T00:00'))):[];d.status='Released';d.approvedBy=me.id},
+  resched:d=>{d.ops=scheduleOps(d,Date.now())},
+  issue:async d=>{const req=bomReq(d),sh=req.filter(r=>onHand(r.item,d.rmWh)<r.qty-1e-6);
+   if(sh.length)fail('Not enough stock in '+d.rmWh+': '+sh.map(r=>`${r.item} short ${q3(r.qty-onHand(r.item,d.rmWh))}`).join(', '));
+   let k=0,val=0;for(const r of req){const rate=+avgCost(r.item).toFixed(4);const al=alloc(r.item,d.rmWh,r.qty);
+    await addLedger(al.map(a=>({id:'MOI-'+d.no+'-'+(k++),date:today(),type:'Material Issue',ref:d.no,item:r.item,wh:d.rmWh,qty:-a.qty,rate,party:'',batch:a.batch,exp:a.exp})));val+=r.qty*rate;r.batches=al.filter(a=>a.batch).map(a=>`${a.batch}×${q3(a.qty)}`).join(', ')}
+   d.issued=req;d.issuedValue=+val.toFixed(2);d.status='In Progress'},
+  finish:async d=>{const g=n(d.goodQty);if(g<=0)fail('Enter the good quantity produced, then click “Report as finished”.');
+   d.unitCost=+(n(d.issuedValue)/g).toFixed(4);const b=isTracked(d.item)?d.no:'';
+   await addLedger([{id:'MOF-'+d.no,date:today(),type:'Production Receipt',ref:d.no,item:d.item,wh:d.fgWh,qty:g,rate:d.unitCost,party:'',batch:b,exp:b?expFor(d.item,today()):''}]);
+   for(const o of d.ops||[])if(o.status!=='Done'){o.status='Done';o.doneAt=Date.now();o.doneBy=me.id}d.status='Finished'}},
+ sos:{confirm:d=>{if(!d.lines?.length)fail('Add at least one line before confirming.');d.status='Confirmed';d.approvedBy=me.id},close:d=>{d.status='Closed'},
+  mkdn:d=>{openNew('dispatches',{so:d.no});return 'nav'},
+  mkmo:d=>{const l=d.lines.find(x=>FG.includes(get('items',x.item)?.type));if(!l)fail('This order has no finished-good item to produce.');openNew('prods',{item:l.item,qty:n(l.qty)-n(l.disp),so:d.no});return 'nav'}},
+ dispatches:{post:async d=>{const so=get('sos',d.so);if(!so)fail('Sales order not found.');const s=clone(so);
+  const need={};for(const l of d.lines)if(n(l.qty)>0){const k=l.item+'|'+(l.batch||'').trim();need[k]=(need[k]||0)+n(l.qty)}
+  for(const [k,q] of Object.entries(need)){const [it,b]=k.split('|');const have=b?(batchBal(it,d.wh).find(x=>x.batch===b)?.qty||0):onHand(it,d.wh);if(have<q-1e-6)fail(`${it}${b?' batch '+b:''}: only ${q3(have)} in ${d.wh}, dispatch needs ${q3(q)}.`)}
+  for(const l of d.lines){let left=n(l.qty);for(const sl of s.lines.filter(x=>x.item===l.item)){const t=Math.min(left,n(sl.qty)-n(sl.disp));if(t>0){sl.disp=+(n(sl.disp)+t).toFixed(3);left-=t}}if(left>1e-6)fail(`${l.item}: dispatching more than pending on ${so.no}.`)}
+  if(!Object.keys(need).length)fail('Enter a dispatch quantity on at least one line.');
+  let k=0;for(const l of d.lines.filter(l=>n(l.qty)>0)){const rate=+avgCost(l.item).toFixed(4),al=alloc(l.item,d.wh,n(l.qty),String(l.batch||'').trim());
+   await addLedger(al.map(a=>({id:'DN-'+d.no+'-'+(k++),date:d.date,type:'Dispatch',ref:d.no,item:l.item,wh:d.wh,qty:-a.qty,rate,party:d.customer,batch:a.batch,exp:a.exp})));
+   const bs=al.filter(a=>a.batch);if(bs.length)l.batch=bs.map(a=>bs.length>1?`${a.batch}×${q3(a.qty)}`:a.batch).join(', ')}
+  s.status=s.lines.every(x=>n(x.disp)>=n(x.qty)-1e-6)?'Dispatched':'Partially Dispatched';await put('sos',sid(s.no),s);d.status='Posted'},
+  mkgp:d=>{const c=get('customers',d.customer);openNew('gatepasses',{type:GP_TYPES[2],partyType:'Customer',party:c?.name||d.customer,refDoc:d.no,vehicle:d.vehicle||'',purpose:'Sales dispatch',
+   lines:d.lines.map(l=>({item:l.item,desc:get('items',l.item)?.name||l.item,qty:l.qty,uom:get('items',l.item)?.uom||''}))});return 'nav'},
+  mkinv:d=>{openNew('sinv',{dn:d.no});return 'nav'}},
+ journals:{post:async d=>{const out={};for(const l of d.lines)if(n(l.qty)<0){const k=l.item+'|'+(l.batch||'').trim();out[k]=(out[k]||0)-n(l.qty)}
+  for(const [k,q] of Object.entries(out)){const [it,b]=k.split('|');const have=b?(batchBal(it,d.wh).find(x=>x.batch===b)?.qty||0):onHand(it,d.wh);if(have<q-1e-6)fail(`${it}${b?' batch '+b:''}: only ${q3(have)} in ${d.wh}.`)}
+  let k=0;for(const [i,l] of d.lines.entries()){const q=n(l.qty);if(!q)continue;
+   if(q>0){if(isTracked(l.item)&&!String(l.batch||'').trim())l.batch=`${d.no}-${i+1}`;if(!l.exp&&l.batch)l.exp=expFor(l.item,d.date);
+    await addLedger([{id:'SJ-'+d.no+'-'+(k++),date:d.date,type:d.reason,ref:d.no,item:l.item,wh:d.wh,qty:q,rate:n(l.rate)||n(get('items',l.item)?.stdCost),party:'',batch:String(l.batch||'').trim(),exp:l.exp||''}])}
+   else{const rate=+avgCost(l.item).toFixed(4),al=alloc(l.item,d.wh,-q,String(l.batch||'').trim());await addLedger(al.map(a=>({id:'SJ-'+d.no+'-'+(k++),date:d.date,type:d.reason,ref:d.no,item:l.item,wh:d.wh,qty:-a.qty,rate,party:'',batch:a.batch,exp:a.exp})))}}
+  d.status='Posted';d.approvedBy=me.id}},
+ sinv:{post:async d=>{const dn=get('dispatches',d.dn);if(!dn)fail('Dispatch note not found.');if(dn.invoiced&&dn.invoiced!==d.no)fail(`${dn.no} is already billed on ${dn.invoiced}.`);
+   if(!company.state)fail('Set your company’s state in Company Setup before posting invoices.');if(!d.lines?.length)fail('Invoice has no lines.');
+   await put('dispatches',sid(dn.no),{...clone(dn),invoiced:d.no});const g=gstCalc(d);d.taxable=+g.taxable.toFixed(2);d.taxAmt=+g.tax.toFixed(2);d.grand=g.total;d.status='Posted';d.approvedBy=me.id},
+  dlinv:d=>{downloadInvoice(d);return 'stay'}},
+ pinv:{post:async d=>{const g=get('grns',d.grn);if(!g)fail('GRN not found.');if(g.billed&&g.billed!==d.no)fail(`${g.no} is already booked on ${g.billed}.`);
+   await put('grns',sid(g.no),{...clone(g),billed:d.no});const t=gstCalc(d);d.grand=t.total;d.status='Posted';d.approvedBy=me.id}},
+ gatepasses:{approve:d=>{if(d.type===GP_TYPES[1]&&!d.expReturn)fail('Set the expected return date for a returnable gate pass.');if(!d.lines?.length)fail('Add at least one line.');d.status='Approved';d.approvedBy=me.id},
+  gatein:d=>{d.status='Closed';d.inAt=Date.now()},
+  gateout:d=>{d.outAt=Date.now();d.status=d.type===GP_TYPES[1]?'Out':'Closed'},
+  ret:d=>{for(const l of d.lines)if(n(l.returned)>n(l.qty)+1e-6)fail(`${l.desc}: returned qty is more than sent.`);
+   if(!d.lines.some(l=>n(l.returned)>0))fail('Enter the returned quantity on the lines first.');d.status=d.lines.every(l=>n(l.returned)>=n(l.qty)-1e-6)?'Returned':'Partially Returned'},
+  close:d=>{d.status='Closed'}},
+};
+/* autofill on change */
+function onField(v,k,d){
+ const wh=t=>list('warehouses').find(w=>w.type===t)?.code;
+ if(v==='mins'&&k==='mr'){const m=get('mrs',d.mr);d.dept=m?.dept||'';d.wh=m?.wh||d.wh||'';if(m&&!d.issuedTo)d.issuedTo=m.requestedBy||'';d.lines=m?mrPending(m).map(x=>({item:x.item,qty:x.pend,batch:''})):[];return 1}
+ if(v==='mrets'&&k==='min'){const m=get('mins',d.min);if(m){d.dept=m.dept;d.wh=d.wh||m.wh;d.lines=(m.lines||[]).filter(l=>n(l.qty)>0).map(l=>({item:l.item,qty:l.qty,batch:/[×,]/.test(String(l.batch||''))?'':(l.batch||'')}))}return 1}
+ if(v==='mrs'&&k==='mo'){const m=get('prods',d.mo);if(m){d.wh=m.rmWh||d.wh;if(!(d.lines||[]).some(l=>l.item))d.lines=bomReq(m).map(r=>({item:r.item,qty:r.qty}))}return 1}
+ if((v==='mrs'||v==='mins')&&k==='wh')return 1;
+ if(v==='grns'&&k==='po'){const p=get('pos',d.po);d.supplier=p?.supplier||'';d.lines=(p?.lines||[]).filter(l=>n(l.qty)-n(l.recv)>0).map(l=>{const q=+(n(l.qty)-n(l.recv)).toFixed(3);return {item:l.item,qty:q,accepted:q,rejected:0,rate:l.rate,batch:'',exp:''}});if(!d.wh)d.wh=wh('Raw Material')||'';return 1}
+ if(v==='dispatches'&&k==='so'){const s=get('sos',d.so);d.customer=s?.customer||'';d.lines=(s?.lines||[]).filter(l=>n(l.qty)-n(l.disp)>0).map(l=>({item:l.item,qty:+(n(l.qty)-n(l.disp)).toFixed(3),rate:l.rate,batch:''}));if(!d.wh)d.wh=wh('Finished Goods')||'';return 1}
+ if(v==='prods'&&k==='item'){const it=get('items',d.item);d.bom=list('boms').find(b=>b.item===d.item&&b.active!==false)?.code||'';d.routing=list('routings').find(b=>b.item===d.item&&b.active!==false)?.code||'';
+  if(it?.defWh)d.fgWh=it.defWh;if(!d.rmWh)d.rmWh=wh('Raw Material')||'';if(!d.fgWh)d.fgWh=wh('Finished Goods')||'';return 1}
+ if(v==='prods'&&['bom','routing','qty','rmWh','date'].includes(k))return 1;
+ if(v==='sinv'&&k==='dn'){const dn=get('dispatches',d.dn),c=get('customers',dn?.customer);d.customer=dn?.customer||'';d.gstin=c?.gstin||'';d.pos=c?.state||'';d.due=c?.payDays?addDays(d.date||today(),n(c.payDays)):'';
+  d.lines=(dn?.lines||[]).filter(l=>n(l.qty)>0).map(l=>{const it=get('items',l.item)||{};return {item:l.item,hsn:it.hsn||'',qty:l.qty,rate:l.rate,gst:it.gst??''}});return 1}
+ if(v==='pinv'&&k==='grn'){const g=get('grns',d.grn),s=get('suppliers',g?.supplier);d.supplier=g?.supplier||'';d.supInv=d.supInv||g?.invNo||'';d.pos=s?.state||'';d.due=s?.payDays?addDays(d.date||today(),n(s.payDays)):'';
+  d.lines=(g?.lines||[]).filter(l=>n(l.accepted)>0).map(l=>{const it=get('items',l.item)||{};return {item:l.item,hsn:it.hsn||'',qty:l.accepted,rate:l.rate,gst:it.gst??''}});return 1}
+ if(['sinv','pinv'].includes(v)&&k==='pos')return 1;
+ return 0}
+function onLine(v,k,l){if(k==='item'){const it=get('items',l.item);if(v==='prs'&&!n(l.rate))l.rate=it?.stdCost??'';if(v==='pos'&&!n(l.rate))l.rate=it?.stdCost??'';if(v==='sos'&&!n(l.rate))l.rate=it?.salePrice??'';if(v==='journals'&&!n(l.rate))l.rate=it?.stdCost??'';
+ if(v==='gatepasses'&&it){if(!l.desc)l.desc=it.name;if(!l.uom)l.uom=it.uom}}}
+
+/* ---------- codes, products, requisitions & material requests ---------- */
+function nextCode(c,v){const p=c.auto+'-';let m=0;for(const x of list(v)){const s=String(x[c.key]||'');if(s.startsWith(p)){const k=parseInt(s.slice(p.length),10);if(k>m)m=k}}return p+String(m+1).padStart(4,'0')}
+const mrFor=mo=>list('mrs').filter(m=>m.mo===mo&&!['Rejected','Closed'].includes(m.status));
+const deptName=c=>get('departments',c)?.name||c||'';
+const mrPending=d=>(d.lines||[]).map(l=>({item:l.item,pend:+Math.max(0,n(l.qty)-n(l.issued)).toFixed(3)})).filter(x=>x.item&&x.pend>0);
+const mrShort=d=>mrPending(d).map(x=>({...x,short:+Math.max(0,x.pend-Math.max(0,onHand(x.item,d.wh))).toFixed(3)})).filter(x=>x.short>0);
+function allocTo(lines,item,qty,key){let left=qty;for(const l of lines.filter(x=>x.item===item)){const t=Math.min(left,n(l.qty)-n(l[key]));if(t>0){l[key]=+(n(l[key])+t).toFixed(3);left-=t}}return left}
+async function prOrdered(po){if(!po.pr)return;const pr=get('prs',po.pr);if(!pr)return;const p=clone(pr);for(const l of po.lines||[])allocTo(p.lines,l.item,n(l.qty),'ordered');
+ p.status=p.lines.every(x=>n(x.ordered)>=n(x.qty)-1e-6)?'Ordered':'Partially Ordered';p.log=[...(p.log||[]),{at:Date.now(),by:me.id||'',act:`Ordered on ${po.no}`}];await put('prs',sid(p.no),p)}
+const bomOf=item=>list('boms').find(b=>b.item===item&&b.active!==false)||list('boms').find(b=>b.item===item);
+function bomCost(b){if(!b)return 0;let s=0;for(const l of b.lines||[])s+=n(l.qty)*(1+n(l.scrap)/100)*avgCost(l.item);return s/(n(b.outQty)||1)}
+function bomExtra(d){const ls=(d.lines||[]).filter(l=>l.item);if(!ls.length)return '';let tot=0;
+ const rows=ls.map(l=>{const it=get('items',l.item)||{},q=n(l.qty)*(1+n(l.scrap)/100),c=avgCost(l.item),a=q*c;tot+=a;return `<tr><td class="code">${esc(l.item)}</td><td>${esc(it.name)}</td><td>${esc(it.type)}</td><td class="num">${q3(q)} ${esc(it.uom||'')}</td><td class="num">${fmt(c)}</td><td class="num">${fmt(a)}</td></tr>`}).join('');
+ const per=tot/(n(d.outQty)||1),fg=get('items',d.item);
+ return `<section class="tab"><h2>Material cost</h2><div class="tablewrap"><table><thead><tr><th>Component</th><th>Name</th><th>Type</th><th class="num">Qty incl. scrap</th><th class="num">Unit cost (₹)</th><th class="num">Cost (₹)</th></tr></thead><tbody>${rows}</tbody></table></div>
+ <div class="totals"><span class="muted">Cost for ${q3(n(d.outQty)||1)} ${esc(fg?.uom||'unit')} <b>${inr(tot)}</b></span><span class="muted">Cost per unit <b>${inr(per)}</b></span>${n(fg?.salePrice)?`<span class="muted">Margin at sale price <b>${fmt((n(fg.salePrice)-per)/n(fg.salePrice)*100,1)}%</b></span>`:''}</div>
+ <p class="hint" style="padding:0 14px 10px">Unit cost is the weighted average of receipts, or the item’s standard cost until it has been received.</p></section>`}
+function stockCheck(v,d){if(!d.wh||['Posted','Issued','Closed','Rejected'].includes(d.status))return '';
+ const rows=(d.lines||[]).filter(l=>l.item).map(l=>({item:l.item,need:v==='mrs'?Math.max(0,n(l.qty)-n(l.issued)):n(l.qty)}));if(!rows.length)return '';
+ return `<section class="tab"><h2>Stock in ${esc(d.wh)}</h2><div class="tablewrap"><table><thead><tr><th>Item</th><th>Name</th><th class="num">${v==='mrs'?'Still to issue':'To issue now'}</th><th class="num">In store</th><th>Availability</th></tr></thead><tbody>
+ ${rows.map(r=>{const it=get('items',r.item)||{},oh=onHand(r.item,d.wh);return `<tr><td class="code">${esc(r.item)}</td><td>${esc(it.name)}</td><td class="num">${q3(r.need)} ${esc(it.uom||'')}</td><td class="num">${q3(oh)}</td><td>${oh>=r.need-1e-9?'<span class="pill p-good">Available</span>':`<span class="pill p-bad">Short ${q3(r.need-oh)}</span>`}</td></tr>`}).join('')}
+ </tbody></table></div>${v==='mrs'&&mrShort(d).length?'<p class="hint" style="padding:0 14px 10px">Short items can be bought with “Raise PR for shortage” once this request is approved.</p>':''}</section>`}
+function productRows(){const q=st.q.toLowerCase().trim();return list('items').filter(i=>FG.includes(i.type)).filter(i=>!q||(i.code+' '+i.name).toLowerCase().includes(q))
+ .sort((a,b)=>String(a.code).localeCompare(String(b.code),undefined,{numeric:true}))
+ .map(i=>{const b=bomOf(i.code),r=list('routings').find(x=>x.item===i.code&&x.active!==false),c=b?bomCost(b):0;return {i,b,r,c,m:n(i.salePrice)&&b?(n(i.salePrice)-c)/n(i.salePrice)*100:null}})}
+function productsHTML(){const rows=productRows(),ce=canEnt('items'),cb=canEnt('boms');
+ return `<div class="head"><div><div class="crumb">Masters</div><h1>Product Master</h1></div></div>
+ <div class="pane">${ce?'<button class="btn pri" data-act="newprod">+ New product</button><span class="sep"></span>':''}<button class="btn" data-act="rep-xlsx">Export Excel</button><button class="btn" data-act="rep-csv">Export CSV</button><input class="search" id="pq" placeholder="Search products…" value="${esc(st.q)}" aria-label="Search products"></div>
+ <div class="tablewrap"><table><thead><tr><th>Product code</th><th>Name</th><th>Type</th><th>Unit</th><th>BOM</th><th class="num">Components</th><th>Routing</th><th class="num">Material cost / unit (₹)</th><th class="num">Sale price (₹)</th><th class="num">Margin</th><th></th></tr></thead><tbody>
+ ${rows.length?rows.map(({i,b,r,c,m})=>`<tr class="click" data-goto="items" data-id="${esc(sid(i.code))}"><td class="code">${esc(i.code)}</td><td>${esc(i.name)}</td><td>${esc(i.type)}</td><td>${esc(i.uom)}</td>
+  <td>${b?`<span class="pill p-good">${esc(b.code)}</span>`:'<span class="pill p-warn">Not mapped</span>'}</td><td class="num">${b?(b.lines||[]).length:''}</td><td>${r?`<span class="code">${esc(r.code)}</span>`:'<span class="muted">—</span>'}</td>
+  <td class="num">${b?fmt(c):''}</td><td class="num">${i.salePrice!=null&&i.salePrice!==''?fmt(i.salePrice):''}</td><td class="num">${m==null?'':`<span class="pill ${m<0?'p-bad':m<15?'p-warn':'p-good'}">${fmt(m,1)}%</span>`}</td>
+  <td>${cb?(b?`<button class="btn sm" data-goto="boms" data-id="${esc(sid(b.code))}">Edit BOM</button>`:`<button class="btn sm wf" data-act="newbom" data-item="${esc(i.code)}">Map BOM</button>`):''}</td></tr>`).join('')
+ :`<tr><td colspan="11" class="empty">${ready?'No products yet. Click “+ New product” to add what you manufacture, then map its BOM.':'Loading…'}</td></tr>`}
+ </tbody></table></div>
+ <p class="hint">Products are items of type Finished Good or Semi-Finished. Map each product to a BOM (its components) and a routing (its operations) before making production orders.</p>`}
+
+/* ---------- invoice document ---------- */
+function downloadInvoice(d){const c=get('customers',d.customer)||{},g=gstCalc(d),co=company,dn=get('dispatches',d.dn)||{};
+ const row=(l,i)=>{const t=n(l.qty)*n(l.rate),tx=t*n(l.gst)/100,it=get('items',l.item)||{};return `<tr><td>${i+1}</td><td>${esc(it.name||l.item)}<div class="s">${esc(l.item)}</div></td><td>${esc(l.hsn)}</td><td class="r">${q3(l.qty)} ${esc(it.uom||'')}</td><td class="r">${fmt(l.rate)}</td><td class="r">${fmt(t)}</td><td class="r">${q3(l.gst)}%</td><td class="r">${fmt(tx)}</td><td class="r">${fmt(t+tx)}</td></tr>`};
+ const html=`<!doctype html><html><head><meta charset="utf-8"><title>Tax Invoice ${esc(d.no)}</title><style>
+ body{font:13px/1.45 Arial,Helvetica,sans-serif;color:#111;margin:24px}h1{font-size:18px;margin:0}.box{border:1px solid #333;padding:10px}.g{display:grid;grid-template-columns:1fr 1fr;gap:0}.g>.box+.box{border-left:0}
+ table{width:100%;border-collapse:collapse;margin-top:-1px}th,td{border:1px solid #333;padding:5px 6px;vertical-align:top}th{background:#eee;font-size:11px;text-transform:uppercase}.r{text-align:right}.s{font-size:11px;color:#555}
+ .t{text-align:center;font-weight:bold;letter-spacing:.1em;border:1px solid #333;border-bottom:0;padding:6px}@media print{body{margin:8mm}}</style></head><body>
+ <div class="t">TAX INVOICE</div>
+ <div class="g"><div class="box"><h1>${esc(co.legal||co.name||'')}</h1><div>${esc(co.address||'').replace(/\n/g,'<br>')}</div><div>GSTIN: <b>${esc(co.gstin||'')}</b> · PAN: ${esc(co.pan||'')}</div><div>State: ${esc(co.state||'')} (${stCode(co.state)})</div><div>${esc(co.phone||'')} ${esc(co.email||'')}</div></div>
+ <div class="box"><div>Invoice No: <b>${esc(d.no)}</b></div><div>Date: <b>${esc(fmtD(d.date))}</b></div><div>Dispatch: ${esc(d.dn)} · Vehicle: ${esc(dn.vehicle||'')}</div><div>LR / E-way Bill: ${esc(dn.lrNo||'')}</div><div>Payment due: ${esc(fmtD(d.due))}</div></div></div>
+ <div class="g"><div class="box" style="border-top:0"><b>Bill to</b><div>${esc(c.name||d.customer)}</div><div>${esc(c.address||'').replace(/\n/g,'<br>')}</div><div>GSTIN: ${esc(d.gstin||'Unregistered')}</div></div>
+ <div class="box" style="border-top:0"><b>Ship to</b><div>${esc(c.name||'')}</div><div>${esc(c.shipAddress||c.address||'').replace(/\n/g,'<br>')}</div><div>Place of supply: <b>${esc(d.pos)} (${stCode(d.pos)})</b></div></div></div>
+ <table><thead><tr><th>#</th><th>Description</th><th>HSN</th><th class="r">Qty</th><th class="r">Rate</th><th class="r">Taxable</th><th class="r">GST</th><th class="r">Tax</th><th class="r">Amount</th></tr></thead><tbody>${(d.lines||[]).map(row).join('')}</tbody>
+ <tfoot><tr><td colspan="5" class="r"><b>Total</b></td><td class="r"><b>${fmt(g.taxable)}</b></td><td></td><td class="r"><b>${fmt(g.tax)}</b></td><td class="r"><b>${fmt(g.taxable+g.tax)}</b></td></tr></tfoot></table>
+ <table><tr><td style="width:60%"><b>Amount in words:</b> ${esc(words(g.total))}<br><br><b>Tax summary</b><br>${Object.entries(g.rates).map(([r,x])=>`GST ${r}% on ₹${fmt(x.taxable)}: ${g.intra?`CGST ₹${fmt(x.tax/2)} + SGST ₹${fmt(x.tax/2)}`:`IGST ₹${fmt(x.tax)}`}`).join('<br>')}</td>
+ <td><div>Taxable value <span style="float:right">₹${fmt(g.taxable)}</span></div>${g.intra?`<div>CGST <span style="float:right">₹${fmt(g.cgst)}</span></div><div>SGST <span style="float:right">₹${fmt(g.sgst)}</span></div>`:`<div>IGST <span style="float:right">₹${fmt(g.igst)}</span></div>`}<div>Round off <span style="float:right">${fmt(g.round)}</span></div><div style="font-size:15px;margin-top:6px"><b>Invoice total <span style="float:right">₹${fmt(g.total)}</span></b></div></td></tr>
+ <tr><td><b>Bank details</b><br>${esc(co.bankName||'')}<br>A/c: ${esc(co.bankAcc||'')} · IFSC: ${esc(co.ifsc||'')}<br><br><b>Terms</b><br><span class="s">${esc(co.invTerms||'').replace(/\n/g,'<br>')}</span></td><td style="text-align:right;vertical-align:bottom;height:110px">For ${esc(co.legal||co.name||'')}<br><br><br>Authorised Signatory</td></tr></table></body></html>`;
+ printDoc(html,sid(d.no)+'.html')}
+function printDoc(html,name){const w=window.open('','_blank');if(!w){saveFile(name,html);return}w.document.open();w.document.write(html);w.document.close();setTimeout(()=>{try{w.focus();w.print()}catch(e){}},400)}
+
+/* ---------- form ops ---------- */
+function logAct(d,act){d.log=[...(d.log||[]),{at:Date.now(),by:me.id||'',act}].slice(-40)}
+function openNew(v,preset){const c=ENT[v],d={};for(const f of c.fields)if(f.def!==undefined)d[f.k]=typeof f.def==='function'?f.def():f.def;if(c.lines)d.lines=[];
+ st.draft=d;Object.assign(d,clone(preset||{}));st.autoCode='';if(c.auto&&!d[c.key]){d[c.key]=nextCode(c,v);st.autoCode=d[c.key]}if(c.lines&&!c.noAdd&&!d.lines.length)d.lines.push({});
+ st.isNew=true;for(const k in preset||{})if(k!=='lines')onField(v,k,d);
+ st.q='';st.pop=false;if(st.view!==v){st.view=v;st.skip=(st.skip||0)+1;location.hash=v}render();scrollTo(0,0)}
+function openRec(v,id){const r=S[v][id];if(!r)return;if(st.view!==v){st.view=v;st.skip=(st.skip||0)+1;location.hash=v}st.isNew=false;st.draft=clone(r);render();scrollTo(0,0)}
+async function saveDraft(quiet){const v=st.view,c=ENT[v],d=st.draft;if(!canEnt(v)){toast('Your role can’t change '+c.title.toLowerCase()+'.',1);return false}
+ if(st.isNew&&c.auto&&!String(d[c.key]??'').trim()){d[c.key]=nextCode(c,v);st.autoCode=d[c.key]}
+ for(const f of c.fields){if(f.req&&f.t!=='bool'&&!String(d[f.k]??'').trim()){toast(`${f.l} is required.`,1);return false}}
+ if(c.lines){d.lines=(d.lines||[]).filter(l=>l.item||l.desc);for(const [i,l] of d.lines.entries())for(const f of c.lines)if(f.req&&!String(l[f.k]??'').trim()){toast(`Line ${i+1}: ${f.l} is required.`,1);return false}
+  if(c.txn&&!d.lines.length){toast('Add at least one line.',1);return false}
+  if(v==='routings'){const s=d.lines.map(l=>n(l.seq));if(new Set(s).size!==s.length){toast('Each operation needs a different Op No.',1);return false}}}
+ const wasNew=st.isNew;let autoKey=false;
+ if(wasNew){if(c.txn){d.no=docNo(c,v,d);d.createdBy=me.id||'';d.createdAt=Date.now()}else{d[c.key]=String(d[c.key]).trim();autoKey=!!c.auto&&d[c.key]===st.autoCode;
+  if(S[v][sid(d[c.key])]){if(!autoKey){toast(`${c.one} ${d[c.key]} already exists.`,1);return false}d[c.key]=nextCode(c,v)}}}
+ if(c.txn&&!quiet)logAct(d,wasNew?'Created':'Edited');else if(c.txn&&wasNew)logAct(d,'Created');
+ d.updatedAt=Date.now();
+ for(let i=0;;i++){try{await put(v,sid(d[c.key]),clone(d),wasNew);break}
+  catch(e){if(e?.code==='exists'&&wasNew&&i<4&&(c.txn||autoKey)){await reloadCol(v);d[c.key]=c.txn?docNo(c,v,d):nextCode(c,v);continue}
+   if(e?.code==='exists')toast(`${c.one} ${d[c.key]} already exists. Use a different code.`,1);if(wasNew&&c.txn)delete d.no;return false}}
+ st.isNew=false;st.autoCode='';return true}
+async function runWF(a){const v=st.view,label=(WF[v](st.draft).find(x=>x&&x[0]===a)||[])[1]||a;
+ const needSave=st.isNew||editable(ENT[v],v,st.draft)||ENT[v].fields.some(f=>f.stage&&stageOk(f,st.draft))||(ENT[v].lines||[]).some(f=>f.stage&&stageOk(f,st.draft));
+ if(needSave&&!(await saveDraft(true)))return;const d=st.draft;const before=clone(d);
+ try{const r=await ACT[v][a](d);if(r==='nav'||r==='stay')return;logAct(d,label);d.updatedAt=Date.now();await put(v,sid(d[ENT[v].key]),clone(d));toast(`${d[ENT[v].key]} — ${d.status}`)}
+ catch(e){st.draft=before;if(!e?.code)toast(e.message||String(e),1)}render()}
+function inUse(v,code){const refs=[];for(const [cv,c] of Object.entries(ENT)){for(const r of list(cv)){if(c.fields.some(f=>f.t==='ref'&&f.r===v&&r[f.k]===code)||(c.lines||[]).some(f=>f.t==='ref'&&f.r===v&&(r.lines||[]).some(l=>l[f.k]===code))){refs.push(r[c.key]);if(refs.length>3)return refs}}}
+ if(v==='items'&&list('ledger').some(l=>l.item===code))refs.push('stock ledger');if(v==='warehouses'&&list('ledger').some(l=>l.wh===code))refs.push('stock ledger');return refs}
+function askDelete(){const v=st.view,c=ENT[v],d=st.draft,k=d[c.key];
+ if(!c.txn){const u=inUse(v,k);if(u.length){toast(`${k} is used in ${u.slice(0,3).join(', ')} and can’t be deleted. Mark it inactive instead.`,1);return}}
+ modal(`<h2>Delete ${esc(c.one.toLowerCase())} ${esc(k)}?</h2><p class="muted">This removes it for everyone using the ERP and can’t be undone.</p><div class="acts"><button class="btn" data-act="mclose">Cancel</button><button class="btn pri" style="background:var(--bad)" data-act="dodelete">Delete</button></div>`)}
+function modal(h){const m=$('#modal');m.innerHTML=`<div class="dlg" role="dialog" aria-modal="true">${h}</div>`;m.hidden=false}
+function mclose(){$('#modal').hidden=true}
+
+/* ---------- import / export ---------- */
+const norm=s=>String(s??'').toLowerCase().replace(/[^a-z0-9]/g,'');
+function flatHeaders(c){return [...c.fields.map(f=>f.l),...(c.lines||[]).map(f=>'Line - '+f.l)]}
+function flatRows(v,recs){const c=ENT[v],out=[];
+ for(const r of recs){const base={};for(const f of c.fields)base[f.l]=f.t==='bool'?(r[f.k]===true||(r[f.k]==null&&f.def!==false)?'Yes':'No'):f.t==='num'?(r[f.k]===''||r[f.k]==null?'':n(r[f.k])):(r[f.k]??'');
+  if(c.lines&&(r.lines||[]).length)for(const l of r.lines){const o={...base};for(const f of c.lines)o['Line - '+f.l]=f.t==='num'||f.t==='ro'?(l[f.k]===''||l[f.k]==null?'':n(l[f.k])):(l[f.k]??'');out.push(o)}
+  else out.push(base)}return out}
+async function saveFile(name,data){const ext=name.split('.').pop();const type={csv:'text/csv',html:'text/html',json:'application/json',xlsx:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}[ext]||'application/octet-stream';
+ const b=data instanceof Blob?data:new Blob([data],{type});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),3000);toast('Downloaded '+name)}
+function exportAoa(base,head,rows,fmtx,extra){if(!window.XLSX){toast('Excel library didn’t load. Check your connection and reload.',1);return}
+ const ws=XLSX.utils.aoa_to_sheet([head,...rows]);ws['!cols']=head.map(h=>({wch:Math.max(10,String(h).length+2)}));
+ const name=`${base}_${today()}.${fmtx}`;
+ if(fmtx==='csv')return saveFile(name,'﻿'+XLSX.utils.sheet_to_csv(ws));
+ const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,base.slice(0,31));if(extra)extra(wb);
+ saveFile(name,new Uint8Array(XLSX.write(wb,{bookType:'xlsx',type:'array'})))}
+function exportList(fmtx){const v=st.view,c=ENT[v];let h=flatHeaders(c),rs=rowsFor(v);
+ if(c.gst){h=[...h,'Taxable (₹)','CGST (₹)','SGST (₹)','IGST (₹)','Invoice Total (₹)'];const fr=[];for(const r of rs){const g=gstCalc(r);for(const o of flatRows(v,[r]))fr.push({...o,'Taxable (₹)':+g.taxable.toFixed(2),'CGST (₹)':+g.cgst.toFixed(2),'SGST (₹)':+g.sgst.toFixed(2),'IGST (₹)':+g.igst.toFixed(2),'Invoice Total (₹)':g.total})}return exportAoa(v,h,fr.map(o=>h.map(k=>o[k]??'')),fmtx)}
+ exportAoa(v,h,flatRows(v,rs).map(o=>h.map(k=>o[k]??'')),fmtx)}
+const skipImp=f=>(f.t==='ro'&&f.k!=='no')||f.ro||f.stage;
+function exportTemplate(){const v=st.view,c=ENT[v],h=[...c.fields.filter(f=>!skipImp(f)).map(f=>f.l),...(c.lines||[]).filter(f=>!skipImp(f)).map(f=>'Line - '+f.l)];
+ exportAoa(v+'_template',h,[],'xlsx',wb=>{const notes=[['Column','Required','Allowed values / notes']];
+  for(const f of c.fields.filter(f=>!skipImp(f)))notes.push([f.l,f.req&&!(f.k===c.key&&c.auto)?'Yes':'',f.t==='sel'?f.o.join(', '):f.t==='ref'?`Code from ${ENT[f.r].title}`:f.t==='bool'?'Yes / No':f.t==='date'?'Date (YYYY-MM-DD)':f.t==='num'?'Number':f.k===c.key&&c.auto?`Optional: leave blank to create the code automatically (${c.auto}-0001, ${c.auto}-0002…)`:f.k==='no'?'Optional: leave blank to number automatically. Rows with the same number become one document.':''])
+  for(const f of (c.lines||[]).filter(f=>!skipImp(f)))notes.push(['Line - '+f.l,f.req?'Yes':'',f.t==='ref'?`Code from ${ENT[f.r].title}. One row per line.`:f.t==='num'?'Number':f.t==='date'?'Date (YYYY-MM-DD)':'']);
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(notes),'Instructions')})}
+function exportReport(fmtx){const v=st.view;
+ if(v==='stock'){let r=stockRows();if(st.filt)r=r.filter(x=>x.wh===st.filt);exportAoa('stock_on_hand',['Item Code','Item Name','Type','Warehouse','Qty','Unit','Avg Cost','Value'],r.map(x=>[x.item,x.name,x.type,x.wh,+x.qty.toFixed(3),x.uom,+x.rate.toFixed(2),+x.value.toFixed(2)]),fmtx)}
+ if(v==='batches'){let r=batchRows();if(st.filt)r=r.filter(x=>x.wh===st.filt);exportAoa('batch_aging',['Item Code','Item Name','Batch','Warehouse','Qty','Unit','Received','Age (days)','Bucket','Expiry','Value'],r.map(x=>[x.item,x.name,x.batch,x.wh,+x.qty.toFixed(3),x.uom,x.first,x.age,x.bucket,x.exp,+x.value.toFixed(2)]),fmtx)}
+ if(v==='ledger'){let r=ledgerRows();if(st.filt)r=r.filter(x=>x.wh===st.filt);exportAoa('stock_ledger',['Date','Type','Document','Item','Batch','Warehouse','Party','Qty','Rate','Value'],r.map(x=>[x.date,x.type,x.ref,x.item,x.batch||'',x.wh,x.party,n(x.qty),n(x.rate),n(x.value)]),fmtx)}
+ if(v==='products')exportAoa('product_master',['Product Code','Name','Type','Unit','BOM','Components','Routing','Material Cost / Unit','Sale Price','Margin %'],productRows().map(({i,b,r,c,m})=>[i.code,i.name,i.type,i.uom,b?.code||'',b?(b.lines||[]).length:'',r?.code||'',b?+c.toFixed(2):'',n(i.salePrice),m==null?'':+m.toFixed(1)]),fmtx);
+ if(v==='plan')exportAoa('material_planning',['Item Code','Item Name','Needed for MOs','Reorder Level','On Hand','On Open POs','To Purchase','Unit'],planRows().map(x=>[x.item,x.name,x.req,x.ro,x.oh,x.po,x.short,x.uom]),fmtx)}
+function coerce(f,raw,errs,row){let v=raw;if(v instanceof Date){const d=new Date(v.getTime()-v.getTimezoneOffset()*60000);v=d.toISOString().slice(0,10)}
+ v=typeof v==='string'?v.trim():v;if(v===''||v==null)return f.t==='bool'?(f.def!==false):'';
+ if(f.t==='num'){if(!isFinite(parseFloat(String(v).replace(/,/g,''))))errs.push(`Row ${row}: “${f.l}” must be a number.`);return n(v)}
+ if(f.t==='bool')return !['no','n','false','0','inactive'].includes(String(v).toLowerCase());
+ if(f.t==='sel'){const o=f.o.find(o=>o.toLowerCase()===String(v).toLowerCase());if(!o)errs.push(`Row ${row}: “${v}” isn’t a valid ${f.l}.`);return o||''}
+ if(f.t==='ref'){const s=String(v);if(!get(f.r,s))errs.push(`Row ${row}: ${f.l} “${s}” not found in ${ENT[f.r].title}.`);return s}
+ if(f.t==='date'&&typeof v==='number'){const d=XLSX.SSF.parse_date_code(v);return `${d.y}-${String(d.m).padStart(2,'0')}-${String(d.d).padStart(2,'0')}`}
+ return String(v)}
+async function importFile(file){const v=st.view,c=ENT[v];if(!window.XLSX){toast('Excel library didn’t load. Check your connection and reload.',1);return}
+ let rows;try{const wb=XLSX.read(await file.arrayBuffer(),{cellDates:true});rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:''})}catch(e){toast('Couldn’t read that file. Use .xlsx or .csv.',1);return}
+ if(!rows.length){toast('The file has no data rows.',1);return}
+ const map={};for(const h of Object.keys(rows[0])){const k=norm(h);let f=c.fields.find(f=>norm(f.l)===k||norm(f.k)===k);if(f){map[h]={f};continue}
+  f=(c.lines||[]).find(f=>norm('Line - '+f.l)===k||norm('line'+f.k)===k||(!c.fields.some(x=>norm(x.l)===norm(f.l))&&norm(f.l)===k));if(f)map[h]={f,line:1}}
+ const keyF=c.fields.find(f=>f.k===c.key),errs=[],docs={},order=[];
+ if(!c.txn&&!c.auto&&!Object.values(map).some(m=>m.f===keyF)){toast(`Column “${keyF.l}” is missing. Download the blank template to see the headings.`,1);return}
+ let autoN=null;
+ rows.forEach((r,i)=>{const row=i+2,hd={},ln={};let any=false;
+  for(const [h,m] of Object.entries(map)){if(skipImp(m.f))continue;const raw=r[h];if(raw!==''&&raw!=null)any=true;
+   const val=m.f.k==='no'?String(raw??'').trim():coerce(m.f,raw,errs,row);(m.line?ln:hd)[m.f.k]=val}
+  if(!any)return;let key=hd[c.key];if(!c.txn&&!key&&c.auto){if(autoN===null)autoN=+nextCode(c,v).split('-').pop();key=hd[c.key]=c.auto+'-'+String(autoN++).padStart(4,'0')}if(!c.txn&&!key){errs.push(`Row ${row}: ${keyF.l} is empty.`);return}
+  if(c.txn&&!key)key='__new'+row;
+  if(!docs[key]){docs[key]={...hd,lines:[],_row:row};order.push(key)}
+  if(c.lines&&(ln.item||ln.desc))docs[key].lines.push(ln)});
+ let add=0,upd=0;const writes=[];
+ for(const key of order){const d=docs[key],row=d._row;delete d._row;
+  for(const f of c.fields)if(f.req&&f.t!=='bool'&&f.k!=='no'&&!String(d[f.k]??'').trim()&&f.def===undefined)errs.push(`Row ${row}: ${f.l} is required.`);
+  if(!c.lines)delete d.lines;
+  if(c.txn){if(key.startsWith('__new'))d.no=null;const ex=d.no?get(v,d.no):null;if(ex&&ex.status!=='Draft'){errs.push(`Row ${row}: ${d.no} is ${ex.status} and can’t be overwritten.`);continue}
+   for(const f of c.fields)if(f.def!==undefined&&!d[f.k])d[f.k]=typeof f.def==='function'?f.def():f.def;d.status=c.fields.find(f=>f.k==='status').def;d.createdBy=me.id||'';d.createdAt=Date.now();d.log=[{at:Date.now(),by:me.id||'',act:'Imported'}];writes.push(d)}
+  else{const ex=get(v,d[c.key]);for(const f of c.fields)if(f.t==='bool'&&!(f.k in d))d[f.k]=ex?ex[f.k]:f.def!==false;if(c.lines&&!d.lines.length&&ex)d.lines=ex.lines;writes.push(ex?{...ex,...d}:d);ex?upd++:add++}}
+ if(errs.length){modal(`<h2>Import stopped — ${errs.length} problem${errs.length>1?'s':''} found</h2><p class="muted">Nothing was saved. Fix these rows in your file and import again.</p><ul>${errs.slice(0,25).map(e=>`<li>${esc(e)}</li>`).join('')}</ul>${errs.length>25?`<p class="muted">…and ${errs.length-25} more.</p>`:''}<div class="acts"><button class="btn pri" data-act="mclose">OK</button></div>`);return}
+ modal(`<h2>Importing ${writes.length} record${writes.length>1?'s':''}…</h2><p class="muted" id="iprog">Saving 0 of ${writes.length}</p>`);
+ let done=0;try{for(let i=0;i<writes.length;i+=8){await Promise.all(writes.slice(i,i+8).map(async d=>{if(c.txn){if(!d.no){d.no=docNo(c,v,d);S[v][sid(d.no)]=d}add++}d.updatedAt=Date.now();await put(v,sid(d[c.key]),d);done++}));const p=$('#iprog');if(p)p.textContent=`Saving ${done} of ${writes.length}`}}
+ catch(e){modal(`<h2>Import interrupted</h2><p>${done} of ${writes.length} records were saved before an error: ${esc(e?.message||e)}</p><div class="acts"><button class="btn pri" data-act="mclose">OK</button></div>`);render();return}
+ modal(`<h2>Import complete</h2><p>${c.txn?`${writes.length} draft document${writes.length>1?'s':''} created or updated.`:`${add} added, ${upd} updated.`}</p><div class="acts"><button class="btn pri" data-act="mclose">Done</button></div>`);render()}
+
+/* ---------- events ---------- */
+$('#menuBtn').onclick=()=>$('#rail').classList.toggle('open');
+$('#fileIn').addEventListener('change',e=>{const f=e.target.files[0];if(f)importFile(f)});
+$('#modal').addEventListener('click',async e=>{const a=e.target.closest('[data-act]')?.dataset.act;if(e.target.id==='modal'||a==='mclose')mclose();
+ if(a==='dodelete'){const v=st.view,c=ENT[v],k=st.draft[c.key];mclose();try{await del(v,sid(k));toast(`${k} deleted`);st.draft=null;render()}catch(e){}}
+ if(a==='doreset'){const id=e.target.closest('[data-uid]').dataset.uid,pw=$('#rpw').value;if(pw.length<8){toast('Password must be at least 8 characters.',1);return}
+  try{await API.j('PATCH','/api/users/'+enc(id),{password:pw});mclose();toast('Password reset. Share it with the user.')}catch(x){toast(x.message,1)}}
+ if(a==='dochpw'){const c=$('#cpw0').value,p=$('#cpw1').value,p2=$('#cpw2').value;if(p.length<8){toast('New password must be at least 8 characters.',1);return}if(p!==p2){toast('New passwords don’t match.',1);return}
+  try{await API.j('POST','/api/me/password',{current:c,password:p});mclose();toast('Password changed')}catch(x){toast(x.message,1)}}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('#modal').hidden)mclose();else if(st.pop){st.pop=false;render()}}
+ if(e.key==='Enter'&&e.target.dataset?.open){openRec(st.view,e.target.dataset.open)}});
+const V=$('#view');
+V.addEventListener('click',async e=>{const t=e.target.closest('[data-act],[data-open],[data-goto]');if(!t){if(st.pop){st.pop=false;render()}return}
+ if(t.dataset.open){openRec(st.view,t.dataset.open);return}
+ if(t.dataset.goto){openRec(t.dataset.goto,t.dataset.id);return}
+ const a=t.dataset.act,v=st.view;if(a!=='pop'&&st.pop)st.pop=false;
+ switch(a){
+  case'new':openNew(v);break;
+  case'pop':st.pop=!st.pop;render();break;
+  case'exp-xlsx':render();exportList('xlsx');break;case'exp-csv':render();exportList('csv');break;case'template':render();exportTemplate();break;
+  case'import':$('#fileIn').value='';$('#fileIn').click();break;
+  case'close':st.draft=null;render();break;
+  case'save':if(await saveDraft()){toast('Saved '+st.draft[ENT[v].key]);render()}break;
+  case'delete':askDelete();break;
+  case'addline':st.draft.lines.push({});render();break;
+  case'delline':st.draft.lines.splice(+t.dataset.i,1);render();break;
+  case'wf':runWF(t.dataset.wf);break;
+  case'opdone':{const d=st.draft,o=d.ops[+t.dataset.i];o.status='Done';o.doneAt=Date.now();o.doneBy=me.id||'';logAct(d,`Operation ${o.seq} ${o.op} done`);d.updatedAt=Date.now();
+   try{await put('prods',sid(d.no),clone(d));toast(`Op ${o.seq} marked done`)}catch(e){o.status='Pending'}render();break}
+  case'rep-xlsx':exportReport('xlsx');break;case'rep-csv':exportReport('csv');break;
+  case'newprod':openNew('items',{type:'Finished Good'});break;
+  case'newbom':openNew('boms',{item:t.dataset.item});break;
+  case'mkprplan':{const sh=planRows().filter(x=>x.short>0);openNew('prs',{purpose:'Shortage from material planning',lines:sh.map(x=>({item:x.item,qty:+x.short.toFixed(3),rate:x.rate}))});break}
+  case'mkpo':{const sh=planRows().filter(x=>x.short>0);openNew('pos',{remarks:'Raised from material planning',lines:sh.map(x=>({item:x.item,qty:+x.short.toFixed(3),rate:x.rate}))});break}
+  case'cosave':{if(!String(coDraft.name||'').trim()){toast('Company Name is required.',1);break}const prev=company;company=clone(coDraft);
+   try{await API.j('PUT','/api/docs/settings/company',company);coDirty=false;toast('Company details saved');renderChrome()}catch(e){company=prev;wErr(e)}break}
+  case'backup':{try{const r=await API.j('GET','/api/backup');saveFile(`gopin-erp-backup_${today()}.json`,JSON.stringify(r,null,1))}catch(x){toast(x.message,1)}break}
+  case'utoggle':{const u=USERS[t.dataset.uid];if(!u)break;try{await API.j('PATCH','/api/users/'+enc(u.id),{active:u.active===false});toast(u.active===false?'User activated':'User deactivated and signed out')}catch(x){toast(x.message,1)}break}
+  case'ureset':{const u=USERS[t.dataset.uid];if(!u)break;modal(`<h2>Reset password for ${esc(u.name)}</h2><p class="muted">They’ll be signed out everywhere and must use the new password.</p><div class="fld"><label for="rpw">New password (8+ characters)</label><input id="rpw" minlength="8" autocomplete="off"></div><div class="acts"><button class="btn" data-act="mclose">Cancel</button><button class="btn pri" data-act="doreset" data-uid="${esc(u.id)}">Reset password</button></div>`);break}
+ }});
+V.addEventListener('input',async e=>{const t=e.target,d=st.draft;
+ if(t.id==='q'){st.q=t.value;fillRows();return}if(t.id==='pq'){st.q=t.value;render();const p=$('#pq');if(p){p.focus();p.setSelectionRange(p.value.length,p.value.length)}return}if(t.id==='rq'){st.q=t.value;fillReport();return}
+ if(t.dataset.ck){coDraft[t.dataset.ck]=t.value;coDirty=true;return}
+ if(!d)return;
+ if(t.dataset.k&&t.tagName!=='SELECT'&&t.type!=='checkbox'){d[t.dataset.k]=t.value;if(st.view==='prods'&&['qty','date'].includes(t.dataset.k)){clearTimeout(st.tm);st.tm=setTimeout(()=>{const y=scrollY,k=t.dataset.k;render();scrollTo(0,y);document.getElementById('f_'+k)?.focus()},700)}return}
+ if(t.dataset.li!=null&&t.tagName!=='SELECT'){const l=d.lines[+t.dataset.li];l[t.dataset.lk]=t.value;const amt=V.querySelector(`[data-amt="${t.dataset.li}"]`);if(amt)amt.textContent=fmt(n(l.qty)*n(l.rate));
+  const tt=$('#totals');if(tt)tt.innerHTML=totalsHTML(ENT[st.view],d)}});
+V.addEventListener('change',async e=>{const t=e.target,d=st.draft;
+ if(t.id==='whf'){st.filt=t.value;st.view==='batches'?render():fillReport();return}
+ if(t.id==='wcf'){st.filt=t.value;render();return}
+ if(t.dataset.urole){const id=t.dataset.urole;try{await API.j('PATCH','/api/users/'+enc(id),{role:t.value});toast('Role updated')}catch(x){toast(x.message,1);render()}return}
+ if(t.dataset.ck){coDraft[t.dataset.ck]=t.value;coDirty=true;return}if(!d)return;
+ if(t.dataset.k){d[t.dataset.k]=t.type==='checkbox'?t.checked:t.value;if((t.tagName==='SELECT'||t.type==='date')&&onField(st.view,t.dataset.k,d)){const y=scrollY;render();scrollTo(0,y)}return}
+ if(t.dataset.li!=null&&t.tagName==='SELECT'){const l=d.lines[+t.dataset.li];l[t.dataset.lk]=t.value;onLine(st.view,t.dataset.lk,l);const y=scrollY;render();scrollTo(0,y)}});
+
+V.addEventListener('submit',async e=>{if(e.target.id!=='uform')return;e.preventDefault();
+ const b={name:$('#un').value.trim(),email:$('#ue').value.trim(),password:$('#up').value,role:$('#ur').value};
+ try{await API.j('POST','/api/users',b);e.target.reset();toast(`${b.name} added as ${b.role}`)}catch(x){toast(x.message,1)}});
+$('#rail').addEventListener('click',async e=>{const a=e.target.closest('[data-act]')?.dataset.act;
+ if(a==='logout'){try{await API.j('POST','/api/logout',{})}catch(x){}showLogin('')}
+ if(a==='chpw')modal(`<h2>Change your password</h2><div class="fgrid" style="grid-template-columns:1fr"><div class="fld"><label for="cpw0">Current password</label><input id="cpw0" type="password" autocomplete="current-password"></div><div class="fld"><label for="cpw1">New password (8+ characters)</label><input id="cpw1" type="password" autocomplete="new-password"></div><div class="fld"><label for="cpw2">Repeat new password</label><input id="cpw2" type="password" autocomplete="new-password"></div></div><div class="acts"><button class="btn" data-act="mclose">Cancel</button><button class="btn pri" data-act="dochpw">Change password</button></div>`)});
+
+/* ---------- sign-in, data load and live updates ---------- */
+let ws=null,wsTry=0,wsTimer=0;
+function showLogin(msg){if(ws){ws.onclose=null;try{ws.close()}catch(e){}ws=null}clearTimeout(wsTimer);
+ for(const c of COLS)S[c]={};company={};USERS={};me.id=null;mode='connecting';ready=false;st.draft=null;mclose();
+ $('#lerr').textContent=msg||'';$('#login').hidden=false;$('#view').innerHTML='';setTimeout(()=>$('#lemail').focus(),50)}
+function setMe(u){me.id=u.id;me.name=u.name;me.email=u.email;me.role=u.role;me.owner=u.role==='Admin';$('#login').hidden=true}
+async function loadAll(){const r=await API.j('GET','/api/all');for(const c of COLS)S[c]={};
+ for(const x of r.docs){if(x.collection==='settings'){if(x.id==='company')company=x.data}else if(S[x.collection])S[x.collection][x.id]=x.data}
+ USERS={};for(const u of r.users)USERS[u.id]=u;mode='live';ready=true;stale=false;computeRole();if(!st.draft)render();else renderChrome()}
+async function refreshUsers(){try{const r=await API.j('GET','/api/users');USERS={};for(const u of r.users)USERS[u.id]=u;computeRole();schedule()}catch(e){}}
+function connectWS(){clearTimeout(wsTimer);const p=location.protocol==='https:'?'wss':'ws';const sock=new WebSocket(`${p}://${location.host}/ws`);ws=sock;
+ sock.onopen=()=>{if(wsTry>0)loadAll().catch(()=>{});wsTry=0;stale=false;renderChrome()};
+ sock.onmessage=e=>{let m;try{m=JSON.parse(e.data)}catch(x){return}
+  if(m.t==='doc'){if(m.c==='settings'){if(m.id==='company')company=m.d||{}}else if(S[m.c]){if(m.d==null)delete S[m.c][m.id];else S[m.c][m.id]=m.d}schedule()}
+  if(m.t==='users')refreshUsers()};
+ sock.onclose=e=>{if(ws!==sock)return;ws=null;if(e.code===4001){API.j('GET','/api/me').catch(()=>{});return}
+  stale=true;renderChrome();wsTimer=setTimeout(connectWS,e.code===4002?200:Math.min(30000,1000*2**(wsTry++)))}}
+$('#loginForm').addEventListener('submit',async e=>{e.preventDefault();const btn=$('#lbtn');btn.disabled=true;$('#lerr').textContent='';
+ try{const r=await API.j('POST','/api/login',{email:$('#lemail').value.trim(),password:$('#lpass').value});$('#lpass').value='';setMe(r.user);await loadAll();wsTry=0;connectWS();route()}
+ catch(x){$('#lerr').textContent=x.message||'Sign-in failed.'}finally{btn.disabled=false}});
+// Logo / company name always lead to the home screen, even when already on it.
+document.addEventListener('click',e=>{const a=e.target.closest('a[href="#dash"]');if(a&&location.hash==='#dash'){e.preventDefault();route()}});
+
+/* ---------- mobile app (PWA) ---------- */
+let installEvt=null;
+const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;$('#installBtn').hidden=false});
+window.addEventListener('appinstalled',()=>{installEvt=null;$('#installBtn').hidden=true;toast('Gopin ERP installed')});
+if(isIOS&&!standalone())$('#installBtn').hidden=false;
+$('#installBtn').addEventListener('click',async()=>{
+ if(installEvt){installEvt.prompt();await installEvt.userChoice.catch(()=>{});installEvt=null;$('#installBtn').hidden=true;return}
+ modal(`<h2>Install on iPhone / iPad</h2><ol style="padding-left:18px;line-height:1.9;margin:0"><li>Open this page in <b>Safari</b>.</li><li>Tap the <b>Share</b> button (square with an arrow).</li><li>Choose <b>Add to Home Screen</b>, then <b>Add</b>.</li></ol><div class="acts"><button class="btn pri" data-act="mclose">OK</button></div>`)});
+// Phones pause the connection in the background; catch up as soon as the app is opened again.
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&me.id&&(!ws||ws.readyState>1)){wsTry=0;loadAll().catch(()=>{});connectWS()}});
+
+route();
+(async()=>{try{const r=await API.j('GET','/api/me');setMe(r.user);await loadAll();connectWS()}catch(e){if(e.code!=='unauth'){$('#login').hidden=false;$('#lerr').textContent=e.message}}})();
+</script>
+</body>
+</html>
